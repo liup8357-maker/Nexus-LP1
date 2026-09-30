@@ -91,6 +91,7 @@ h1{font-size:28px;font-weight:600;text-align:center}
 .mi{display:flex;align-items:center;gap:10px;background:var(--p);border:1px solid var(--b);border-radius:14px;padding:8px;margin-bottom:8px}
 .mi.sel{border-color:var(--ac)}.mi .th{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#000;flex-shrink:0}
 .mi .in{flex:1;min-width:0;font-size:13px}.mi small{display:block;color:var(--sub);margin-top:2px}
+.card select{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px}
 </style></head><body>
 <div class="shell">
 <div class="screen on" id="s-home">
@@ -107,7 +108,7 @@ h1{font-size:28px;font-weight:600;text-align:center}
 </div>
 <div class="screen" id="s-settings">
  <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Configurações</b></div>
- <div class="scroll" id="setBody"><h3 style="margin-top:0">Chaves de API</h3><p class="hint">Cole a chave, toque em Testar conexão e, quando der sucesso, toque em Salvar. Ficam guardadas só neste aparelho.</p><div id="keyList"></div></div>
+ <div class="scroll" id="setBody"><h3 style="margin-top:0">Chaves de API</h3><p class="hint">Cole a chave e toque em Testar conexão. Deu sucesso? Ela já fica salva e você pode conversar. Dica: cole 2 ou mais chaves da mesma IA separadas por vírgula (de contas/projetos diferentes) — quando uma chegar no limite, o app usa a outra. Ficam guardadas só neste aparelho.</p><div id="keyList"></div></div>
 </div>
 <div class="screen" id="s-search"><div class="top"><button class="back" onclick="home()">←</button><input class="si" style="flex:1" id="q" placeholder="Pesquisar chats" oninput="renderSearch(this.value)"></div><div class="scroll" id="sList"></div></div>
 <div class="screen" id="s-media">
@@ -129,7 +130,7 @@ h1{font-size:28px;font-weight:600;text-align:center}
 <div class="cw" id="cw">
  <div id="chip"></div>
  <div class="composer"><textarea id="inp" rows="1" placeholder="Conversa com o Nexus LP..."></textarea>
-  <div class="row"><label class="round">➕<input type="file" id="file" accept="image/*,.txt,.md,.csv,.json,.html,.js,.css" hidden></label>
+  <div class="row"><label class="round">➕<input type="file" id="file" accept="image/*,audio/*,.txt,.md,.csv,.json,.html,.js,.css" hidden><input type="file" id="afile" accept="audio/*" capture hidden></label>
    <button class="pill" onclick="openModes()"><span id="mi"></span><span id="ml"></span></button><div class="sp"></div>
    <button class="round" id="mic" onclick="mic()">🎙️</button><button class="round send" id="send" onclick="send()">➤</button></div></div>
 </div>
@@ -150,7 +151,8 @@ const MEM={};
 const LS={g:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));if(v!=null)return v}catch(e){}return k in MEM?MEM[k]:d},s:(k,v)=>{MEM[k]=v;try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
 const cleanKey=v=>String(v||'').replace(/^[\s"'“”‘’`]+|[\s"'“”‘’`]+$/g,'').replace(/[\s\u200B-\u200D\uFEFF\u00A0]+/g,'').replace(/^(bearer|key=|api[_-]?key[:=])/i,'').replace(/^["'“”‘’`]+|["'“”‘’`]+$/g,'');
 const persist=()=>LS.s('nexuslp_cfg2',cfg);
-const CLAUDE_MODEL='claude-sonnet-4-6', GEMINI_MODEL='gemini-3.8-flash'; // troque aqui se o teste de conexão der 404
+const APP_VERSION='v11 · 30/09/2026';
+const CLAUDE_MODEL='claude-sonnet-4-6', GEMINI_MODEL='gemini-flash-latest'; // troque aqui se o teste de conexão der 404
 const KC='nexuslp_convos', KG='nexuslp_cfg';
 
 const MODES=[
@@ -169,7 +171,7 @@ const RULES={
 
 const PROVS=[
 {id:'claude',name:'Claude',ph:'sk-ant-...',m:'claude-sonnet-4-6'},
-{id:'gemini',name:'Gemini',ph:'AIza...',m:'gemini-3.8-flash'},
+{id:'gemini',name:'Gemini',ph:'AIza...',m:'gemini-flash-latest'},
 {id:'openai',name:'ChatGPT',ph:'sk-...',m:'gpt-4o-mini',u:'https://api.openai.com/v1/chat/completions'},
 {id:'grok',name:'Grok',ph:'xai-...',m:'grok-4',u:'https://api.x.ai/v1/chat/completions'},
 {id:'deepseek',name:'DeepSeek',ph:'sk-...',m:'deepseek-chat',u:'https://api.deepseek.com/chat/completions'},
@@ -194,14 +196,21 @@ function setMode(k){st.mode=k;const m=MODES.find(x=>x.k===k);$('mi').textContent
 setMode('partner');
 
 /* ---------- camada de API ---------- */
-const HTTP=s=>({400:'Pedido recusado (400).',401:'Chave inválida (401).',403:'Acesso negado (403): sem permissão ou região bloqueada.',404:'Modelo ou URL não encontrado (404).',429:'Limite de uso ou cota esgotada (429).'}[s]||(s>=500?`Servidor da IA indisponível (${s}).`:`Erro ${s}.`));
+const HTTP=(s,d)=>{d=(d||'').slice(0,160);
+ if(s===401)return 'Chave inválida (401): confira se copiou a chave inteira, sem espaço.';
+ if(s===403)return 'Acesso negado (403): o serviço bloqueou esta chave ou projeto (às vezes por conta nova ou região). Crie uma chave nova — no Google: aistudio.google.com/apikey, escolhendo um projeto novo.';
+ if(s===404)return 'Modelo ou endereço não encontrado (404).'+(d?' '+d:'');
+ if(s===429)return 'Limite de uso ou cota esgotada (429): espere um minuto ou confira créditos/plano.';
+ if(s===408||s>=500)return `O serviço da IA está sobrecarregado agora (${s}). O app já tentou várias vezes; tente de novo em instantes.`;
+ if(s===400)return 'Pedido recusado (400).'+(d?' '+d:'');
+ return `Erro ${s}.`+(d?' '+d:'')};
 async function api(url,opt){
  const c=new AbortController(),t=setTimeout(()=>c.abort(),90000);let r,raw;
  try{r=await fetch(url,{...opt,signal:c.signal});raw=await r.text()}
- catch(e){throw new Error(e.name==='AbortError'?'Tempo esgotado: a IA demorou demais.':'Sem conexão com este serviço: a internet caiu, ou ele não aceita chamadas diretas do navegador.')}
+ catch(e){throw Object.assign(new Error(e.name==='AbortError'?'Tempo esgotado: a IA demorou demais.':'Sem conexão com este serviço: a internet caiu, ou ele não aceita chamadas diretas do navegador.'),{net:1})}
  finally{clearTimeout(t)}
  let d=null;try{d=JSON.parse(raw)}catch(e){}
- if(!r.ok){const m=d&&((d.error&&d.error.message)||d.error||d.message);throw new Error(HTTP(r.status)+(typeof m==='string'?' '+m.slice(0,200):''))}
+ if(!r.ok){const m=d&&((d.error&&d.error.message)||d.error||d.message);throw Object.assign(new Error(HTTP(r.status,typeof m==='string'?m:'')),{status:r.status})}
  if(!d)throw new Error('Resposta inválida do servidor.');return d}
 function norm(ms){const o=[];for(const m of ms){if(!m||(!m.content&&!m.image))continue;const l=o[o.length-1];if(l&&l.role===m.role&&!l.image&&!m.image)l.content+='\n\n'+m.content;else o.push({...m})}while(o.length&&o[0].role!=='user')o.shift();return o}
 async function askClaude(ms,sys,k,mo){
@@ -222,24 +231,56 @@ async function askCustom(ms,sys,p){
  let c=d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
  if(Array.isArray(c))c=c.map(x=>x.text||x).join('\n');c=(c||'').trim();
  if(!c)throw new Error('A IA respondeu vazio.');return c}
-const ALT={claude:['claude-sonnet-4-5','claude-haiku-4-5'],gemini:['gemini-2.5-flash','gemini-2.0-flash'],openai:['gpt-4.1-mini','gpt-4o'],grok:['grok-3','grok-3-mini'],mistral:['mistral-small-latest'],groq:['llama-3.1-8b-instant']};
+const ALT={claude:['claude-sonnet-4-5','claude-haiku-4-5'],gemini:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash','gemini-2.5-flash-lite'],openai:['gpt-4.1-mini','gpt-4o'],grok:['grok-3','grok-3-mini'],mistral:['mistral-small-latest'],groq:['llama-3.1-8b-instant']};
 const callP=(p,m,s,k,x)=>p.id==='claude'?askClaude(m,s,k,x):p.id==='gemini'?askGemini(m,s,k,x):askCustom(m,s,{url:p.u,key:k,model:x});
-const mk=(p,k,mo)=>({name:p.name,ask:async(m,s)=>{
- k=cleanKey(k);const list=[...new Set([mo,p.m,...(ALT[p.id]||[])].filter(Boolean))];let last;
- for(const x of list){
-  try{const r=await callP(p,m,s,k,x);if(x!==cfg.m[p.id]&&cfg.k[p.id]===k){cfg.m[p.id]=x;persist()}return r}
-  catch(e){last=e;if(!(/\(404\)/.test(e.message)||(/\(400\)/.test(e.message)&&/model|modelo/i.test(e.message))))throw e}}
- throw last}});
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+/* pergunta ao próprio serviço quais modelos a chave pode usar */
+async function discover(p,k){
+ try{
+  if(p.id==='gemini'){const d=await api('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100&key='+encodeURIComponent(k),{});return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')&&/flash/.test(m.name)&&!/tts|image|live|audio|embed|thinking|exp|preview|robotics|computer|translate/.test(m.name)).map(m=>m.name.replace('models/','')).sort().reverse().slice(0,3)}
+  if(p.id==='claude'){const d=await api('https://api.anthropic.com/v1/models',{headers:{'x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}});return (d.data||[]).map(m=>m.id).slice(0,3)}
+  const d=await api(p.u.replace(/\/chat\/completions$/,'/models'),{headers:{Authorization:'Bearer '+k}});
+  return (d.data||[]).map(m=>m.id).filter(id=>!/embed|tts|whisper|dall|image|audio|moderation|realtime|transcribe|guard/i.test(id)).slice(0,3)
+ }catch(e){return []}}
+/* repete se o serviço estiver ocupado, troca de modelo se um falhar, e só desiste no fim */
+const HEALTH={},DEAD=LS.g('nexuslp_dead',{});
+/* várias chaves (separadas por vírgula) + todos os modelos: se um cair, o próximo assume */
+const mk=(p,k,mo)=>({name:p.name,ask:async(m,s,opt)=>{
+ const keys=String(k||'').split(',').map(cleanKey).filter(Boolean),bad=new Set(),light=opt&&opt.light;let last,netFails=0;const tried=new Set();
+ if(!keys.length)throw new Error('Cole a chave antes.');
+ const all=[...new Set([mo,p.m,...(ALT[p.id]||[])].filter(Boolean))];
+ let L=all.filter(x=>!(DEAD[p.id+':'+x]>Date.now()-864e5));if(!L.length)L=all;
+ const cold=x=>(HEALTH[p.id+':'+x]||0)>Date.now();
+ L=[...L.filter(x=>!cold(x)),...L.filter(cold)]; /* quem falhou agora há pouco vai pro fim da fila */
+ const once=async(x,kk)=>{tried.add(x);
+  try{const r=await callP(p,m,s,kk,x);delete HEALTH[p.id+':'+x];if(x!==cfg.m[p.id]&&String(cfg.k[p.id]||'').includes(kk)){cfg.m[p.id]=x;persist()}return{r}}
+  catch(e){last=e;
+   if(e.status===401||(e.status===403&&keys.length>1)){bad.add(kk);if(bad.size>=keys.length)throw e;return{keep:1}}
+   if(e.status===400&&!/model|modelo/i.test(e.message))throw e;
+   if(e.net){if(++netFails>=2)throw e;return{keep:1}}
+   if(e.status>=500||e.status===429||e.status===408){HEALTH[p.id+':'+x]=Date.now()+(e.status===429?9e4:45e3);return{keep:1}}
+   if(e.status===404){DEAD[p.id+':'+x]=Date.now();LS.s('nexuslp_dead',DEAD)}
+   return{}}};
+ const passes=light?1:4;
+ for(let pass=0;pass<passes&&L.length;pass++){
+  const keep=[];
+  for(const x of L){let kept=false;
+   for(const kk of keys.filter(z=>!bad.has(z))){const o=await once(x,kk);if(o.r)return o.r;if(o.keep)kept=true;else break}
+   if(kept)keep.push(x)}
+  L=keep;if(L.length&&pass<passes-1)await wait(1800*(pass+1))}
+ if(!light&&last&&[400,403,404].includes(last.status))for(const x of await discover(p,keys[0])){if(tried.has(x))continue;const o=await once(x,keys[0]);if(o.r)return o.r}
+ throw last||new Error('A IA não respondeu.')}});
 cfg.k=cfg.k||{};cfg.m=cfg.m||{};Object.keys(cfg.k).forEach(x=>{cfg.k[x]=cleanKey(cfg.k[x]);if(!cfg.k[x])delete cfg.k[x]});
+if((cfg.v||0)<3){cfg.m={};cfg.v=3;persist()}
 const providers=()=>PROVS.filter(p=>cfg.k[p.id]).map(p=>mk(p,cfg.k[p.id],cfg.m[p.id]||p.m));
 
 /* todas as IAs em paralelo + síntese numa resposta única */
 async function askAll(hist,mode,provs){
  const sys=SYSTEM+' '+RULES[mode];
  const res=await Promise.allSettled(provs.map(p=>p.ask(hist,sys)));
- const ok=[],err=[];
- res.forEach((r,i)=>{if(r.status==='fulfilled'&&r.value)ok.push({p:provs[i],v:r.value});else err.push(provs[i].name+': '+((r.reason&&r.reason.message)||'resposta vazia'))});
- if(!ok.length)return{err};
+ const ok=[],err=[];let tr=true;
+ res.forEach((r,i)=>{if(r.status==='fulfilled'&&r.value)ok.push({p:provs[i],v:r.value});else{const e=r.reason;if(!(e&&(e.status>=500||e.status===429||e.status===408)))tr=false;err.push(provs[i].name+': '+((e&&e.message)||'resposta vazia'))}});
+ if(!ok.length)return{err,transient:tr};
  let text=ok[0].v;
  if(ok.length>1){
   const lu=[...hist].reverse().find(m=>m.role==='user');
@@ -272,15 +313,52 @@ function errBubble(lines){
  const d=document.createElement('div');d.className='bub';
  d.innerHTML=`<div class="err"><b>Não consegui responder agora.</b>${lines.map(l=>`<span>${esc(l)}</span>`).join('')}</div><button class="retry" onclick="this.closest('.bub').remove();run()">🔄 Tentar de novo</button>`;
  $('msgs').appendChild(d);$('msgs').scrollTop=1e9}
+let runTok=0;
+function cancelRun(){runTok++;document.querySelectorAll('.bub.dim').forEach(x=>x.remove());busy=false;$('send').disabled=false;toast('Cancelado.')}
 async function run(){
  busy=true;$('send').disabled=true;
- const th=document.createElement('div');th.className='bub dim';th.textContent='Pensando…';$('msgs').appendChild(th);$('msgs').scrollTop=1e9;
- const cid=convo.id,mode=st.mode,provs=providers();
- const out=provs.length?await askAll(convo.messages,mode,provs):{err:['Nenhuma IA configurada. Abra o menu → Configurações, cole uma chave e toque em Testar conexão.']};
+ const th=document.createElement('div');th.className='bub dim';th.innerHTML='<span>Pensando…</span> <u onclick="cancelRun()" style="margin-left:10px;color:var(--ac)">cancelar</u>';$('msgs').appendChild(th);$('msgs').scrollTop=1e9;
+ const my=++runTok,cid=convo.id,mode=st.mode,provs=providers();
+ let out={err:['Nenhuma IA configurada. Abra o menu → Configurações, cole uma chave e toque em Testar conexão.']};
+ if(provs.length)for(let round=0;round<6;round++){
+  out=await askAll(convo.messages,mode,provs);
+  if(my!==runTok)return;
+  if(out.text||!out.transient)break;
+  if(round<5){th.querySelector('span').textContent='O serviço da IA está ocupado. Tentando de novo ('+(round+2)+'/6)…';await wait(4000*(round+1));if(my!==runTok)return}}
+ if(!out.text&&out.transient)out.err=[...out.err,'Sua chave está certa: quem está sobrecarregado é o serviço da IA. Toque em Tentar de novo — ou adicione uma segunda IA em Configurações (por exemplo Groq, que tem plano grátis): ela assume sozinha quando a primeira falha.'];
  th.remove();busy=false;$('send').disabled=false;
  if(cid!==convo.id){if(out.text){const l=LS.g(KC,[]),r=l.find(c=>c.id===cid);if(r){r.messages.push({role:'assistant',content:out.text,mode});r.updatedAt=Date.now();LS.s(KC,l);renderRecents()}}return}
  if(!out.text){errBubble(out.err);return}
- const m={role:'assistant',content:out.text,mode};convo.messages.push(m);bubble(m);save()}
+ const m={role:'assistant',content:out.text,mode};convo.messages.push(m);bubble(m);save();maybeTitle()}
+let titling=false;
+const ttl=c=>c.titled?c.title:'Nova conversa';
+function setStoredTitle(id,t){const l=LS.g(KC,[]),r=l.find(c=>c.id===id);if(r){r.title=t;r.titled=true;LS.s(KC,l);renderRecents()}}
+/* pede à IA um nome curto sobre o ASSUNTO da conversa (tenta até 3 vezes, em todas as IAs) */
+async function genTitle(msgs){
+ const provs=providers();if(!provs.length)return null;
+ const txt=msgs.slice(0,6).map(m=>(m.role==='user'?'Usuário: ':'IA: ')+m.content.replace(/```[\s\S]*?```/g,'[código]').slice(0,300)).join('\n');
+ const ask='Dê um título curto (2 a 5 palavras, em português, sem aspas e sem ponto final) que explique o assunto desta conversa. Não copie a primeira mensagem; diga sobre o que estamos conversando:\n\n'+txt;
+ for(let a=0;a<3;a++){
+  for(let w=0;busy&&w<20;w++)await wait(2000);
+  for(const p of provs){
+   try{let t=await p.ask([{role:'user',content:ask}],'Responda só com o título, nada mais.',{light:true});
+    t=(t||'').split('\n')[0].replace(/["'*#.]/g,'').trim().slice(0,40);if(t)return t}catch(e){}}
+  await wait(4000*(a+1))}
+ return null}
+/* depois de 2 respostas da IA, o chat ganha um nome sobre o assunto (nunca a 1ª mensagem) */
+async function maybeTitle(){
+ if(convo.title||titling||convo.messages.filter(m=>m.role==='assistant').length<2)return;
+ titling=true;const cid=convo.id;
+ try{await wait(4000);const t=await genTitle(convo.messages);
+  if(t){if(cid===convo.id){convo.title=t;save()}else setStoredTitle(cid,t)}}catch(e){}
+ titling=false}
+/* conversas antigas que ainda mostram a 1ª mensagem: renomeia em segundo plano (3 por abertura) */
+async function retitleOld(){
+ let n=0;
+ for(const c of LS.g(KC,[])){
+  if(c.titled||n>=3||c.messages.filter(m=>m.role==='assistant').length<2)continue;
+  n++;const t=await genTitle(c.messages);if(t)setStoredTitle(c.id,t);await wait(3000)}}
+setTimeout(retitleOld,20000);
 async function send(){
  const t=$('inp').value.trim();if((!t&&!att)||busy)return;
  let c=t,img=null;
@@ -294,6 +372,7 @@ function chip(){const c=$('chip');c.style.display=att?'block':'none';c.innerHTML
 $('file').addEventListener('change',e=>{
  const f=e.target.files[0];if(!f)return;e.target.value='';
  if(f.size>8e6)return toast('Arquivo muito grande (máx 8MB).');
+ if(f.type.startsWith('audio/'))return transcribeInto(f,f.type);
  const r=new FileReader();
  if(f.type.startsWith('image/')){r.onload=()=>{att={kind:'image',type:f.type,b64:r.result.split(',')[1],name:f.name};chip()};r.readAsDataURL(f)}
  else{r.onload=()=>{att={kind:'text',content:r.result,name:f.name};chip()};r.readAsText(f)}});
@@ -302,18 +381,18 @@ function copyT(b){const t=b.closest('.bub').querySelector('.txt').textContent;na
 /* ---------- conversas ---------- */
 function save(){
  if(!convo.messages.length)return;
- const l=LS.g(KC,[]),u=convo.messages.find(m=>m.role==='user');
- const rec={id:convo.id,title:(u?u.content:'Conversa').replace(/\s+/g,' ').slice(0,40),messages:convo.messages.map(({role,content,mode})=>({role,content,mode})),updatedAt:Date.now()};
+ const l=LS.g(KC,[]),ex=l.find(c=>c.id===convo.id);
+ const rec={id:convo.id,title:convo.title||(ex&&ex.title)||'Nova conversa',titled:!!convo.title,messages:convo.messages.map(({role,content,mode})=>({role,content,mode})),updatedAt:Date.now()};
  const i=l.findIndex(c=>c.id===convo.id);if(i>=0)l[i]=rec;else l.unshift(rec);
  try{LS.s(KC,l.slice(0,50))}catch(e){}renderRecents()}
 function renderRecents(){
  const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt);
- $('recent').innerHTML=l.map(c=>`<div onclick="openConvo('${c.id}')"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.title)}</span><i onclick="event.stopPropagation();delConvo('${c.id}')">✕</i></div>`).join('')||'<div>Nada por aqui ainda.</div>'}
+ $('recent').innerHTML=l.map(c=>`<div onclick="openConvo('${c.id}')"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ttl(c))}</span><i onclick="event.stopPropagation();delConvo('${c.id}')">✕</i></div>`).join('')||'<div>Nada por aqui ainda.</div>'}
 function openConvo(id){
  const r=LS.g(KC,[]).find(c=>c.id===id);if(!r)return;
- convo={id:r.id,messages:r.messages};st.code=BLANK;$('msgs').innerHTML='';convo.messages.forEach(bubble);go('chat')}
+ convo={id:r.id,messages:r.messages,title:r.titled?r.title:null};st.code=BLANK;$('msgs').innerHTML='';convo.messages.forEach(bubble);go('chat');maybeTitle()}
 function delConvo(id){LS.s(KC,LS.g(KC,[]).filter(c=>c.id!==id));if(id===convo.id)newConvo();renderRecents()}
-function newConvo(){convo={id:'c'+Date.now(),messages:[]};st.code=BLANK;fixes=0;$('msgs').innerHTML='';$('inp').value='';go('home')}
+function newConvo(){convo={id:'c'+Date.now(),messages:[],title:null};st.code=BLANK;fixes=0;$('msgs').innerHTML='';$('inp').value='';go('home')}
 renderRecents();
 
 /* ---------- preview + autocorreção ---------- */
@@ -414,24 +493,147 @@ async function runCmd(cmd){
  if(n)toast('✅ '+n+' arquivo(s) novo(s) na biblioteca.',3000)}
 
 /* ---------- voz ---------- */
-function speak(b){
- const s=window.speechSynthesis;if(!s)return toast('Este aparelho não tem leitura em voz.');
- if(s.speaking||s.pending){s.cancel();b.textContent='🔊';return}
- const t=b.closest('.bub').querySelector('.txt').textContent.replace(/[`*_#>]/g,''),ch=t.match(/[^.!?\n]+[.!?]*\s*/g)||[t],v=s.getVoices().find(x=>/^pt/i.test(x.lang));
- b.textContent='⏸';
- ch.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang='pt-BR';if(v)u.voice=v;u.onerror=()=>b.textContent='🔊';if(i===ch.length-1)u.onend=()=>b.textContent='🔊';s.speak(u)})}
-let rec=null,lis=false;
+let actx=null,ttsStop=null,srBad=false,mr=null,rec=null,lis=false;
+const cleanSp=b=>b.closest('.bub').querySelector('.txt').textContent.replace(/```[\s\S]*?```/g,' ').replace(/[`*_#>]/g,'').trim();
+const SILENT='data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+const elAudio=new Audio(),elCache=new Map();
+const EL_VOICES=[['EXAVITQu4vr4xnSDxMaL','Sarah (feminina)'],['Xb7hH8MSUJpSbSDYk0k2','Alice (feminina)'],['pNInz6obpgDQGcFmaJgB','Adam (masculina)'],['JBFqnCBsd6RMkjVDRZzb','George (masculina)']];
+const cutTxt=(t,n)=>{if(t.length<=n)return t;const c=t.slice(0,n),i=Math.max(c.lastIndexOf('. '),c.lastIndexOf('! '),c.lastIndexOf('? '),c.lastIndexOf('\n'));return (i>n*.5?c.slice(0,i+1):c).trim()};
+/* toque no 🔊: tenta a voz do aparelho (grátis), depois ElevenLabs, depois Gemini */
+async function speak(b){
+ if(ttsStop){const f=ttsStop;ttsStop=null;f();return}
+ const t=cleanSp(b);if(!t)return;
+ /* destrava o áudio enquanto o toque ainda vale (WebViews de APK exigem isso) */
+ if(cfg.elKey){try{elAudio.src=SILENT;const p=elAudio.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+ const AC=window.AudioContext||window.webkitAudioContext;
+ if(cfg.k.gemini&&AC){try{if(!actx||actx.state==='closed')actx=new AC({sampleRate:24000});actx.resume()}catch(e){}}
+ const steps={sys:speakSys,el:speakEL,gem:speakCloud},sysBad=Date.now()-LS.g('nexuslp_sysbad',0)<6048e5&&(cfg.elKey||cfg.k.gemini),order=(cfg.vp==='el'?['el','sys','gem']:['sys','el','gem']).filter(x=>!(x==='sys'&&sysBad));
+ for(const k of order){
+  if((k==='el'&&!cfg.elKey)||(k==='gem'&&!cfg.k.gemini))continue;
+  if(await steps[k](b,t)==='ok')return}
+ toast('Não consegui falar neste aparelho. Cole uma chave do ElevenLabs (ou do Gemini) em Configurações: a voz vem da internet e funciona em qualquer app.',8000)}
+function speakSys(b,t){return new Promise(res=>{
+ const s=window.speechSynthesis;
+ if(!s||!window.SpeechSynthesisUtterance)return res('fail');
+ let started=false,dead=false,w;
+ const reset=()=>{b.textContent='🔊';ttsStop=null;clearTimeout(w)};
+ const fail=()=>{if(dead)return;dead=true;reset();try{s.cancel()}catch(e){}LS.s('nexuslp_sysbad',Date.now());res('fail')};
+ b.textContent='⏸';ttsStop=()=>{dead=true;reset();try{s.cancel()}catch(e){}};
+ w=setTimeout(()=>{if(!started)fail()},2500);
+ try{
+  s.cancel();const ch=t.match(/[^.!?\n]+[.!?]*\s*/g)||[t],v=(s.getVoices()||[]).find(x=>/^pt/i.test(x.lang));
+  ch.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang='pt-BR';if(v)u.voice=v;u.onstart=()=>{if(!started){started=true;LS.s('nexuslp_sysbad',0);res('ok')}};u.onerror=e=>{if(!/interrupted|canceled/.test(e.error||''))fail()};if(i===ch.length-1)u.onend=()=>{if(!dead)reset()};s.speak(u)})
+ }catch(e){fail()}})}
+async function elErr(r){
+ let d={};try{d=await r.json()}catch(e){}
+ const dt=d.detail||{},msg=typeof dt==='string'?dt:(dt.message||''),code=dt.status||'',quota=/quota/i.test(code+msg);
+ const text=quota?'Acabaram os créditos deste mês do ElevenLabs (o plano grátis tem ~10 mil caracteres).':r.status===401?'Chave do ElevenLabs inválida ou sem permissão (401). Confira se copiou a chave inteira.':r.status===429?'ElevenLabs ocupado agora (429). Tente de novo em instantes.':r.status>=500?'ElevenLabs indisponível agora ('+r.status+').':'ElevenLabs recusou o pedido ('+r.status+'). '+msg.slice(0,120);
+ return Object.assign(new Error(text),{status:r.status,quota,el:1})}
+async function elTTS(txt){
+ const first=cfg.elVoice||EL_VOICES[0][0],ids=[first,...EL_VOICES.map(v=>v[0]).filter(x=>x!==first)];let last;
+ for(const v of ids){
+  for(let a=0;a<3;a++){
+   let r;try{r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+v+'?output_format=mp3_44100_64',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({text:txt,model_id:'eleven_flash_v2_5'})})}
+   catch(e){throw Object.assign(new Error('Sem conexão com o ElevenLabs.'),{el:1})}
+   if(r.ok)return r.blob();
+   last=await elErr(r);
+   if(last.quota||last.status===401)throw last;
+   if((r.status>=500||r.status===429)&&a<2){await wait(1500);continue}
+   break}
+  if(![404,422].includes(last.status))throw last}
+ throw last}
+async function speakEL(b,t){
+ const txt=cutTxt(t,+cfg.elMax||600),ck=(cfg.elVoice||'')+'|'+txt;let dead=false;
+ b.textContent='⏳';ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{elAudio.pause()}catch(e){}};
+ try{
+  let url=elCache.get(ck);
+  if(!url){
+   url=URL.createObjectURL(await elTTS(txt));elCache.set(ck,url);
+   const mo=new Date().toISOString().slice(0,7),u=cfg.elUsed&&cfg.elUsed.m===mo?cfg.elUsed.c:0;cfg.elUsed={m:mo,c:u+txt.length};persist()}
+  if(dead)return 'ok';
+  if(txt.length<t.length)toast('Li só o começo, para poupar créditos (limite: '+(cfg.elMax||600)+' caracteres).',3500);
+  elAudio.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};
+  elAudio.src=url;await elAudio.play();b.textContent='⏸';return 'ok'
+ }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('ElevenLabs: '+e.message,5000);return 'fail'}}
+/* plano C: o Gemini gera a voz e o app toca o áudio */
+async function speakCloud(b,t){
+ const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return 'fail';
+ const gk=String(cfg.k.gemini).split(',')[0],ctx=actx&&actx.state!=='closed'?actx:(actx=new AC({sampleRate:24000}));
+ let src=null,dead=false;b.textContent='⏳';
+ ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{src&&src.stop()}catch(e){}};
+ try{
+  const body=JSON.stringify({contents:[{parts:[{text:t.slice(0,1500)}]}],generationConfig:{responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:'Kore'}}}}});
+  let d,last;
+  for(const mo of ['gemini-2.5-flash-preview-tts','gemini-3.1-flash-tts-preview','gemini-2.5-flash-tts']){
+   for(let a=0;a<3;a++){
+    try{d=await api('https://generativelanguage.googleapis.com/v1beta/models/'+mo+':generateContent?key='+encodeURIComponent(gk),{method:'POST',headers:{'Content-Type':'application/json'},body});break}
+    catch(e){last=e;if(e.status===401||e.status===403)throw e;if((e.status>=500||e.status===429)&&a<2){await wait(1500);continue}break}}
+   if(d)break}
+  if(dead)return 'ok';if(!d)throw last||new Error('sem resposta');
+  const c0=(d.candidates||[])[0],part=c0&&c0.content&&c0.content.parts.find(x=>x.inlineData||x.inline_data);
+  if(!part)throw new Error('a voz não veio na resposta');
+  const bin=atob((part.inlineData||part.inline_data).data),n=bin.length>>1,buf=ctx.createBuffer(1,n,24000),ch=buf.getChannelData(0);
+  for(let i=0;i<n;i++){let v=bin.charCodeAt(2*i)|(bin.charCodeAt(2*i+1)<<8);if(v>=32768)v-=65536;ch[i]=v/32768}
+  src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};src.start();b.textContent='⏸';return 'ok'
+ }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('Gemini (voz): '+e.message,5000);return 'fail'}}
+
+const micHelp=()=>toast('O microfone não está liberado neste app. No APK, ative a permissão de microfone no criador do app e nas configurações do Android; no Chrome, toque em Permitir. Ou use o 🎙️ do teclado.',10000);
+const IS_WV=/;\s*wv\)/.test(navigator.userAgent||'');
+const srBadNow=()=>srBad||(Date.now()-LS.g('nexuslp_srbad',0)<6048e5&&!!(cfg.elKey||cfg.k.gemini));
+const markSrBad=()=>{srBad=true;LS.s('nexuslp_srbad',Date.now())};
 function mic(){
+ if(mr&&mr.state==='recording'){mr.stop();return}
+ if(lis&&rec){rec.stop();return}
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR)return toast('Microfone de voz indisponível aqui. Use o microfone do teclado.',4000);
- if(lis){rec.stop();return}
+ if(!SR||IS_WV||srBadNow())return micRecord();
  rec=new SR();rec.lang='pt-BR';rec.interimResults=true;rec.continuous=true;
- const base=$('inp').value?$('inp').value+' ':'';
+ const base=$('inp').value?$('inp').value+' ':'';let got=false;
  rec.onstart=()=>{lis=true;$('mic').classList.add('lis')};
- rec.onresult=e=>{let t='';for(const r of e.results)t+=r[0].transcript;$('inp').value=base+t};
- rec.onerror=e=>{if(/not-allowed|service/.test(e.error))toast('Sem permissão de microfone. Libere nas configurações do Android.',4000)};
+ rec.onresult=e=>{got=true;LS.s('nexuslp_srbad',0);let t='';for(const r of e.results)t+=r[0].transcript;$('inp').value=base+t;$('inp').dispatchEvent(new Event('input'))};
+ rec.onerror=e=>{if(e.error==='no-speech')return toast('Não ouvi nada. Tente de novo.');if(e.error!=='aborted'){markSrBad();micRecord()}};
  rec.onend=()=>{lis=false;$('mic').classList.remove('lis')};
- try{rec.start()}catch(e){}}
+ try{rec.start()}catch(e){markSrBad();return micRecord()}
+ setTimeout(()=>{if(!lis&&!got){try{rec.abort()}catch(e){}markSrBad();micRecord()}},4000)}
+/* plano C (APK sem permissão de microfone): o gravador do próprio celular, ou o microfone do teclado */
+function micKeyboard(msg){$('inp').focus();toast((msg?msg+' ':'')+'Por enquanto, toque no 🎙️ do teclado do celular para ditar.',9000)}
+function micFile(){
+ if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Este app não liberou o microfone.');
+ try{$('afile').click();toast('O microfone do app não está liberado, então vou abrir o gravador do celular: grave, confirme e eu transcrevo. Se nada abrir, use o 🎙️ do teclado.',9000)}catch(e){micKeyboard('')}}
+async function transcribeInto(blob,mt){
+ if(!cfg.k.gemini&&!cfg.elKey)return toast('Cole uma chave do ElevenLabs ou do Gemini em Configurações para transcrever áudio.',6000);
+ toast('Transcrevendo…',6e4);
+ try{const t=await transcribe(blob,mt);$('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')}
+ catch(e){toast('Não consegui transcrever: '+e.message,7000)}}
+$('afile').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)transcribeInto(f,f.type||'audio/mpeg')});
+/* plano B: grava o áudio e o ElevenLabs/Gemini transcreve */
+async function micRecord(){
+ if(!navigator.mediaDevices||!window.MediaRecorder)return micFile();
+ if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Para transcrever a sua voz, cole uma chave do ElevenLabs ou do Gemini em Configurações.');
+ let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){return micFile()}
+ const chunks=[];mr=new MediaRecorder(stream);
+ mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+ mr.onstart=()=>{$('mic').classList.add('lis');toast('🎙️ Gravando… toque no microfone de novo para parar.',6e4)};
+ mr.onstop=async()=>{
+  stream.getTracks().forEach(t=>t.stop());$('mic').classList.remove('lis');toast('Transcrevendo…',6e4);
+  try{
+   const mt=(mr.mimeType||'audio/webm').split(';')[0],blob=new Blob(chunks,{type:mt});
+   if(blob.size<800)return toast('Não ouvi nada. Tente de novo.');
+   const t=await transcribe(blob,mt);
+   $('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')
+  }catch(e){toast('Não consegui transcrever: '+e.message,7000)}};
+ mr.start();setTimeout(()=>{if(mr.state==='recording')mr.stop()},60000)}
+
+async function transcribe(blob,mt){
+ if(cfg.elKey){
+  try{
+   const f=new FormData();f.append('file',blob,'audio.'+(/mp4|m4a|aac/.test(mt)?'m4a':/ogg/.test(mt)?'ogg':/mpeg|mp3/.test(mt)?'mp3':/wav/.test(mt)?'wav':/3gp/.test(mt)?'3gp':'webm'));f.append('model_id','scribe_v1');
+   let r;try{r=await fetch('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':cfg.elKey},body:f})}catch(e){throw new Error('Sem conexão com o ElevenLabs.')}
+   if(!r.ok)throw await elErr(r);
+   const d=await r.json();if(d.text&&d.text.trim())return d.text.trim();
+   throw new Error('não entendi o áudio')
+  }catch(e){if(!cfg.k.gemini)throw e}}
+ const b64=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(blob)});
+ return mk(PROVS[1],cfg.k.gemini,cfg.m.gemini||PROVS[1].m).ask([{role:'user',content:'Transcreva fielmente este áudio em português. Responda só com a transcrição, sem comentários.',image:{t:mt,b:b64}}],'')}
 
 /* ---------- configurações ---------- */
 const res=(id,k,t)=>{const e=$(id);e.className='res '+k;e.textContent=t};
@@ -440,22 +642,41 @@ function renderSettings(){
  <input type="password" id="k_${p.id}" value="${ea(k)}" placeholder="${p.ph}" oninput="dirty('${p.id}')" autocomplete="off">
  <label>Modelo</label><input id="m_${p.id}" value="${ea(cfg.m[p.id]||p.m)}" oninput="dirty('${p.id}')" autocomplete="off">
  <div class="r"><button class="mini" onclick="testP('${p.id}',this)">Testar conexão</button><button class="mini" onclick="clr('${p.id}')">Apagar</button></div>
- <div class="res" id="r_${p.id}"></div><button class="save sv" id="s_${p.id}" onclick="saveP('${p.id}')">Salvar</button></div>`}).join('')}
+ <div class="res" id="r_${p.id}"></div><button class="save sv" id="s_${p.id}" onclick="saveP('${p.id}')">Salvar</button></div>`}).join('')+elCard()+'<p class="hint" style="text-align:center">Nexus LP · versão '+APP_VERSION+'</p>'}
+const elCard=()=>`<div class="card"><label>Voz e microfone — ElevenLabs${cfg.elKey?' ✅ salva':''}</label>
+ <input type="password" id="el_key" value="${ea(cfg.elKey||'')}" placeholder="chave do ElevenLabs" oninput="elSave()" autocomplete="off">
+ <label>Voz</label><select id="el_voice" onchange="elSave()">${EL_VOICES.map(v=>`<option value="${v[0]}"${(cfg.elVoice||EL_VOICES[0][0])===v[0]?' selected':''}>${v[1]}</option>`).join('')}</select>
+ <label>Quem fala primeiro?</label><select id="el_vp" onchange="elSave()"><option value="sys"${cfg.vp!=='el'?' selected':''}>Voz do aparelho (grátis); ElevenLabs se não funcionar</option><option value="el"${cfg.vp==='el'?' selected':''}>ElevenLabs primeiro (voz mais natural)</option></select>
+ <label>Limite por leitura (caracteres), para poupar créditos</label><input id="el_max" type="number" inputmode="numeric" value="${cfg.elMax||600}" oninput="elSave()">
+ <div class="r"><button class="mini" onclick="testEL(this)">Testar conexão</button><button class="mini" onclick="clrEL()">Apagar</button></div>
+ <div class="res" id="r_el"></div>
+ <p class="hint" style="margin:8px 0 0">O plano grátis dá cerca de 10.000 caracteres (~10 min de fala) por mês. O app só gasta quando você toca no 🔊, guarda o áudio para repetir de graça e também usa o ElevenLabs para transcrever o microfone (bem barato).${cfg.elUsed?` Já gerei ~${cfg.elUsed.c} caracteres em ${cfg.elUsed.m}.`:''}</p></div>`;
+function elSave(){cfg.elKey=cleanKey($('el_key').value)||'';cfg.elVoice=$('el_voice').value;cfg.vp=$('el_vp').value;cfg.elMax=Math.min(2500,Math.max(100,+$('el_max').value||600));persist()}
+function clrEL(){cfg.elKey='';persist();renderSettings();res('r_el','wait','Chave apagada.')}
+async function testEL(btn){
+ elSave();if(!cfg.elKey)return res('r_el','err','❌ Cole a chave antes de testar.');
+ btn.disabled=true;res('r_el','wait','Testando…');
+ try{
+  let r;try{r=await fetch('https://api.elevenlabs.io/v1/user/subscription',{headers:{'xi-api-key':cfg.elKey}})}catch(e){throw new Error('Sem conexão com o ElevenLabs.')}
+  if(r.ok){const d=await r.json();res('r_el','ok','✅ Conectado e salva! Créditos usados neste mês: '+d.character_count+' de '+d.character_limit+'.')}
+  else{await elTTS('Oi');res('r_el','ok','✅ Conectado e salva! Já pode tocar no 🔊.')}
+ }catch(e){res('r_el','err','❌ '+e.message)}
+ btn.disabled=false}
 const dirty=id=>{const k=cleanKey($('k_'+id).value);if(k)cfg.k[id]=k;else delete cfg.k[id];cfg.m[id]=$('m_'+id).value.trim();const ok=persist();res('r_'+id,ok?'wait':'err',ok?(k?'Guardada automaticamente. Toque em Testar conexão.':''):'⚠️ Este navegador não deixa gravar: a chave vale só até fechar o app.')};
 async function testP(id,btn){
  const p=PROVS.find(x=>x.id===id),k=cleanKey($('k_'+id).value),mo=$('m_'+id).value.trim()||p.m;
  if(!k)return res('r_'+id,'err','❌ Cole a chave antes de testar.');
- $('k_'+id).value=k;dirty(id);if(btn)btn.disabled=true;res('r_'+id,'wait','Testando…');
- try{await mk(p,k,mo).ask([{role:'user',content:'Responda apenas com a palavra: ok'}],'');$('m_'+id).value=cfg.m[id]||mo;res('r_'+id,'ok','✅ Conectado com sucesso. Agora toque em Salvar.')}
- catch(e){res('r_'+id,'err','❌ '+e.message+' A chave já ficou guardada; toque em Salvar se quiser mantê-la assim mesmo.')}
+ $('k_'+id).value=k;dirty(id);if(btn)btn.disabled=true;res('r_'+id,'wait','Testando… (se o serviço estiver ocupado, o app tenta de novo sozinho)');
+ try{await mk(p,k,mo).ask([{role:'user',content:'Responda apenas com a palavra: ok'}],'');$('m_'+id).value=cfg.m[id]||mo;res('r_'+id,'ok','✅ Conectado e salva! Já pode voltar (←) e conversar.')}
+ catch(e){res('r_'+id,'err','❌ '+e.message)}
  if(btn)btn.disabled=false}
 function saveP(id){dirty(id);const ok=persist();renderSettings();res('r_'+id,ok?'ok':'err',ok?'✅ Salva. '+providers().length+' IA(s) ativa(s).':'⚠️ Não consegui gravar neste navegador: a chave vale só até fechar o app.')}
 function clr(id){delete cfg.k[id];persist();renderSettings();res('r_'+id,'wait','Chave apagada.')}
 
 /* ---------- busca e perfil ---------- */
 function renderSearch(q){
- const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt).filter(c=>!q||c.title.toLowerCase().includes(q.toLowerCase()));
- $('sList').innerHTML=l.map(c=>`<div class="li" onclick="openConvo('${c.id}')">${esc(c.title)}</div>`).join('')||'<p class="hint">Nenhum chat encontrado.</p>'}
+ const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt).filter(c=>!q||ttl(c).toLowerCase().includes(q.toLowerCase()));
+ $('sList').innerHTML=l.map(c=>`<div class="li" onclick="openConvo('${c.id}')">${esc(ttl(c))}</div>`).join('')||'<p class="hint">Nenhum chat encontrado.</p>'}
 const pn=()=>LS.g('nexuslp_name','Laiton Flugêncio');
 function applyName(){const n=pn(),h=new Date().getHours();$('pname').textContent=n;$('av').textContent=n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();$('greet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+n.split(' ')[0]}
 function editName(){const n=prompt('Seu nome',pn());if(n&&n.trim()){LS.s('nexuslp_name',n.trim());applyName()}}
