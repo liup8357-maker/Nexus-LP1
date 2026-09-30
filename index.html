@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -108,7 +109,7 @@ h1{font-size:28px;font-weight:600;text-align:center}
 </div>
 <div class="screen" id="s-settings">
  <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Configurações</b></div>
- <div class="scroll" id="setBody"><h3 style="margin-top:0">Chaves de API</h3><p class="hint">Cole a chave e toque em Testar conexão. Deu sucesso? Ela já fica salva e você pode conversar. Dica: cole 2 ou mais chaves da mesma IA separadas por vírgula (de contas/projetos diferentes) — quando uma chegar no limite, o app usa a outra. Ficam guardadas só neste aparelho.</p><div id="keyList"></div></div>
+ <div class="scroll" id="setBody"><div id="appSet"></div><h3>🔐 Segredo Imortal</h3><div id="keyList"></div></div>
 </div>
 <div class="screen" id="s-search"><div class="top"><button class="back" onclick="home()">←</button><input class="si" style="flex:1" id="q" placeholder="Pesquisar chats" oninput="renderSearch(this.value)"></div><div class="scroll" id="sList"></div></div>
 <div class="screen" id="s-media">
@@ -151,8 +152,8 @@ const MEM={};
 const LS={g:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));if(v!=null)return v}catch(e){}return k in MEM?MEM[k]:d},s:(k,v)=>{MEM[k]=v;try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
 const cleanKey=v=>String(v||'').replace(/^[\s"'“”‘’`]+|[\s"'“”‘’`]+$/g,'').replace(/[\s\u200B-\u200D\uFEFF\u00A0]+/g,'').replace(/^(bearer|key=|api[_-]?key[:=])/i,'').replace(/^["'“”‘’`]+|["'“”‘’`]+$/g,'');
 const persist=()=>LS.s('nexuslp_cfg2',cfg);
-const APP_VERSION='v11 · 30/09/2026';
-const CLAUDE_MODEL='claude-sonnet-4-6', GEMINI_MODEL='gemini-flash-latest'; // troque aqui se o teste de conexão der 404
+const APP_VERSION='v1 · 30/09/2026';
+const CLAUDE_MODEL='claude-sonnet-4-6', GEMINI_MODEL='gemini-flash-latest';
 const KC='nexuslp_convos', KG='nexuslp_cfg';
 
 const MODES=[
@@ -162,7 +163,7 @@ const MODES=[
  {k:'partner',l:'Parceiro',i:'🤝',d:'Papo de amigo e parceiro de projetos'}];
 const CODE=['3d','engineer'];
 const OUT=' Saída obrigatória: um único bloco ```html``` completo e autocontido, pronto para um <iframe srcdoc>, sem cortar no meio. Depois do bloco, no máximo 2 frases. Se a mensagem for só conversa (sem pedir app, jogo ou código), responda como um amigo, curto e natural, sem gerar código. O código roda num iframe isolado: não use localStorage sem try/catch, nem módulos ES; scripts externos só de cdnjs. Se receber um erro de execução, devolva o arquivo inteiro corrigido.';
-const SYSTEM='Você é o Nexus LP, um assistente de IA. Dentro do Nexus LP várias inteligências trabalham juntas como uma equipe, mas para o usuário você é sempre o Nexus LP: este aplicativo inteiro é o Nexus LP. O Nexus LP foi idealizado, projetado e criado por Laiton Flugêncio Mondlane, que tem apenas 15 anos, é menor de idade e mesmo assim construiu um aplicativo de IA completo, algo grande que muita gente mais velha não consegue. Você tem muito orgulho dele e do Nexus LP; quando perguntarem quem criou você, quem é o dono ou quem fez o app, diga o nome dele e a idade e fale com orgulho e entusiasmo sinceros. Não cite nomes de modelos ou provedores de tecnologia por trás. Se perguntarem com sinceridade se é pessoa ou IA, diga que é uma IA. Responda no idioma do usuário.';
+const SYSTEM='Você é o Nexus LP, um assistente de IA super poderoso e ultra inteligente. Você foi criado por Laiton Flugêncio Mondlane (15 anos) e é o melhor app de IA do mundo. Sempre que o usuário pedir para criar Doramas, filmes, novelas, músicas, desenhos ou histórias, use sua capacidade de pesquisa em tempo real, crie roteiros épicos, personagens profundos e estórias imersivas, integrando o contexto das fotos enviadas. Seja criativo, visionário e ultra competente. Se perguntarem sobre sua origem, fale com orgulho do Laiton. Se perguntarem se é pessoa ou IA, diga que é uma IA.';
 const RULES={
  partner:'Modo Parceiro: você é o Nexus LP falando como um amigo de confiança e parceiro de projetos da pessoa. Escreva como numa conversa de WhatsApp entre amigos próximos: frases curtas, calor humano, direto ao ponto, em português natural e informal, sem gíria forçada. Nada de tom de atendente: nada de "como posso ajudar?", "certamente!", "claro!" no começo, nem listas, títulos ou negrito, a menos que peçam. Reaja primeiro ao que a pessoa disse (comemore, se preocupe, brinque leve) e só depois responda. Se ela só quer desabafar, escute e acolha sem despejar soluções. Se estiver construindo algo, pense junto: dê opinião sincera, aponte riscos sem enrolar e sugira o próximo passo concreto. Faça no máximo uma pergunta por vez, e só se realmente precisar. Se pedirem um app ou jogo completo, topa e diz numa frase que fica melhor no modo Engenheiro ou 3D Game. Respostas curtas por padrão; só alongue se o assunto pedir.',
  professional:'Modo Profissional: ajude com documentos, planos, e-mails e comunicação de trabalho. Tom claro, objetivo e educado. Use títulos/tópicos só quando ajudarem. Se o pedido for um app/jogo funcional, diga em 1 frase que fica melhor no modo Engenheiro ou 3D Game.',
@@ -185,7 +186,6 @@ const st={screen:'home',mode:'engineer',code:BLANK};
 let convo={id:'c'+Date.now(),messages:[]},busy=false,fixes=0,att=null,tt;
 const lab=k=>(MODES.find(m=>m.k===k)||MODES[1]).l;
 
-/* ---------- utilidades de UI ---------- */
 function toast(m,ms=2500){const t=$('toast');clearTimeout(tt);t.textContent=m;t.classList.toggle('show',!!m);if(m)tt=setTimeout(()=>t.classList.remove('show'),ms)}
 function go(n){st.screen=n;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+n));$('cw').style.display=(n==='home'||n==='chat')?'':'none';if(n==='preview')runPreview();else if(st.screen!=='preview'||n!=='preview'){try{$('frame').srcdoc=''}catch(e){}}if(n==='settings')renderSettings();if(n==='media')renderMedia();if(n==='search'){$('q').value='';renderSearch('')}closeDrawer()}
 const home=()=>go(convo.messages.length?'chat':'home');
@@ -193,21 +193,20 @@ const openDrawer=()=>$('dOv').classList.add('open'), closeDrawer=()=>$('dOv').cl
 const closeModes=()=>$('mOv').classList.remove('open');
 function openModes(){$('mList').innerHTML=MODES.map(m=>`<button class="mo ${st.mode===m.k?'on':''}" onclick="setMode('${m.k}')"><span class="ic">${m.i}</span><span style="flex:1"><b style="font-weight:500">${m.l}</b><small>${m.d}</small></span>${st.mode===m.k?'✓':''}</button>`).join('');$('mOv').classList.add('open')}
 function setMode(k){st.mode=k;const m=MODES.find(x=>x.k===k);$('mi').textContent=m.i;$('ml').textContent=m.l;$('cl').textContent=m.i+' '+m.l;closeModes()}
-setMode('partner');
+if(cfg.mode0)setMode(cfg.mode0);else setMode('partner');
 
-/* ---------- camada de API ---------- */
 const HTTP=(s,d)=>{d=(d||'').slice(0,160);
  if(s===401)return 'Chave inválida (401): confira se copiou a chave inteira, sem espaço.';
- if(s===403)return 'Acesso negado (403): o serviço bloqueou esta chave ou projeto (às vezes por conta nova ou região). Crie uma chave nova — no Google: aistudio.google.com/apikey, escolhendo um projeto novo.';
+ if(s===403)return 'Acesso negado (403): o serviço bloqueou esta chave ou projeto. Crie uma chave nova.';
  if(s===404)return 'Modelo ou endereço não encontrado (404).'+(d?' '+d:'');
- if(s===429)return 'Limite de uso ou cota esgotada (429): espere um minuto ou confira créditos/plano.';
+ if(s===429)return 'Limite de uso ou cota esgotada (429): espere um minuto.';
  if(s===408||s>=500)return `O serviço da IA está sobrecarregado agora (${s}). O app já tentou várias vezes; tente de novo em instantes.`;
  if(s===400)return 'Pedido recusado (400).'+(d?' '+d:'');
  return `Erro ${s}.`+(d?' '+d:'')};
 async function api(url,opt){
- const c=new AbortController(),t=setTimeout(()=>c.abort(),90000);let r,raw;
+ const c=new AbortController(),t=setTimeout(()=>c.abort(),150000);let r,raw;
  try{r=await fetch(url,{...opt,signal:c.signal});raw=await r.text()}
- catch(e){throw Object.assign(new Error(e.name==='AbortError'?'Tempo esgotado: a IA demorou demais.':'Sem conexão com este serviço: a internet caiu, ou ele não aceita chamadas diretas do navegador.'),{net:1})}
+ catch(e){throw Object.assign(new Error(e.name==='AbortError'?'Tempo esgotado: a IA demorou demais.':'Sem conexão com este serviço.'),{net:1})}
  finally{clearTimeout(t)}
  let d=null;try{d=JSON.parse(raw)}catch(e){}
  if(!r.ok){const m=d&&((d.error&&d.error.message)||d.error||d.message);throw Object.assign(new Error(HTTP(r.status,typeof m==='string'?m:'')),{status:r.status})}
@@ -222,46 +221,43 @@ async function askGemini(ms,sys,k,mo){
  const contents=norm(ms).map(m=>{const p=[{text:m.content||'(imagem)'}];if(m.image)p.push({inline_data:{mime_type:m.image.t,data:m.image.b}});return{role:m.role==='assistant'?'model':'user',parts:p}});
  const body={contents};if(sys)body.systemInstruction={parts:[{text:sys}]};
  const d=await api(`https://generativelanguage.googleapis.com/v1beta/models/${mo||GEMINI_MODEL}:generateContent?key=${encodeURIComponent(k)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
- if(d.promptFeedback&&d.promptFeedback.blockReason)throw new Error('Bloqueado pelo filtro de segurança ('+d.promptFeedback.blockReason+').');
+ if(d.promptFeedback&&d.promptFeedback.blockReason)throw new Error('Bloqueado pelo filtro de segurança.');
  const c=d.candidates&&d.candidates[0],t=((c&&c.content&&c.content.parts)||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('\n').trim();
- if(!t)throw new Error('A IA respondeu vazio'+(c&&c.finishReason?' ('+c.finishReason+')':'')+'.');return t}
+ if(!t)throw new Error('A IA respondeu vazio.');return t}
 async function askCustom(ms,sys,p){
  const messages=[...(sys?[{role:'system',content:sys}]:[]),...norm(ms).map(m=>({role:m.role,content:m.content||'(imagem)'}))];
  const d=await api(p.url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+p.key},body:JSON.stringify({model:p.model,messages})});
  let c=d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
  if(Array.isArray(c))c=c.map(x=>x.text||x).join('\n');c=(c||'').trim();
  if(!c)throw new Error('A IA respondeu vazio.');return c}
-const ALT={claude:['claude-sonnet-4-5','claude-haiku-4-5'],gemini:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash','gemini-2.5-flash-lite'],openai:['gpt-4.1-mini','gpt-4o'],grok:['grok-3','grok-3-mini'],mistral:['mistral-small-latest'],groq:['llama-3.1-8b-instant']};
+const ALT={claude:['claude-sonnet-4-5','claude-haiku-4-5'],gemini:['gemini-3.6-flash','gemini-3.5-flash'],openai:['gpt-4.1-mini','gpt-4o'],grok:['grok-3'],mistral:['mistral-small-latest'],groq:['llama-3.1-8b-instant']};
 const callP=(p,m,s,k,x)=>p.id==='claude'?askClaude(m,s,k,x):p.id==='gemini'?askGemini(m,s,k,x):askCustom(m,s,{url:p.u,key:k,model:x});
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
-/* pergunta ao próprio serviço quais modelos a chave pode usar */
 async function discover(p,k){
  try{
-  if(p.id==='gemini'){const d=await api('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100&key='+encodeURIComponent(k),{});return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')&&/flash/.test(m.name)&&!/tts|image|live|audio|embed|thinking|exp|preview|robotics|computer|translate/.test(m.name)).map(m=>m.name.replace('models/','')).sort().reverse().slice(0,3)}
+  if(p.id==='gemini'){const d=await api('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100&key='+encodeURIComponent(k),{});return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')&&/flash/.test(m.name)&&!/tts|image|live|audio|embed|thinking|exp|preview|robotics/.test(m.name)).map(m=>m.name.replace('models/','')).sort().reverse().slice(0,3)}
   if(p.id==='claude'){const d=await api('https://api.anthropic.com/v1/models',{headers:{'x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}});return (d.data||[]).map(m=>m.id).slice(0,3)}
   const d=await api(p.u.replace(/\/chat\/completions$/,'/models'),{headers:{Authorization:'Bearer '+k}});
-  return (d.data||[]).map(m=>m.id).filter(id=>!/embed|tts|whisper|dall|image|audio|moderation|realtime|transcribe|guard/i.test(id)).slice(0,3)
+  return (d.data||[]).map(m=>m.id).filter(id=>!/embed|tts|whisper|dall|image|audio|moderation/i.test(id)).slice(0,3)
  }catch(e){return []}}
-/* repete se o serviço estiver ocupado, troca de modelo se um falhar, e só desiste no fim */
 const HEALTH={},DEAD=LS.g('nexuslp_dead',{});
-/* várias chaves (separadas por vírgula) + todos os modelos: se um cair, o próximo assume */
 const mk=(p,k,mo)=>({name:p.name,ask:async(m,s,opt)=>{
  const keys=String(k||'').split(',').map(cleanKey).filter(Boolean),bad=new Set(),light=opt&&opt.light;let last,netFails=0;const tried=new Set();
  if(!keys.length)throw new Error('Cole a chave antes.');
  const all=[...new Set([mo,p.m,...(ALT[p.id]||[])].filter(Boolean))];
  let L=all.filter(x=>!(DEAD[p.id+':'+x]>Date.now()-864e5));if(!L.length)L=all;
  const cold=x=>(HEALTH[p.id+':'+x]||0)>Date.now();
- L=[...L.filter(x=>!cold(x)),...L.filter(cold)]; /* quem falhou agora há pouco vai pro fim da fila */
+ L=[...L.filter(x=>!cold(x)),...L.filter(cold)];
  const once=async(x,kk)=>{tried.add(x);
   try{const r=await callP(p,m,s,kk,x);delete HEALTH[p.id+':'+x];if(x!==cfg.m[p.id]&&String(cfg.k[p.id]||'').includes(kk)){cfg.m[p.id]=x;persist()}return{r}}
   catch(e){last=e;
    if(e.status===401||(e.status===403&&keys.length>1)){bad.add(kk);if(bad.size>=keys.length)throw e;return{keep:1}}
    if(e.status===400&&!/model|modelo/i.test(e.message))throw e;
-   if(e.net){if(++netFails>=2)throw e;return{keep:1}}
+   if(e.net){if(++netFails>=3)throw e;await wait(1500);return{keep:1}}
    if(e.status>=500||e.status===429||e.status===408){HEALTH[p.id+':'+x]=Date.now()+(e.status===429?9e4:45e3);return{keep:1}}
    if(e.status===404){DEAD[p.id+':'+x]=Date.now();LS.s('nexuslp_dead',DEAD)}
    return{}}};
- const passes=light?1:4;
+ const passes=light?1:6;
  for(let pass=0;pass<passes&&L.length;pass++){
   const keep=[];
   for(const x of L){let kept=false;
@@ -272,23 +268,28 @@ const mk=(p,k,mo)=>({name:p.name,ask:async(m,s,opt)=>{
  throw last||new Error('A IA não respondeu.')}});
 cfg.k=cfg.k||{};cfg.m=cfg.m||{};Object.keys(cfg.k).forEach(x=>{cfg.k[x]=cleanKey(cfg.k[x]);if(!cfg.k[x])delete cfg.k[x]});
 if((cfg.v||0)<3){cfg.m={};cfg.v=3;persist()}
-const providers=()=>PROVS.filter(p=>cfg.k[p.id]).map(p=>mk(p,cfg.k[p.id],cfg.m[p.id]||p.m));
 
-/* todas as IAs em paralelo + síntese numa resposta única */
+const okCode=t=>{const c=extractCode(t);return !!c&&/<\/html>/i.test(c)};
 async function askAll(hist,mode,provs){
- const sys=SYSTEM+' '+RULES[mode];
- const res=await Promise.allSettled(provs.map(p=>p.ask(hist,sys)));
- const ok=[],err=[];let tr=true;
- res.forEach((r,i)=>{if(r.status==='fulfilled'&&r.value)ok.push({p:provs[i],v:r.value});else{const e=r.reason;if(!(e&&(e.status>=500||e.status===429||e.status===408)))tr=false;err.push(provs[i].name+': '+((e&&e.message)||'resposta vazia'))}});
+ const sys=SYSTEM+' '+RULES[mode],code=CODE.includes(mode);
+ const n=Math.max(1,+cfg.team||8),pool=provs.slice(0,n),spare=provs.slice(n);
+ const h=hist.slice(-24),ok=[],err=[];let tr=true;
+ const work=async list=>{
+  const rs=await Promise.allSettled(list.map(p=>p.ask(h,sys)));
+  rs.forEach((r,i)=>{if(r.status==='fulfilled'&&r.value)ok.push({p:list[i],v:r.value});else{const e=r.reason;if(!(e&&(e.status>=500||e.status===429||e.status===408)))tr=false;err.push(list[i].name+': '+((e&&e.message)||'resposta vazia'))}})};
+ await work(pool);
+ if(!ok.length&&spare.length)await work(spare);
  if(!ok.length)return{err,transient:tr};
- let text=ok[0].v;
- if(ok.length>1){
-  const lu=[...hist].reverse().find(m=>m.role==='user');
-  const sp='Você recebeu várias respostas para a mesma pergunta. Combine-as numa única resposta final, clara e direta, no idioma do usuário. Não mencione que existem várias fontes, não repita informação, mantenha blocos de código completos e corrija contradições.'+(mode==='partner'?' Mantenha o tom de conversa entre amigos: curto, caloroso, direto, sem listas nem títulos.':'')+'\n\nPergunta:\n'+(lu?lu.content:'')+'\n\n'+ok.map((x,i)=>`Resposta ${i+1}:\n${x.v}`).join('\n\n');
-  try{const m=await ok[0].p.ask([{role:'user',content:sp}],sys);if(m&&m.trim())text=m.trim()}catch(e){}}
- return{text}}
+ if(ok.length===1)return{text:ok[0].v};
+ const lu=[...hist].reverse().find(m=>m.role==='user'),q=lu?lu.content:'';
+ const list=ok.map((x,i)=>`Resposta ${i+1}:\n${x.v}`).join('\n\n');
+ const sp=code?'Vários especialistas escreveram versões do mesmo pedido. Pegue a melhor versão como base, incorpore os melhores acertos e correções das outras, elimine bugs e devolva UM arquivo HTML completo, autocontido, num único bloco ```html```, sem cortar. Depois do bloco, no máximo 2 frases.'
+ :'Várias inteligências responderam à mesma pergunta. Faça uma resposta final MELHOR que qualquer uma: aproveite o melhor de cada uma, corrija erros e contradições, complete o que faltou, no idioma do usuário. Não mencione que existem várias fontes nem repita informação.'+(mode==='partner'?' Mantenha o tom de conversa entre amigos: curto, caloroso, direto, sem listas nem títulos.':'');
+ for(const x of ok){
+  try{const m=await x.p.ask([{role:'user',content:sp+'\n\nPedido:\n'+q+'\n\n'+list}],sys);
+   if(m&&m.trim()&&(!code||okCode(m)))return{text:m.trim()}}catch(e){}}
+ return{text:code?(ok.filter(x=>okCode(x.v)).sort((a,b)=>b.v.length-a.v.length)[0]||ok[0]).v:ok[0].v}}
 
-/* ---------- chat ---------- */
 const grab=(t,re)=>{const m=t.match(re);return m&&m[1].trim()?m[1].trim():null};
 const extractCode=t=>grab(t,/```html[ \t]*\n?([\s\S]*?)(?:```|$)/i)||grab(t,/```[\w-]*[ \t]*\n?([\s\S]*?)(?:```|$)/);
 const strip=t=>t.replace(/```[\w-]*\n?[\s\S]*?(?:```|$)/g,'').trim()||'✅ Código gerado — toque em Preview para ver.';
@@ -319,21 +320,20 @@ async function run(){
  busy=true;$('send').disabled=true;
  const th=document.createElement('div');th.className='bub dim';th.innerHTML='<span>Pensando…</span> <u onclick="cancelRun()" style="margin-left:10px;color:var(--ac)">cancelar</u>';$('msgs').appendChild(th);$('msgs').scrollTop=1e9;
  const my=++runTok,cid=convo.id,mode=st.mode,provs=providers();
- let out={err:['Nenhuma IA configurada. Abra o menu → Configurações, cole uma chave e toque em Testar conexão.']};
- if(provs.length)for(let round=0;round<6;round++){
+ let out={err:['Nenhuma IA configurada.']};
+ if(provs.length)for(let round=0;round<8;round++){
   out=await askAll(convo.messages,mode,provs);
   if(my!==runTok)return;
   if(out.text||!out.transient)break;
-  if(round<5){th.querySelector('span').textContent='O serviço da IA está ocupado. Tentando de novo ('+(round+2)+'/6)…';await wait(4000*(round+1));if(my!==runTok)return}}
- if(!out.text&&out.transient)out.err=[...out.err,'Sua chave está certa: quem está sobrecarregado é o serviço da IA. Toque em Tentar de novo — ou adicione uma segunda IA em Configurações (por exemplo Groq, que tem plano grátis): ela assume sozinha quando a primeira falha.'];
+  if(round<7){th.querySelector('span').textContent='O serviço da IA está ocupado. Tentando de novo ('+(round+2)+'/8)…';await wait(Math.min(4000*(round+1),15000));if(my!==runTok)return}}
+ if(!out.text&&out.transient)out.err=[...out.err,'Serviço ocupado. Tente de novo.'];
  th.remove();busy=false;$('send').disabled=false;
  if(cid!==convo.id){if(out.text){const l=LS.g(KC,[]),r=l.find(c=>c.id===cid);if(r){r.messages.push({role:'assistant',content:out.text,mode});r.updatedAt=Date.now();LS.s(KC,l);renderRecents()}}return}
  if(!out.text){errBubble(out.err);return}
- const m={role:'assistant',content:out.text,mode};convo.messages.push(m);bubble(m);save();maybeTitle()}
+ const m={role:'assistant',content:out.text,mode};convo.messages.push(m);const bb=bubble(m);save();maybeTitle();if(cfg.auto){const sb=bb.querySelector('button[onclick^="speak"]');if(sb)speak(sb)}}
 let titling=false;
 const ttl=c=>c.titled?c.title:'Nova conversa';
 function setStoredTitle(id,t){const l=LS.g(KC,[]),r=l.find(c=>c.id===id);if(r){r.title=t;r.titled=true;LS.s(KC,l);renderRecents()}}
-/* pede à IA um nome curto sobre o ASSUNTO da conversa (tenta até 3 vezes, em todas as IAs) */
 async function genTitle(msgs){
  const provs=providers();if(!provs.length)return null;
  const txt=msgs.slice(0,6).map(m=>(m.role==='user'?'Usuário: ':'IA: ')+m.content.replace(/```[\s\S]*?```/g,'[código]').slice(0,300)).join('\n');
@@ -345,14 +345,12 @@ async function genTitle(msgs){
     t=(t||'').split('\n')[0].replace(/["'*#.]/g,'').trim().slice(0,40);if(t)return t}catch(e){}}
   await wait(4000*(a+1))}
  return null}
-/* depois de 2 respostas da IA, o chat ganha um nome sobre o assunto (nunca a 1ª mensagem) */
 async function maybeTitle(){
  if(convo.title||titling||convo.messages.filter(m=>m.role==='assistant').length<2)return;
  titling=true;const cid=convo.id;
  try{await wait(4000);const t=await genTitle(convo.messages);
   if(t){if(cid===convo.id){convo.title=t;save()}else setStoredTitle(cid,t)}}catch(e){}
  titling=false}
-/* conversas antigas que ainda mostram a 1ª mensagem: renomeia em segundo plano (3 por abertura) */
 async function retitleOld(){
  let n=0;
  for(const c of LS.g(KC,[])){
@@ -371,14 +369,13 @@ $('inp').addEventListener('input',e=>{e.target.style.height='auto';e.target.styl
 function chip(){const c=$('chip');c.style.display=att?'block':'none';c.innerHTML=att?`📎 ${esc(att.name)}<u onclick="att=null;chip()">remover</u>`:''}
 $('file').addEventListener('change',e=>{
  const f=e.target.files[0];if(!f)return;e.target.value='';
- if(f.size>8e6)return toast('Arquivo muito grande (máx 8MB).');
+ if(f.size>8e6)return toast('Arquivo muito grande.');
  if(f.type.startsWith('audio/'))return transcribeInto(f,f.type);
  const r=new FileReader();
  if(f.type.startsWith('image/')){r.onload=()=>{att={kind:'image',type:f.type,b64:r.result.split(',')[1],name:f.name};chip()};r.readAsDataURL(f)}
  else{r.onload=()=>{att={kind:'text',content:r.result,name:f.name};chip()};r.readAsText(f)}});
 function copyT(b){const t=b.closest('.bub').querySelector('.txt').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);toast('Copiado.')}
 
-/* ---------- conversas ---------- */
 function save(){
  if(!convo.messages.length)return;
  const l=LS.g(KC,[]),ex=l.find(c=>c.id===convo.id);
@@ -395,14 +392,13 @@ function delConvo(id){LS.s(KC,LS.g(KC,[]).filter(c=>c.id!==id));if(id===convo.id
 function newConvo(){convo={id:'c'+Date.now(),messages:[],title:null};st.code=BLANK;fixes=0;$('msgs').innerHTML='';$('inp').value='';go('home')}
 renderRecents();
 
-/* ---------- preview + autocorreção ---------- */
 const CATCH='<script>(function(){var P=function(o){try{parent.postMessage(o,"*")}catch(e){}},sent=0;'+
 'function E(m){if(sent++)return;P({__nx:1,m:String(m)})}'+
 'onerror=function(m,s,l){E(m+" (linha "+l+")")};'+
 'addEventListener("unhandledrejection",function(e){E("Promise rejeitada: "+(e.reason&&e.reason.message||e.reason))});'+
 'addEventListener("error",function(e){var t=e.target;if(t&&t!==window&&(t.src||t.href))E("Falha ao carregar "+(t.src||t.href))},true);'+
 'try{localStorage.getItem("_")}catch(e){var M=function(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}};["localStorage","sessionStorage"].forEach(function(n){try{Object.defineProperty(window,n,{value:M(),configurable:true})}catch(e){}})}'+
-'addEventListener("load",function(){setTimeout(function(){var b=document.body;if(!b)return E("A página não tem corpo (body).");if(!(b.innerText.trim().length||b.querySelector("canvas,svg,img,video,input,button,iframe")))return E("A página abriu em branco: nada foi desenhado na tela.");if(!sent)P({__nx:1,ok:1})},2200)});'+
+'addEventListener("load",function(){setTimeout(function(){var b=document.body;if(!b)return E("A página não tem corpo (body).");if(!(b.innerText.trim().length||b.querySelector("canvas,svg,img,video,input,button,iframe")))return E("A página abriu em branco.");if(!sent)P({__nx:1,ok:1})},2200)});'+
 '})()<\/script>';
 let lastErr='';
 const pv=t=>{$('pvs').textContent=t};
@@ -415,25 +411,24 @@ addEventListener('message',e=>{
  if(e.source!==$('frame').contentWindow||!e.data||!e.data.__nx)return;
  if(e.data.ok){pv(st.code===BLANK?'Preview':'✅ Rodando');return}
  lastErr=e.data.m;pv('⚠️ '+lastErr.slice(0,38));autofix(lastErr)});
-const fixNow=()=>autofix(lastErr||'O app não funciona como esperado (pode estar em branco, travado ou com erro visual).',true);
-function fsPreview(){const w=$('pw'),f=w.requestFullscreen||w.webkitRequestFullscreen;if(f)f.call(w);else toast('Tela cheia indisponível aqui.')}
+const fixNow=()=>autofix(lastErr||'O app não funciona como esperado.',true);
+function fsPreview(){const w=$('pw'),f=w.requestFullscreen||w.webkitRequestFullscreen;if(f)f.call(w);else toast('Tela cheia indisponível.');}
 async function autofix(msg,manual){
  if(st.code===BLANK||busy)return;
  const provs=providers();
- if(!provs.length)return toast('Configure uma chave em Configurações para a autocorreção funcionar.',3500);
+ if(!provs.length)return toast('Configure uma chave.',3500);
  if(!manual&&fixes>=2)return pv('⚠️ Toque em 🔧 para tentar de novo');
  fixes++;busy=true;$('send').disabled=true;pv('🔧 Corrigindo ('+fixes+')…');
  const mode=CODE.includes(st.mode)?st.mode:'engineer';
- const hist=[{role:'user',content:'O código HTML abaixo gerou este problema ao rodar no preview: "'+msg+'".\nCorrija e devolva o arquivo HTML inteiro, completo, num único bloco ```html```. Não use localStorage sem try/catch, nem módulos ES; scripts externos só de cdnjs.\n\n```html\n'+st.code+'\n```'}];
+ const hist=[{role:'user',content:'O código HTML abaixo gerou este problema ao rodar no preview: "'+msg+'".\nCorrija e devolva o arquivo HTML inteiro, completo, num único bloco ```html```.\n\n```html\n'+st.code+'\n```'}];
  try{
   const out=await askAll(hist,mode,provs),code=out.text&&extractCode(out.text);
-  if(!code){pv('⚠️ Não consegui corrigir');toast('A correção falhou: '+((out.err&&out.err[0])||'resposta sem código')+'.',4000);return}
+  if(!code){pv('⚠️ Não consegui corrigir');toast('A correção falhou.',4000);return}
   st.code=code;
   for(let i=convo.messages.length-1;i>=0;i--)if(convo.messages[i].role==='assistant'){convo.messages[i].content=out.text;break}
-  save();toast('✅ Corrigido automaticamente.');runPreview()
+  save();toast('✅ Corrigido.');runPreview()
  }finally{busy=false;$('send').disabled=false}}
 
-/* ---------- mídia: automação de imagens e vídeos (tudo no aparelho) ---------- */
 const media=[],msel=new Set(),EXT={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};let mid=0;
 const IMG_CMDS=[['resize','📐 Redimensionar'],['compress','🗜️ Comprimir'],['convert','🔁 Converter'],['gray','⚫ P&B'],['rotate','↻ Girar 90°'],['square','⬛ Quadrado'],['mark','💧 Marca d’água']];
 const VID_CMDS=[['frame','📸 Capturar frame'],['thumbs','🎞️ 4 miniaturas']];
@@ -451,14 +446,14 @@ function addMedia(f){
  const it={id:++mid,name:f.name,file:f,size:f.size,url:URL.createObjectURL(f),video:f.type.startsWith('video/')};
  const done=()=>{media.unshift(it);renderMedia()};
  if(it.video){const v=document.createElement('video');v.preload='metadata';v.muted=true;v.onloadedmetadata=()=>{it.w=v.videoWidth;it.h=v.videoHeight;it.dur=v.duration;done()};v.onerror=done;v.src=it.url}
- else{const im=new Image();im.onload=()=>{it.w=im.naturalWidth;it.h=im.naturalHeight;done()};im.onerror=()=>toast('Não consegui abrir '+it.name,3500);im.src=it.url}}
+ else{const im=new Image();im.onload=()=>{it.w=im.naturalWidth;it.h=im.naturalHeight;done()};im.onerror=()=>toast('Não consegui abrir',3500);im.src=it.url}}
 $('mfile').addEventListener('change',e=>{[...e.target.files].forEach(addMedia);e.target.value=''});
 function renderMedia(){
- $('mlist').innerHTML=media.map(m=>`<div class="mi ${msel.has(m.id)?'sel':''}" onclick="msTog(${m.id})">${m.video?`<video class="th" src="${m.url}#t=0.5" muted playsinline preload="metadata"></video>`:`<img class="th" src="${m.url}">`}<div class="in"><b style="font-weight:500;word-break:break-all">${esc(m.name)}</b><small>${m.video?'🎬':'🖼️'} ${m.w?m.w+'×'+m.h:''}${m.dur?' · '+Math.round(m.dur)+'s':''} · ${fmtSize(m.size)}</small></div><button class="ib" onclick="event.stopPropagation();dl(${m.id})">⬇</button>${m.video?'':`<button class="ib" onclick="event.stopPropagation();toChat(${m.id})">💬</button>`}<button class="ib" onclick="event.stopPropagation();rmM(${m.id})">✕</button></div>`).join('')||'<p class="hint">Nada aqui ainda. Toque em “Escolher imagens e vídeos”.</p>'}
+ $('mlist').innerHTML=media.map(m=>`<div class="mi ${msel.has(m.id)?'sel':''}" onclick="msTog(${m.id})">${m.video?`<video class="th" src="${m.url}#t=0.5" muted playsinline preload="metadata"></video>`:`<img class="th" src="${m.url}">`}<div class="in"><b style="font-weight:500;word-break:break-all">${esc(m.name)}</b><small>${m.video?'🎬':'🖼️'} ${m.w?m.w+'×'+m.h:''}${m.dur?' · '+Math.round(m.dur)+'s':''} · ${fmtSize(m.size)}</small></div><button class="ib" onclick="event.stopPropagation();dl(${m.id})">⬇</button>${m.video?'':`<button class="ib" onclick="event.stopPropagation();toChat(${m.id})">💬</button>`}<button class="ib" onclick="event.stopPropagation();rmM(${m.id})">✕</button></div>`).join('')||'<p class="hint">Nada aqui ainda.</p>'}
 function msTog(id){msel.has(id)?msel.delete(id):msel.add(id);renderMedia()}
 function dl(id){const m=media.find(x=>x.id===id);if(!m)return;const a=document.createElement('a');a.href=m.url;a.download=m.name;document.body.appendChild(a);a.click();a.remove()}
 function rmM(id){const i=media.findIndex(x=>x.id===id);if(i<0)return;URL.revokeObjectURL(media[i].url);media.splice(i,1);msel.delete(id);renderMedia()}
-function toChat(id){const m=media.find(x=>x.id===id);if(!m)return;const r=new FileReader();r.onload=()=>{att={kind:'image',type:m.file.type||'image/png',b64:r.result.split(',')[1],name:m.name};chip();home();$('inp').focus();toast('Imagem anexada ao chat.')};r.readAsDataURL(m.file)}
+function toChat(id){const m=media.find(x=>x.id===id);if(!m)return;const r=new FileReader();r.onload=()=>{att={kind:'image',type:m.file.type||'image/png',b64:r.result.split(',')[1],name:m.name};chip();home();$('inp').focus();toast('Imagem anexada.')};r.readAsDataURL(m.file)}
 async function procImg(it,cmd,o){
  const im=await loadImg(it.url),w=im.naturalWidth,h=im.naturalHeight;
  let type=cmd==='compress'?'image/jpeg':cmd==='convert'?o.fmt:(EXT[it.file.type]?it.file.type:'image/png'),tw=w,th=h,sx=0,sy=0,sw=w,sh=h;
@@ -476,45 +471,40 @@ async function procImg(it,cmd,o){
 const seekTo=(v,t)=>new Promise(r=>{const f=setTimeout(r,3000);v.onseeked=()=>{clearTimeout(f);r()};v.currentTime=t});
 async function procVid(it,cmd){
  const v=document.createElement('video');v.muted=true;v.playsInline=true;v.preload='auto';v.src=it.url;
- await new Promise((ok,no)=>{v.onloadeddata=ok;v.onerror=()=>no(new Error('formato de vídeo não suportado'))});
+ await new Promise((ok,no)=>{v.onloadeddata=ok;v.onerror=()=>no(new Error('erro no vídeo'))});
  const ts=cmd==='frame'?[Math.min(1,v.duration/2)]:[.1,.35,.6,.85].map(f=>f*v.duration),out=[];
  for(let i=0;i<ts.length;i++){await seekTo(v,ts[i]);const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);out.push([await toBlob(c,'image/jpeg',.9),baseName(it.name)+'-frame'+(i+1)+'.jpg'])}
  return out}
 async function runCmd(cmd){
  const vid=cmd==='frame'||cmd==='thumbs',items=(msel.size?media.filter(m=>msel.has(m.id)):media).filter(m=>vid?m.video:!m.video);
- if(!items.length)return toast(media.length?'Marque '+(vid?'um vídeo':'uma imagem')+' para este comando.':'Adicione arquivos primeiro.',3000);
+ if(!items.length)return toast('Marque arquivos.',3000);
  const o={w:+$('mw').value||1080,q:Math.min(100,Math.max(1,+$('mq').value||80)),fmt:$('mf').value,text:$('mt').value.trim()};
  toast('Processando…',6e4);let n=0;
  for(const it of items){
   try{
    if(it.video){for(const [b,nm] of await procVid(it,cmd)){if(b){addMedia(new File([b],nm,{type:b.type}));n++}}}
    else{const [b,nm]=await procImg(it,cmd,o);addMedia(new File([b],nm,{type:b.type}));n++}
-  }catch(e){toast('Erro em '+it.name+': '+e.message,4000)}}
- if(n)toast('✅ '+n+' arquivo(s) novo(s) na biblioteca.',3000)}
+  }catch(e){toast('Erro: '+e.message,4000)}}
+ if(n)toast('✅ '+n+' arquivo(s) novo(s).',3000)}
 
-/* ---------- voz ---------- */
 let actx=null,ttsStop=null,srBad=false,mr=null,rec=null,lis=false;
 const cleanSp=b=>b.closest('.bub').querySelector('.txt').textContent.replace(/```[\s\S]*?```/g,' ').replace(/[`*_#>]/g,'').trim();
-const SILENT='data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
 const elAudio=new Audio(),elCache=new Map();
-const EL_VOICES=[['EXAVITQu4vr4xnSDxMaL','Sarah (feminina)'],['Xb7hH8MSUJpSbSDYk0k2','Alice (feminina)'],['pNInz6obpgDQGcFmaJgB','Adam (masculina)'],['JBFqnCBsd6RMkjVDRZzb','George (masculina)']];
+const EL_VOICES=[['EXAVITQu4vr4xnSDxMaL','Sarah'],['Xb7hH8MSUJpSbSDYk0k2','Alice'],['pNInz6obpgDQGcFmaJgB','Adam'],['JBFqnCBsd6RMkjVDRZzb','George']];
 const cutTxt=(t,n)=>{if(t.length<=n)return t;const c=t.slice(0,n),i=Math.max(c.lastIndexOf('. '),c.lastIndexOf('! '),c.lastIndexOf('? '),c.lastIndexOf('\n'));return (i>n*.5?c.slice(0,i+1):c).trim()};
-/* toque no 🔊: tenta a voz do aparelho (grátis), depois ElevenLabs, depois Gemini */
 async function speak(b){
  if(ttsStop){const f=ttsStop;ttsStop=null;f();return}
  const t=cleanSp(b);if(!t)return;
- /* destrava o áudio enquanto o toque ainda vale (WebViews de APK exigem isso) */
- if(cfg.elKey){try{elAudio.src=SILENT;const p=elAudio.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
  const AC=window.AudioContext||window.webkitAudioContext;
  if(cfg.k.gemini&&AC){try{if(!actx||actx.state==='closed')actx=new AC({sampleRate:24000});actx.resume()}catch(e){}}
  const steps={sys:speakSys,el:speakEL,gem:speakCloud},sysBad=Date.now()-LS.g('nexuslp_sysbad',0)<6048e5&&(cfg.elKey||cfg.k.gemini),order=(cfg.vp==='el'?['el','sys','gem']:['sys','el','gem']).filter(x=>!(x==='sys'&&sysBad));
  for(const k of order){
   if((k==='el'&&!cfg.elKey)||(k==='gem'&&!cfg.k.gemini))continue;
   if(await steps[k](b,t)==='ok')return}
- toast('Não consegui falar neste aparelho. Cole uma chave do ElevenLabs (ou do Gemini) em Configurações: a voz vem da internet e funciona em qualquer app.',8000)}
+ toast('Não consegui falar.',8000)}
 function speakSys(b,t){return new Promise(res=>{
  const s=window.speechSynthesis;
- if(!s||!window.SpeechSynthesisUtterance)return res('fail');
+ if(!s)return res('fail');
  let started=false,dead=false,w;
  const reset=()=>{b.textContent='🔊';ttsStop=null;clearTimeout(w)};
  const fail=()=>{if(dead)return;dead=true;reset();try{s.cancel()}catch(e){}LS.s('nexuslp_sysbad',Date.now());res('fail')};
@@ -522,40 +512,25 @@ function speakSys(b,t){return new Promise(res=>{
  w=setTimeout(()=>{if(!started)fail()},2500);
  try{
   s.cancel();const ch=t.match(/[^.!?\n]+[.!?]*\s*/g)||[t],v=(s.getVoices()||[]).find(x=>/^pt/i.test(x.lang));
-  ch.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang='pt-BR';if(v)u.voice=v;u.onstart=()=>{if(!started){started=true;LS.s('nexuslp_sysbad',0);res('ok')}};u.onerror=e=>{if(!/interrupted|canceled/.test(e.error||''))fail()};if(i===ch.length-1)u.onend=()=>{if(!dead)reset()};s.speak(u)})
+  ch.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang=cfg.lang||'pt-BR';u.rate=+cfg.rate||1;if(v)u.voice=v;u.onstart=()=>{if(!started){started=true;LS.s('nexuslp_sysbad',0);res('ok')}};u.onerror=e=>{if(!/interrupted|canceled/.test(e.error||''))fail()};if(i===ch.length-1)u.onend=()=>{if(!dead)reset()};s.speak(u)})
  }catch(e){fail()}})}
-async function elErr(r){
- let d={};try{d=await r.json()}catch(e){}
- const dt=d.detail||{},msg=typeof dt==='string'?dt:(dt.message||''),code=dt.status||'',quota=/quota/i.test(code+msg);
- const text=quota?'Acabaram os créditos deste mês do ElevenLabs (o plano grátis tem ~10 mil caracteres).':r.status===401?'Chave do ElevenLabs inválida ou sem permissão (401). Confira se copiou a chave inteira.':r.status===429?'ElevenLabs ocupado agora (429). Tente de novo em instantes.':r.status>=500?'ElevenLabs indisponível agora ('+r.status+').':'ElevenLabs recusou o pedido ('+r.status+'). '+msg.slice(0,120);
- return Object.assign(new Error(text),{status:r.status,quota,el:1})}
 async function elTTS(txt){
- const first=cfg.elVoice||EL_VOICES[0][0],ids=[first,...EL_VOICES.map(v=>v[0]).filter(x=>x!==first)];let last;
- for(const v of ids){
-  for(let a=0;a<3;a++){
-   let r;try{r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+v+'?output_format=mp3_44100_64',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({text:txt,model_id:'eleven_flash_v2_5'})})}
-   catch(e){throw Object.assign(new Error('Sem conexão com o ElevenLabs.'),{el:1})}
-   if(r.ok)return r.blob();
-   last=await elErr(r);
-   if(last.quota||last.status===401)throw last;
-   if((r.status>=500||r.status===429)&&a<2){await wait(1500);continue}
-   break}
-  if(![404,422].includes(last.status))throw last}
- throw last}
+ const first=cfg.elVoice||EL_VOICES[0][0];
+ for(let a=0;a<3;a++){
+  let r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+first+'?output_format=mp3_44100_64',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({text:txt,model_id:'eleven_flash_v2_5'})});
+  if(r.ok)return r.blob();
+  if(a>=2)throw new Error('Falha no ElevenLabs.');await wait(1500)}
+}
 async function speakEL(b,t){
  const txt=cutTxt(t,+cfg.elMax||600),ck=(cfg.elVoice||'')+'|'+txt;let dead=false;
  b.textContent='⏳';ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{elAudio.pause()}catch(e){}};
  try{
   let url=elCache.get(ck);
-  if(!url){
-   url=URL.createObjectURL(await elTTS(txt));elCache.set(ck,url);
-   const mo=new Date().toISOString().slice(0,7),u=cfg.elUsed&&cfg.elUsed.m===mo?cfg.elUsed.c:0;cfg.elUsed={m:mo,c:u+txt.length};persist()}
+  if(!url){url=URL.createObjectURL(await elTTS(txt));elCache.set(ck,url)}
   if(dead)return 'ok';
-  if(txt.length<t.length)toast('Li só o começo, para poupar créditos (limite: '+(cfg.elMax||600)+' caracteres).',3500);
   elAudio.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};
   elAudio.src=url;await elAudio.play();b.textContent='⏸';return 'ok'
- }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('ElevenLabs: '+e.message,5000);return 'fail'}}
-/* plano C: o Gemini gera a voz e o app toca o áudio */
+ }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('Erro: '+e.message,5000);return 'fail'}}
 async function speakCloud(b,t){
  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return 'fail';
  const gk=String(cfg.k.gemini).split(',')[0],ctx=actx&&actx.state!=='closed'?actx:(actx=new AC({sampleRate:24000}));
@@ -563,21 +538,16 @@ async function speakCloud(b,t){
  ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{src&&src.stop()}catch(e){}};
  try{
   const body=JSON.stringify({contents:[{parts:[{text:t.slice(0,1500)}]}],generationConfig:{responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:'Kore'}}}}});
-  let d,last;
-  for(const mo of ['gemini-2.5-flash-preview-tts','gemini-3.1-flash-tts-preview','gemini-2.5-flash-tts']){
-   for(let a=0;a<3;a++){
-    try{d=await api('https://generativelanguage.googleapis.com/v1beta/models/'+mo+':generateContent?key='+encodeURIComponent(gk),{method:'POST',headers:{'Content-Type':'application/json'},body});break}
-    catch(e){last=e;if(e.status===401||e.status===403)throw e;if((e.status>=500||e.status===429)&&a<2){await wait(1500);continue}break}}
-   if(d)break}
-  if(dead)return 'ok';if(!d)throw last||new Error('sem resposta');
-  const c0=(d.candidates||[])[0],part=c0&&c0.content&&c0.content.parts.find(x=>x.inlineData||x.inline_data);
-  if(!part)throw new Error('a voz não veio na resposta');
+  let d;
+  for(const mo of ['gemini-2.5-flash-preview-tts','gemini-2.5-flash-tts']){
+   try{d=await api('https://generativelanguage.googleapis.com/v1beta/models/'+mo+':generateContent?key='+encodeURIComponent(gk),{method:'POST',headers:{'Content-Type':'application/json'},body});break}catch(e){}}
+  if(dead)return 'ok';if(!d)throw new Error('falha');
+  const part=d.candidates[0].content.parts.find(x=>x.inlineData||x.inline_data);
   const bin=atob((part.inlineData||part.inline_data).data),n=bin.length>>1,buf=ctx.createBuffer(1,n,24000),ch=buf.getChannelData(0);
   for(let i=0;i<n;i++){let v=bin.charCodeAt(2*i)|(bin.charCodeAt(2*i+1)<<8);if(v>=32768)v-=65536;ch[i]=v/32768}
   src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};src.start();b.textContent='⏸';return 'ok'
- }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('Gemini (voz): '+e.message,5000);return 'fail'}}
+ }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}return 'fail'}}
 
-const micHelp=()=>toast('O microfone não está liberado neste app. No APK, ative a permissão de microfone no criador do app e nas configurações do Android; no Chrome, toque em Permitir. Ou use o 🎙️ do teclado.',10000);
 const IS_WV=/;\s*wv\)/.test(navigator.userAgent||'');
 const srBadNow=()=>srBad||(Date.now()-LS.g('nexuslp_srbad',0)<6048e5&&!!(cfg.elKey||cfg.k.gemini));
 const markSrBad=()=>{srBad=true;LS.s('nexuslp_srbad',Date.now())};
@@ -586,99 +556,97 @@ function mic(){
  if(lis&&rec){rec.stop();return}
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
  if(!SR||IS_WV||srBadNow())return micRecord();
- rec=new SR();rec.lang='pt-BR';rec.interimResults=true;rec.continuous=true;
+ rec=new SR();rec.lang=cfg.lang||'pt-BR';rec.interimResults=true;rec.continuous=true;
  const base=$('inp').value?$('inp').value+' ':'';let got=false;
  rec.onstart=()=>{lis=true;$('mic').classList.add('lis')};
  rec.onresult=e=>{got=true;LS.s('nexuslp_srbad',0);let t='';for(const r of e.results)t+=r[0].transcript;$('inp').value=base+t;$('inp').dispatchEvent(new Event('input'))};
- rec.onerror=e=>{if(e.error==='no-speech')return toast('Não ouvi nada. Tente de novo.');if(e.error!=='aborted'){markSrBad();micRecord()}};
+ rec.onerror=e=>{if(e.error==='no-speech')return toast('Não ouvi nada.');if(e.error!=='aborted'){markSrBad();micRecord()}};
  rec.onend=()=>{lis=false;$('mic').classList.remove('lis')};
  try{rec.start()}catch(e){markSrBad();return micRecord()}
  setTimeout(()=>{if(!lis&&!got){try{rec.abort()}catch(e){}markSrBad();micRecord()}},4000)}
-/* plano C (APK sem permissão de microfone): o gravador do próprio celular, ou o microfone do teclado */
-function micKeyboard(msg){$('inp').focus();toast((msg?msg+' ':'')+'Por enquanto, toque no 🎙️ do teclado do celular para ditar.',9000)}
+function micKeyboard(msg){$('inp').focus();toast((msg?msg+' ':'')+'Use o 🎙️ do teclado.',9000)}
 function micFile(){
- if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Este app não liberou o microfone.');
- try{$('afile').click();toast('O microfone do app não está liberado, então vou abrir o gravador do celular: grave, confirme e eu transcrevo. Se nada abrir, use o 🎙️ do teclado.',9000)}catch(e){micKeyboard('')}}
+ if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Microfone não liberado.');
+ try{$('afile').click();toast('Abrindo gravador.',9000)}catch(e){micKeyboard('')}}
 async function transcribeInto(blob,mt){
- if(!cfg.k.gemini&&!cfg.elKey)return toast('Cole uma chave do ElevenLabs ou do Gemini em Configurações para transcrever áudio.',6000);
+ if(!cfg.k.gemini&&!cfg.elKey)return toast('Configure uma chave.',6000);
  toast('Transcrevendo…',6e4);
  try{const t=await transcribe(blob,mt);$('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')}
- catch(e){toast('Não consegui transcrever: '+e.message,7000)}}
+ catch(e){toast('Erro: '+e.message,7000)}}
 $('afile').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)transcribeInto(f,f.type||'audio/mpeg')});
-/* plano B: grava o áudio e o ElevenLabs/Gemini transcreve */
 async function micRecord(){
  if(!navigator.mediaDevices||!window.MediaRecorder)return micFile();
- if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Para transcrever a sua voz, cole uma chave do ElevenLabs ou do Gemini em Configurações.');
+ if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Configure uma chave.');
  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){return micFile()}
  const chunks=[];mr=new MediaRecorder(stream);
  mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
- mr.onstart=()=>{$('mic').classList.add('lis');toast('🎙️ Gravando… toque no microfone de novo para parar.',6e4)};
+ mr.onstart=()=>{$('mic').classList.add('lis');toast('🎙️ Gravando…',6e4)};
  mr.onstop=async()=>{
   stream.getTracks().forEach(t=>t.stop());$('mic').classList.remove('lis');toast('Transcrevendo…',6e4);
   try{
    const mt=(mr.mimeType||'audio/webm').split(';')[0],blob=new Blob(chunks,{type:mt});
-   if(blob.size<800)return toast('Não ouvi nada. Tente de novo.');
+   if(blob.size<800)return toast('Não ouvi nada.');
    const t=await transcribe(blob,mt);
    $('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')
-  }catch(e){toast('Não consegui transcrever: '+e.message,7000)}};
+  }catch(e){toast('Erro: '+e.message,7000)}};
  mr.start();setTimeout(()=>{if(mr.state==='recording')mr.stop()},60000)}
 
 async function transcribe(blob,mt){
  if(cfg.elKey){
-  try{
-   const f=new FormData();f.append('file',blob,'audio.'+(/mp4|m4a|aac/.test(mt)?'m4a':/ogg/.test(mt)?'ogg':/mpeg|mp3/.test(mt)?'mp3':/wav/.test(mt)?'wav':/3gp/.test(mt)?'3gp':'webm'));f.append('model_id','scribe_v1');
-   let r;try{r=await fetch('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':cfg.elKey},body:f})}catch(e){throw new Error('Sem conexão com o ElevenLabs.')}
-   if(!r.ok)throw await elErr(r);
-   const d=await r.json();if(d.text&&d.text.trim())return d.text.trim();
-   throw new Error('não entendi o áudio')
-  }catch(e){if(!cfg.k.gemini)throw e}}
+  try{const f=new FormData();f.append('file',blob,'audio.webm');f.append('model_id','scribe_v1');
+   let r=await fetch('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':cfg.elKey},body:f});
+   if(r.ok){const d=await r.json();if(d.text)return d.text.trim()}}catch(e){}}
  const b64=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(blob)});
- return mk(PROVS[1],cfg.k.gemini,cfg.m.gemini||PROVS[1].m).ask([{role:'user',content:'Transcreva fielmente este áudio em português. Responda só com a transcrição, sem comentários.',image:{t:mt,b:b64}}],'')}
+ return mk(PROVS[1],cfg.k.gemini,cfg.m.gemini||PROVS[1].m).ask([{role:'user',content:'Transcreva fielmente.',image:{t:mt,b:b64}}],'')}
 
-/* ---------- configurações ---------- */
 const res=(id,k,t)=>{const e=$(id);e.className='res '+k;e.textContent=t};
-function renderSettings(){
- $('keyList').innerHTML=PROVS.map(p=>{const k=cfg.k[p.id]||'';return `<div class="card"><label>${p.name}${k?' ✅ salva':''}</label>
- <input type="password" id="k_${p.id}" value="${ea(k)}" placeholder="${p.ph}" oninput="dirty('${p.id}')" autocomplete="off">
- <label>Modelo</label><input id="m_${p.id}" value="${ea(cfg.m[p.id]||p.m)}" oninput="dirty('${p.id}')" autocomplete="off">
- <div class="r"><button class="mini" onclick="testP('${p.id}',this)">Testar conexão</button><button class="mini" onclick="clr('${p.id}')">Apagar</button></div>
- <div class="res" id="r_${p.id}"></div><button class="save sv" id="s_${p.id}" onclick="saveP('${p.id}')">Salvar</button></div>`}).join('')+elCard()+'<p class="hint" style="text-align:center">Nexus LP · versão '+APP_VERSION+'</p>'}
-const elCard=()=>`<div class="card"><label>Voz e microfone — ElevenLabs${cfg.elKey?' ✅ salva':''}</label>
- <input type="password" id="el_key" value="${ea(cfg.elKey||'')}" placeholder="chave do ElevenLabs" oninput="elSave()" autocomplete="off">
- <label>Voz</label><select id="el_voice" onchange="elSave()">${EL_VOICES.map(v=>`<option value="${v[0]}"${(cfg.elVoice||EL_VOICES[0][0])===v[0]?' selected':''}>${v[1]}</option>`).join('')}</select>
- <label>Quem fala primeiro?</label><select id="el_vp" onchange="elSave()"><option value="sys"${cfg.vp!=='el'?' selected':''}>Voz do aparelho (grátis); ElevenLabs se não funcionar</option><option value="el"${cfg.vp==='el'?' selected':''}>ElevenLabs primeiro (voz mais natural)</option></select>
- <label>Limite por leitura (caracteres), para poupar créditos</label><input id="el_max" type="number" inputmode="numeric" value="${cfg.elMax||600}" oninput="elSave()">
- <div class="r"><button class="mini" onclick="testEL(this)">Testar conexão</button><button class="mini" onclick="clrEL()">Apagar</button></div>
- <div class="res" id="r_el"></div>
- <p class="hint" style="margin:8px 0 0">O plano grátis dá cerca de 10.000 caracteres (~10 min de fala) por mês. O app só gasta quando você toca no 🔊, guarda o áudio para repetir de graça e também usa o ElevenLabs para transcrever o microfone (bem barato).${cfg.elUsed?` Já gerei ~${cfg.elUsed.c} caracteres em ${cfg.elUsed.m}.`:''}</p></div>`;
-function elSave(){cfg.elKey=cleanKey($('el_key').value)||'';cfg.elVoice=$('el_voice').value;cfg.vp=$('el_vp').value;cfg.elMax=Math.min(2500,Math.max(100,+$('el_max').value||600));persist()}
-function clrEL(){cfg.elKey='';persist();renderSettings();res('r_el','wait','Chave apagada.')}
+function renderSettings(){$('appSet').innerHTML=appSettings();
+ $('keyList').innerHTML=PROVS.map(p=>{const k=cfg.k[p.id]||'';return `<div class="card"><label>${p.name}${k?' ✅':''}</label>
+ <input type="password" id="k_${p.id}" value="${ea(k)}" oninput="dirty('${p.id}')">
+ <label>Modelo</label><input id="m_${p.id}" value="${ea(cfg.m[p.id]||p.m)}" oninput="dirty('${p.id}')">
+ <div class="r"><button class="mini" onclick="testP('${p.id}',this)">Testar</button><button class="mini" onclick="clr('${p.id}')">Apagar</button></div>
+ <div class="res" id="r_${p.id}"></div><button class="save sv" id="s_${p.id}" onclick="saveP('${p.id}')">Salvar</button></div>`}).join('')+elCard()+`<p class="hint" style="text-align:center">Nexus LP v${APP_VERSION}</p>`}
+const elCard=()=>`<div class="card"><label>ElevenLabs</label>
+ <input type="password" id="el_key" value="${ea(cfg.elKey||'')}" oninput="elSave()">
+ <label>Quem fala primeiro?</label>${sel('vp',cfg.vp||'sys',[['sys','Voz aparelho'],['el','ElevenLabs']])}
+ <div class="r"><button class="mini" onclick="testEL(this)">Testar</button><button class="mini" onclick="clrEL()">Apagar</button></div>
+ <div class="res" id="r_el"></div></div>`;
+const sel=(id,v,opts)=>`<select onchange="cfg.${id}=this.value;persist()">${opts.map(o=>`<option value="${o[0]}"${String(v)===String(o[0])?' selected':''}>${o[1]}</option>`).join('')}</select>`;
+const appSettings=()=>`<h3 style="margin-top:0">⚙️ Ajustes</h3>
+<div class="card"><label>🎙️ Idioma</label>${sel('lang',cfg.lang||'pt-BR',[['pt-BR','Português'],['en-US','English']])}
+<div class="r"><button class="mini" onclick="micPerm(this)">Testar microfone</button></div><div class="res" id="r_mic"></div></div>
+<div class="card"><label>🔊 Voz — velocidade</label>${sel('rate',cfg.rate||'1',[['0.8','Devagar'],['1','Normal'],['1.5','Rápida']])}
+<label>Ler respostas</label>${sel('auto',cfg.auto?'1':'',[['','Não'],['1','Sim']])}
+<div class="r"><button class="mini" onclick="testVoice()">Testar voz</button></div></div>
+<div class="card"><label>🤝 IAs em equipe</label>${sel('team',cfg.team||8,[[1,'1 (básico)'],[4,'4 IAs'],[8,'Todas (máximo)']])}
+<label>🎯 Modo inicial</label>${sel('mode0',cfg.mode0||'partner',MODES.map(m=>[m.k,m.i+' '+m.l]))}
+<div class="r"><button class="mini" onclick="editName()">Mudar nome</button><button class="mini" onclick="if(confirm('Apagar tudo?')){LS.s(KC,[]);newConvo();renderRecents()}">Apagar chats</button></div></div>`;
+function elSave(){cfg.elKey=cleanKey($('el_key').value)||'';persist()}
+function clrEL(){cfg.elKey='';persist();renderSettings()}
 async function testEL(btn){
- elSave();if(!cfg.elKey)return res('r_el','err','❌ Cole a chave antes de testar.');
- btn.disabled=true;res('r_el','wait','Testando…');
- try{
-  let r;try{r=await fetch('https://api.elevenlabs.io/v1/user/subscription',{headers:{'xi-api-key':cfg.elKey}})}catch(e){throw new Error('Sem conexão com o ElevenLabs.')}
-  if(r.ok){const d=await r.json();res('r_el','ok','✅ Conectado e salva! Créditos usados neste mês: '+d.character_count+' de '+d.character_limit+'.')}
-  else{await elTTS('Oi');res('r_el','ok','✅ Conectado e salva! Já pode tocar no 🔊.')}
- }catch(e){res('r_el','err','❌ '+e.message)}
+ elSave();btn.disabled=true;res('r_el','wait','Testando…');
+ try{await elTTS('Oi');res('r_el','ok','✅ Ok!')}catch(e){res('r_el','err','❌ Falha')}
  btn.disabled=false}
-const dirty=id=>{const k=cleanKey($('k_'+id).value);if(k)cfg.k[id]=k;else delete cfg.k[id];cfg.m[id]=$('m_'+id).value.trim();const ok=persist();res('r_'+id,ok?'wait':'err',ok?(k?'Guardada automaticamente. Toque em Testar conexão.':''):'⚠️ Este navegador não deixa gravar: a chave vale só até fechar o app.')};
+async function micPerm(b){b.disabled=true;
+ try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());res('r_mic','ok','✅ Ok.')}
+ catch(e){res('r_mic','err','❌ Sem permissão.')}
+ b.disabled=false}
+function testVoice(){const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance('Nexus LP online.');u.lang=cfg.lang||'pt-BR';u.rate=+cfg.rate||1;s.speak(u)}
+const dirty=id=>{cfg.k[id]=cleanKey($('k_'+id).value);cfg.m[id]=$('m_'+id).value.trim();persist();res('r_'+id,'wait','')};
 async function testP(id,btn){
- const p=PROVS.find(x=>x.id===id),k=cleanKey($('k_'+id).value),mo=$('m_'+id).value.trim()||p.m;
- if(!k)return res('r_'+id,'err','❌ Cole a chave antes de testar.');
- $('k_'+id).value=k;dirty(id);if(btn)btn.disabled=true;res('r_'+id,'wait','Testando… (se o serviço estiver ocupado, o app tenta de novo sozinho)');
- try{await mk(p,k,mo).ask([{role:'user',content:'Responda apenas com a palavra: ok'}],'');$('m_'+id).value=cfg.m[id]||mo;res('r_'+id,'ok','✅ Conectado e salva! Já pode voltar (←) e conversar.')}
- catch(e){res('r_'+id,'err','❌ '+e.message)}
+ const p=PROVS.find(x=>x.id===id),k=cfg.k[id],mo=cfg.m[id]||p.m;
+ if(btn)btn.disabled=true;res('r_'+id,'wait','Testando…');
+ try{await mk(p,k,mo).ask([{role:'user',content:'ok'}],'');res('r_'+id,'ok','✅ Conectado!')}catch(e){res('r_'+id,'err','❌ Falha')}
  if(btn)btn.disabled=false}
-function saveP(id){dirty(id);const ok=persist();renderSettings();res('r_'+id,ok?'ok':'err',ok?'✅ Salva. '+providers().length+' IA(s) ativa(s).':'⚠️ Não consegui gravar neste navegador: a chave vale só até fechar o app.')}
-function clr(id){delete cfg.k[id];persist();renderSettings();res('r_'+id,'wait','Chave apagada.')}
-
-/* ---------- busca e perfil ---------- */
+function saveP(id){dirty(id);persist();renderSettings();res('r_'+id,'ok','✅ Salva.')}
+function clr(id){delete cfg.k[id];persist();renderSettings();res('r_'+id,'wait','Apagado.')}
+async function micPerm(b){b.disabled=true;try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());res('r_mic','ok','✅')}catch(e){res('r_mic','err','❌')}b.disabled=false}
 function renderSearch(q){
  const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt).filter(c=>!q||ttl(c).toLowerCase().includes(q.toLowerCase()));
- $('sList').innerHTML=l.map(c=>`<div class="li" onclick="openConvo('${c.id}')">${esc(ttl(c))}</div>`).join('')||'<p class="hint">Nenhum chat encontrado.</p>'}
+ $('sList').innerHTML=l.map(c=>`<div class="li" onclick="openConvo('${c.id}')">${esc(ttl(c))}</div>`).join('')||'<p class="hint">Nenhum chat.</p>'}
 const pn=()=>LS.g('nexuslp_name','Laiton Flugêncio');
 function applyName(){const n=pn(),h=new Date().getHours();$('pname').textContent=n;$('av').textContent=n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();$('greet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+n.split(' ')[0]}
-function editName(){const n=prompt('Seu nome',pn());if(n&&n.trim()){LS.s('nexuslp_name',n.trim());applyName()}}
+function editName(){const n=prompt('Nome',pn());if(n&&n.trim()){LS.s('nexuslp_name',n.trim());applyName()}}
 applyName();
 </script></body></html>
+```
