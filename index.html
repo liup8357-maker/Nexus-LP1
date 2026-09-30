@@ -1,15 +1,18 @@
-
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8">
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#12141a"><title>Nexus LP</title>
+<meta name="theme-color" content="#12141a">
+<title>Nexus LP</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#12141a;--p:#181b23;--p2:#1f232d;--b:#2a2f3a;--ink:#e9e8e4;--sub:#7d8494;--ac:#e0a458;--tl:#5fa8a0}
+:root{color-scheme:dark;--bg:#12141a;--p:#181b23;--p2:#1f232d;--b:#2a2f3a;--ink:#e9e8e4;--sub:#7d8494;--ac:#e0a458;--tl:#5fa8a0;--ok:#4cc38a;--bad:#ff6b5b;--blue:#6ea8ff}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;height:100dvh;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
-button,input,textarea{font-family:inherit;touch-action:manipulation}
+button,input,textarea,select{font-family:inherit;touch-action:manipulation}
+button{cursor:pointer}
 .shell{display:flex;flex-direction:column;height:100%}
 .screen{display:none;flex-direction:column;flex:1;min-height:0}.screen.on{display:flex}
 .top{display:flex;align-items:center;gap:10px;padding:16px;flex-shrink:0}
@@ -17,636 +20,418 @@ button,input,textarea{font-family:inherit;touch-action:manipulation}
 .mark{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--tl));flex-shrink:0}
 .sp{flex:1}.lbl{font-size:13px;color:var(--sub)}
 .flat{font-size:12px;padding:7px 12px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ac)}
-.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px}
 .big{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--ac),var(--tl))}
 h1{font-size:28px;font-weight:600;text-align:center}
-.msgs{flex:1;min-height:0;overflow-y:auto;padding:8px 16px;display:flex;flex-direction:column;gap:14px}
-.bub{max-width:90%;width:fit-content;font-size:15px;line-height:1.55;word-break:break-word;white-space:pre-wrap}
+.msgs{flex:1;min-height:0;overflow-y:auto;padding:8px 16px 20px;display:flex;flex-direction:column;gap:14px}
+.bub{max-width:92%;width:fit-content;font-size:15px;line-height:1.55;word-break:break-word;white-space:pre-wrap}
 .bub.user{align-self:flex-end;background:var(--p2);border-radius:16px 16px 4px 16px;padding:10px 14px}
 .bub.dim{color:var(--sub);animation:bl 1.2s infinite}@keyframes bl{50%{opacity:.4}}
 .tag{font-size:11px;color:var(--sub);margin-bottom:4px}
-.acts{display:flex;gap:8px;margin-top:6px}
-.acts button,.retry{font-size:12px;min-width:26px;height:26px;padding:0 8px;border-radius:8px;border:1px solid var(--b);background:none;color:var(--sub)}
-.retry{margin-top:8px;color:var(--ac);border-radius:20px}
-.err{background:#2a1a17;border:1px solid #e2604f66;border-radius:12px;padding:10px 12px;font-size:14px}
-.err b{color:#ff8a7a;display:block;margin-bottom:4px}.err span{display:block;margin-top:3px}
-.cw{padding:0 16px 16px;flex-shrink:0}
-.composer{border-radius:24px;background:var(--p);border:1px solid var(--b);padding:12px}
-.composer textarea{width:100%;background:none;border:none;outline:none;color:var(--ink);font-size:15px;padding:4px 4px 10px;resize:none;max-height:110px}
-.row{display:flex;align-items:center;gap:8px}
-.pill{height:36px;padding:0 12px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:12.5px;display:flex;align-items:center;gap:6px}
-.pill #ml{color:var(--ac)}
-.round{width:36px;height:36px;border-radius:50%;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:16px;display:grid;place-items:center;cursor:pointer}
-.round.send{background:var(--ac);color:#1a1305;border:none}.round.send:disabled{opacity:.4}
-.round.lis{background:#c96a5a;border-color:#c96a5a;animation:bl 1s infinite}
+.acts{display:flex;gap:7px;margin-top:7px;align-items:center}.acts button{font-size:12px;min-width:28px;height:28px;padding:0 7px;border-radius:8px;border:1px solid var(--b);background:none;color:var(--sub)}
+.err{background:#2a1a17;border:1px solid #e2604f66;border-radius:12px;padding:10px 12px;font-size:14px}.err b{color:#ff8a7a;display:block;margin-bottom:4px}.err span{display:block;margin-top:3px}
+.retry{margin-top:8px;color:var(--ac);border:1px solid var(--b);background:none;border-radius:20px;padding:7px 12px}
+.cw{padding:0 16px 16px;flex-shrink:0}.composer{border-radius:24px;background:var(--p);border:1px solid var(--b);padding:12px}.composer textarea{width:100%;background:none;border:none;outline:none;color:var(--ink);font-size:15px;padding:4px 4px 10px;resize:none;max-height:110px}
+.row{display:flex;align-items:center;gap:8px}.pill{height:36px;padding:0 12px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:12.5px;display:flex;align-items:center;gap:6px}.pill #ml{color:var(--ac)}
+.round{width:36px;height:36px;border-radius:50%;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:16px;display:grid;place-items:center;cursor:pointer}.round.send{background:var(--ac);color:#1a1305;border:none}.round.send:disabled{opacity:.4}.round.lis{background:#c96a5a;border-color:#c96a5a;animation:bl 1s infinite}
 #chip{font-size:12px;color:var(--sub);background:var(--p);border:1px solid var(--b);border-radius:12px;padding:6px 10px;margin-bottom:8px;display:none}
 #chip u{color:#e2604f;margin-left:8px}
-.wrap{flex:1;min-height:0;background:#fff;position:relative}
-.wrap iframe{width:100%;height:100%;border:none;display:block}
-.pv{border-bottom:1px solid var(--b);background:var(--p);padding:0 16px;height:56px}
-.scroll{flex:1;overflow-y:auto;padding:0 16px 60px}
-.scroll h3{font-size:16px;margin:22px 0 4px}.hint{color:var(--sub);font-size:12.5px;margin-bottom:12px;line-height:1.45}
-.card{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:12px;margin-bottom:12px}
-.card label{display:block;font-size:12px;color:var(--sub);margin:8px 0 4px}.card label:first-child{margin-top:0}
-.card input{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px}
-.r{display:flex;gap:8px;margin-top:10px}
-.mini{flex:1;border:1px solid var(--b);background:none;color:var(--ink);border-radius:10px;padding:9px;font-size:13px}
-.mini.wide{width:100%;border-style:dashed}
+.wrap{flex:1;min-height:0;background:#fff;position:relative}.wrap iframe{width:100%;height:100%;border:none;display:block}
+.pv{border-bottom:1px solid var(--b);background:var(--p);padding:0 16px;height:56px}.pv .ib:last-child{margin-right:0}
+.scroll{flex:1;overflow-y:auto;padding:0 16px 80px}.scroll h3{font-size:16px;margin:22px 0 4px}.hint{color:var(--sub);font-size:12.5px;margin-bottom:12px;line-height:1.45}
+.card{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:12px;margin-bottom:12px}.card label{display:block;font-size:12px;color:var(--sub);margin:8px 0 4px}.card label:first-child{margin-top:0}
+.card input,.card textarea,.card select,.si{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;outline:none}.card textarea{min-height:90px;resize:vertical}
+.r{display:flex;gap:8px;margin-top:10px}.mini{flex:1;border:1px solid var(--b);background:none;color:var(--ink);border-radius:10px;padding:9px;font-size:13px}.mini.wide{width:100%;border-style:dashed}
 .save{background:var(--ac);color:#1a1305;border:none;border-radius:12px;padding:12px;font-weight:600;width:100%;margin-top:14px}
-.res{font-size:12.5px;margin-top:8px;word-break:break-word}.res.ok{color:#4cc38a}.res.err{color:#ff6b5b;background:none;border:none;padding:0}.res.wait{color:var(--sub)}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--p);border:1px solid var(--b);font-size:12.5px;padding:8px 14px;border-radius:20px;display:none;z-index:70;max-width:90%;text-align:center}
-#toast.show{display:block}
-.ov{position:fixed;inset:0;z-index:50;pointer-events:none}.ov.open{pointer-events:auto}
-.bd{position:absolute;inset:0;background:#0009;opacity:0;transition:opacity .2s}.ov.open .bd{opacity:1}
-.drawer{position:absolute;inset:0 15vw 0 0;max-width:340px;background:var(--bg);transform:translateX(-100%);transition:transform .22s;display:flex;flex-direction:column}
-.ov.open .drawer{transform:none}
-.dh{display:flex;align-items:center;gap:10px;padding:24px 20px 16px;font-size:22px;font-weight:600}
-.nav{padding:0 12px}.nav button{display:block;width:100%;padding:12px;border-radius:8px;background:none;border:none;color:var(--ink);font-size:15px;text-align:left}
-.nav button:active{background:var(--p2)}
-.dv{height:1px;background:var(--b);margin:12px 16px}.sl{padding:0 20px 4px;font-size:13px;color:var(--sub)}
-#recent{flex:1;overflow:auto;padding:0 12px}
-#recent div{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:8px;font-size:14px;color:#9aa0ac}
-#recent div:active{background:var(--p2)}#recent i{font-style:normal;color:var(--sub)}
-.df{display:flex;align-items:center;gap:12px;padding:16px}
-.av{width:40px;height:40px;border-radius:50%;background:var(--ac);color:#1a1305;font-weight:600;font-size:13px;display:grid;place-items:center}
-.nc{flex:1;height:44px;border-radius:22px;background:var(--ink);color:var(--bg);font-weight:500;font-size:14px;border:none}
-.sheet{position:absolute;inset-inline:0;bottom:0;background:var(--p);border-top:1px solid var(--b);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .2s;padding-bottom:16px}
-.ov.open .sheet{transform:none}
-.sh{display:flex;justify-content:space-between;padding:20px 20px 12px;font-size:17px;font-weight:600}.sh button{background:none;border:none;color:var(--sub);font-size:20px}
-.mo{width:calc(100% - 16px);margin:0 8px;display:flex;align-items:center;gap:12px;padding:14px 12px;border-radius:12px;background:none;border:none;text-align:left;color:var(--ink)}
-.mo:active{background:var(--p2)}.mo .ic{font-size:20px}.mo small{display:block;font-size:12.5px;color:var(--sub)}.mo.on b{color:var(--ac)}
-.acts{align-items:center}.acts button{border:none;font-size:15px;padding:0 6px}
-.disc{font-size:11.5px;color:var(--sub);margin-top:8px}
-.cred{font-size:12px;color:var(--sub);text-align:center;padding:0 32px;line-height:1.4}
-.si{background:var(--p2);border:1px solid var(--b);border-radius:12px;padding:10px 12px;color:var(--ink);font-size:14px}
-.li{padding:14px 4px;border-bottom:1px solid var(--b);font-size:15px}
-.sv{display:block}
-.pvs{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.ib{background:none;border:1px solid var(--b);color:var(--ink);border-radius:8px;min-width:32px;height:32px;font-size:15px;flex-shrink:0}.ib:active{background:var(--p2)}
-.pv{gap:8px}.pv .ib:last-child{margin-right:0}
-.qk,.chips{display:flex;flex-wrap:wrap;gap:8px}.qk{justify-content:center;padding:6px 20px 0}
-.qk button,.chips button{font-size:13px;padding:8px 13px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink)}
-.qk button:active,.chips button:active{border-color:var(--ac);color:var(--ac)}
-.og{display:grid;grid-template-columns:1fr 1fr;gap:10px}.og label{margin-top:0!important}
-.card select{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px}
-.mi{display:flex;align-items:center;gap:10px;background:var(--p);border:1px solid var(--b);border-radius:14px;padding:8px;margin-bottom:8px}
-.mi.sel{border-color:var(--ac)}.mi .th{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#000;flex-shrink:0}
-.mi .in{flex:1;min-width:0;font-size:13px}.mi small{display:block;color:var(--sub);margin-top:2px}
-.card select{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px}
-</style></head><body>
+.res{font-size:12.5px;margin-top:8px;word-break:break-word}.res.ok{color:var(--ok)}.res.err{color:var(--bad);background:none;border:none;padding:0}.res.wait{color:var(--sub)}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--p);border:1px solid var(--b);font-size:12.5px;padding:8px 14px;border-radius:20px;display:none;z-index:100;max-width:90%;text-align:center}#toast.show{display:block}
+.ov{position:fixed;inset:0;z-index:50;pointer-events:none}.ov.open{pointer-events:auto}.bd{position:absolute;inset:0;background:#0009;opacity:0;transition:opacity .2s}.ov.open .bd{opacity:1}
+.drawer{position:absolute;inset:0 15vw 0 0;max-width:340px;background:var(--bg);transform:translateX(-100%);transition:transform .22s;display:flex;flex-direction:column}.ov.open .drawer{transform:none}
+.dh{display:flex;align-items:center;gap:10px;padding:24px 20px 16px;font-size:22px;font-weight:600}.nav{padding:0 12px}.nav button{display:block;width:100%;padding:12px;border-radius:8px;background:none;border:none;color:var(--ink);font-size:15px;text-align:left}.nav button:active{background:var(--p2)}
+.dv{height:1px;background:var(--b);margin:12px 16px}.sl{padding:0 20px 4px;font-size:13px;color:var(--sub)}#recent{flex:1;overflow:auto;padding:0 12px}#recent div{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:8px;font-size:14px;color:#9aa0ac}#recent div:active{background:var(--p2)}#recent i{font-style:normal;color:var(--sub)}
+.df{display:flex;align-items:center;gap:12px;padding:16px}.av{width:40px;height:40px;border-radius:50%;background:var(--ac);color:#1a1305;font-weight:600;font-size:13px;display:grid;place-items:center}.nc{flex:1;height:44px;border-radius:22px;background:var(--ink);color:var(--bg);font-weight:500;font-size:14px;border:none}
+.sheet{position:absolute;inset-inline:0;bottom:0;background:var(--p);border-top:1px solid var(--b);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .2s;padding-bottom:16px}.ov.open .sheet{transform:none}.sh{display:flex;justify-content:space-between;padding:20px 20px 12px;font-size:17px;font-weight:600}.sh button{background:none;border:none;color:var(--sub);font-size:20px}.mo{width:calc(100% - 16px);margin:0 8px;display:flex;align-items:center;gap:12px;padding:14px 12px;border-radius:12px;background:none;border:none;text-align:left;color:var(--ink)}.mo:active{background:var(--p2)}.mo .ic{font-size:20px}.mo small{display:block;font-size:12.5px;color:var(--sub)}.mo.on b{color:var(--ac)}
+.cred{font-size:12px;color:var(--sub);text-align:center;padding:0 32px;line-height:1.4}.si{background:var(--p2);border:1px solid var(--b);border-radius:12px;padding:10px 12px;color:var(--ink);font-size:14px}.li{padding:14px 4px;border-bottom:1px solid var(--b);font-size:15px}
+.pvs{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.ib{background:none;border:1px solid var(--b);color:var(--ink);border-radius:8px;min-width:32px;height:32px;font-size:15px;flex-shrink:0}
+.qk,.chips{display:flex;flex-wrap:wrap;gap:8px}.qk{justify-content:center;padding:6px 20px 0}.qk button,.chips button{font-size:13px;padding:8px 13px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink)}.qk button:active,.chips button:active{border-color:var(--ac);color:var(--ac)}
+.og{display:grid;grid-template-columns:1fr 1fr;gap:10px}.og label{margin-top:0!important}.mi{display:flex;align-items:center;gap:10px;background:var(--p);border:1px solid var(--b);border-radius:14px;padding:8px;margin-bottom:8px}.mi.sel{border-color:var(--ac)}.mi .th{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#000;flex-shrink:0}.mi .in{flex:1;min-width:0;font-size:13px}.mi small{display:block;color:var(--sub);margin-top:2px}
+.hero{border:1px solid var(--b);background:linear-gradient(135deg,#1a1e27,#151a20);border-radius:18px;padding:18px;margin-bottom:14px}.hero h2{font-size:23px;margin-bottom:6px}.hero p{font-size:13px;color:var(--sub);line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:13px;text-align:left;color:var(--ink)}.tile b{display:block;font-size:14px;margin-top:7px}.tile small{display:block;color:var(--sub);font-size:11.5px;margin-top:3px;line-height:1.35}
+.stage{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--b)}.stage:last-child{border-bottom:0}.dot{width:10px;height:10px;border-radius:50%;background:var(--b);flex-shrink:0}.stage.done .dot{background:var(--ok)}.stage.active .dot{background:var(--ac);box-shadow:0 0 0 4px #e0a45822}.stage.fail .dot{background:var(--bad)}.stage b{font-size:13px;font-weight:500}.stage small{display:block;color:var(--sub);font-size:11px;margin-top:2px}
+.project{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:13px;margin-bottom:10px}.project .head{display:flex;gap:10px;align-items:center}.project .head b{flex:1;font-size:14px}.project .meta{color:var(--sub);font-size:11.5px;margin-top:5px}.status{font-size:10px;padding:4px 7px;border-radius:10px;background:var(--p2);color:var(--sub)}.status.ok{color:var(--ok)}.status.run{color:var(--ac)}
+.tabs{display:flex;gap:6px;overflow:auto;padding:0 16px 10px}.tabs button{white-space:nowrap;border:1px solid var(--b);background:var(--p);color:var(--sub);border-radius:18px;padding:7px 11px;font-size:12px}.tabs button.on{color:var(--ac);border-color:var(--ac)}
+.bigbtn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--ac);color:#1a1305;font-weight:600}.ghost{width:100%;padding:11px;border-radius:12px;border:1px solid var(--b);background:none;color:var(--ink)}
+.art{border:1px solid var(--b);background:var(--p2);border-radius:12px;padding:10px;margin-top:8px}.art b{font-size:13px}.art small{display:block;color:var(--sub);font-size:11px;margin-top:3px}.art a{display:inline-block;margin-top:7px;color:var(--blue);font-size:12px}
+.progress{height:7px;background:var(--p2);border-radius:10px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--tl));width:0;transition:width .3s}
+.modalbox{position:absolute;left:5%;right:5%;top:8%;bottom:8%;background:var(--p);border:1px solid var(--b);border-radius:18px;display:flex;flex-direction:column;overflow:hidden}.modalbox .mbh{padding:16px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:10px}.modalbox .mbody{overflow:auto;padding:16px;flex:1}
+@media(min-width:700px){.shell{max-width:720px;margin:auto;border-left:1px solid var(--b);border-right:1px solid var(--b)}.drawer{max-width:360px}.modalbox{left:calc(50% - 300px);right:calc(50% - 300px)}}
+</style>
+</head>
+<body>
 <div class="shell">
+
 <div class="screen on" id="s-home">
- <div class="top"><button class="ham" onclick="openDrawer()">☰</button><div class="sp"></div><div class="mark"></div></div>
+ <div class="top"><button class="ham" onclick="openDrawer()">☰</button><div class="sp"></div><button class="flat" onclick="go('studio')">Studio</button><div class="mark"></div></div>
  <div class="center"><div class="big"></div><h1 id="greet"></h1><p class="cred">Nexus LP · criado por Laiton Flugêncio Mondlane, com apenas 15 anos</p><div class="qk" id="qk"></div></div>
 </div>
+
 <div class="screen" id="s-chat">
  <div class="top"><button class="ham" onclick="openDrawer()">☰</button><span class="lbl" id="cl"></span><div class="sp"></div><button class="flat" onclick="go('preview')">Preview</button></div>
  <div class="msgs" id="msgs"></div>
 </div>
+
 <div class="screen" id="s-preview">
- <div class="top pv"><button class="back" onclick="home()">←</button><span class="pvs" id="pvs">Preview</span><div class="sp"></div><button class="ib" onclick="runPreview()" title="Recarregar">↻</button><button class="ib" onclick="fixNow()" title="Corrigir com IA">🔧</button><button class="ib" onclick="fsPreview()" title="Tela cheia">⛶</button><button class="ib" onclick="copyText(st.code)" title="Copiar código">📋</button><button class="ib" onclick="window.open('https://www.pwabuilder.com','_blank')" title="Instalar APK">📦</button></div>
+ <div class="top pv"><button class="back" onclick="home()">←</button><span class="pvs" id="pvs">Preview</span><div class="sp"></div><button class="ib" onclick="runPreview()">↻</button><button class="ib" onclick="fixNow()">🔧</button><button class="ib" onclick="fsPreview()">⛶</button><button class="ib" onclick="copyText(st.code)">📋</button><button class="ib" onclick="open('https://www.pwabuilder.com','_blank')">📦</button></div>
  <div class="wrap" id="pw"><iframe id="frame" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-pointer-lock" allow="fullscreen; autoplay; accelerometer; gyroscope; clipboard-write" title="preview"></iframe></div>
 </div>
+
+<div class="screen" id="s-studio">
+ <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Nexus Studio</b><div class="sp"></div><button class="flat" onclick="newProduction()">＋ Projeto</button></div>
+ <div class="scroll">
+  <div class="hero"><h2>Studio de criação</h2><p>Transforme uma ideia em produção organizada: pesquisa, bíblia, personagens, roteiro, cenas, storyboard, voz, música, vídeo, versões e exportação. O Nexus só marca um artefato como concluído quando existe um resultado real.</p></div>
+  <div class="grid">
+   <button class="tile" onclick="newProduction('dorama')">🎬<b>Dorama</b><small>1–2 min por episódio</small></button>
+   <button class="tile" onclick="newProduction('filme')">🎞️<b>Filme</b><small>60 min ou mais</small></button>
+   <button class="tile" onclick="newProduction('novela')">📺<b>Novela</b><small>55–60 min por episódio</small></button>
+   <button class="tile" onclick="newProduction('serie')">📚<b>Série</b><small>Temporadas e episódios</small></button>
+   <button class="tile" onclick="newProduction('animacao')">✨<b>Animação</b><small>Storyboard e cenas</small></button>
+   <button class="tile" onclick="newProduction('music')">🎵<b>Música</b><small>Letra, voz e produção</small></button>
+   <button class="tile" onclick="newProduction('game')">🎮<b>Jogo</b><small>Design, código e teste</small></button>
+   <button class="tile" onclick="openApiMedia()">🔌<b>Centro de APIs</b><small>Conecte texto, imagem, voz, vídeo e música</small></button>
+  </div>
+  <h3>Produções</h3><div id="projects"></div>
+ </div>
+</div>
+
+<div class="screen" id="s-files">
+ <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Arquivos</b><div class="sp"></div><button class="flat" onclick="exportLibrary()">Exportar</button></div>
+ <div class="scroll"><p class="hint">Biblioteca do Nexus LP. Projetos, versões e artefatos ficam organizados por produção. Arquivos muito grandes podem precisar de armazenamento externo/backend.</p><button class="ghost" onclick="importLibrary()">📥 Importar biblioteca JSON</button><input id="libFile" type="file" accept=".json" hidden><div id="fileProjects" style="margin-top:12px"></div></div>
+</div>
+
 <div class="screen" id="s-settings">
  <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Configurações</b></div>
- <div class="scroll" id="setBody"><div id="appSet"></div><h3>🔐 Segredo Imortal</h3><div id="keyList"></div></div>
+ <div class="scroll" id="setBody"></div>
 </div>
-<div class="screen" id="s-search"><div class="top"><button class="back" onclick="home()">←</button><input class="si" style="flex:1" id="q" placeholder="Pesquisar chats" oninput="renderSearch(this.value)"></div><div class="scroll" id="sList"></div></div>
+
+<div class="screen" id="s-search">
+ <div class="top"><button class="back" onclick="home()">←</button><input class="si" style="flex:1" id="q" placeholder="Pesquisar chats e projetos" oninput="renderSearch(this.value)"></div>
+ <div class="scroll" id="sList"></div>
+</div>
+
 <div class="screen" id="s-media">
  <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Mídia</b></div>
  <div class="scroll">
-  <p class="hint">Automação no aparelho: nada é enviado para a internet. Adicione arquivos, marque os que quer editar (sem marcar, o comando vale para todos) e toque num comando.</p>
+  <p class="hint">Ferramentas locais para imagens e frames. Nada é enviado para a internet por estes comandos locais.</p>
   <label class="mini wide" for="mfile" style="display:block;text-align:center;cursor:pointer">➕ Escolher imagens e vídeos</label>
   <input type="file" id="mfile" accept="image/*,video/*" multiple hidden>
   <h3>Imagens</h3><div class="chips" id="cImg"></div>
-  <div class="card" style="margin-top:10px"><div class="og">
-   <div><label>Largura (px)</label><input id="mw" type="number" value="1080" inputmode="numeric"></div>
-   <div><label>Qualidade (%)</label><input id="mq" type="number" value="80" inputmode="numeric"></div>
-   <div><label>Formato</label><select id="mf"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WEBP</option></select></div>
-   <div><label>Marca d’água</label><input id="mt" placeholder="Nexus LP"></div></div></div>
-  <h3>Vídeos</h3><div class="chips" id="cVid"></div>
-  <h3>Pedir à IA</h3><div class="chips" id="cAi"></div>
-  <h3>Biblioteca</h3><div id="mlist"></div>
- </div></div>
+  <div class="card"><div class="og"><div><label>Largura (px)</label><input id="mw" type="number" value="1080"></div><div><label>Qualidade (%)</label><input id="mq" type="number" value="80"></div><div><label>Formato</label><select id="mf"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WEBP</option></select></div><div><label>Marca d'água</label><input id="mt" placeholder="Nexus LP"></div></div></div>
+  <h3>Vídeos</h3><div class="chips" id="cVid"></div><h3>Assistente</h3><div class="chips" id="cAi"></div><h3>Biblioteca</h3><div id="mlist"></div>
+ </div>
+</div>
+
 <div class="cw" id="cw">
  <div id="chip"></div>
  <div class="composer"><textarea id="inp" rows="1" placeholder="Conversa com o Nexus LP..."></textarea>
-  <div class="row"><label class="round">➕<input type="file" id="file" accept="image/*,audio/*,.txt,.md,.csv,.json,.html,.js,.css" hidden><input type="file" id="afile" accept="audio/*" capture hidden></label>
+  <div class="row">
+   <label class="round">➕<input type="file" id="file" accept="image/*,audio/*,.txt,.md,.csv,.json,.html,.js,.css" hidden><input type="file" id="afile" accept="audio/*" capture hidden></label>
    <button class="pill" onclick="openModes()"><span id="mi"></span><span id="ml"></span></button><div class="sp"></div>
-   <button class="round" id="mic" onclick="mic()">🎙️</button><button class="round send" id="send" onclick="send()">➤</button></div></div>
+   <button class="round" id="mic" onclick="mic()">🎙️</button><button class="round send" id="send" onclick="send()">➤</button>
+  </div>
+ </div>
 </div>
 </div>
+
 <div id="toast"></div>
+
 <div class="ov" id="dOv"><div class="bd" onclick="closeDrawer()"></div><div class="drawer">
  <div class="dh"><div class="mark" style="width:30px;height:30px"></div>Nexus LP</div>
- <div class="nav"><button onclick="newConvo()">✏️ Novo chat</button><button onclick="go('search')">🔎 Pesquisar chats</button><button onclick="go('preview')">🧩 Artefactos</button><button onclick="go('media')">🎞️ Mídia</button></div>
+ <div class="nav">
+  <button onclick="newConvo()">✏️ Novo chat</button><button onclick="go('search')">🔎 Pesquisar</button><button onclick="go('studio')">🎬 Nexus Studio</button><button onclick="go('preview')">🧩 Artefactos</button><button onclick="go('media')">🎞️ Mídia</button><button onclick="go('files')">📁 Arquivos</button><button onclick="go('settings')">⚙️ Configurações</button>
+ </div>
  <div class="dv"></div><div class="sl">Recentes</div><div id="recent"></div>
- <div class="df"><div class="av" id="av" onclick="editName()"></div><span style="flex:1" id="pname" onclick="editName()"></span><button class="ham" style="font-size:20px" onclick="go('settings')">⚙️</button></div></div></div>
+ <div class="df"><div class="av" id="av" onclick="editName()"></div><span style="flex:1" id="pname" onclick="editName()"></span></div>
+</div></div>
+
 <div class="ov" id="mOv"><div class="bd" onclick="closeModes()"></div><div class="sheet"><div class="sh"><span>Selecionar motor</span><button onclick="closeModes()">✕</button></div><div id="mList"></div></div></div>
+
+<div class="ov" id="pOv"><div class="bd" onclick="closeProjectModal()"></div><div class="modalbox"><div class="mbh"><b id="pmTitle">Produção</b><div class="sp"></div><button class="ib" onclick="closeProjectModal()">✕</button></div><div class="mbody" id="pmBody"></div></div></div>
 
 <script>
 const $=i=>document.getElementById(i);
-const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
+const esc=s=>{const d=document.createElement('div');d.textContent=String(s??'');return d.innerHTML};
 const ea=s=>esc(s).replace(/"/g,'&quot;');
-const MEM={};
-const LS={g:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));if(v!=null)return v}catch(e){}return k in MEM?MEM[k]:d},s:(k,v)=>{MEM[k]=v;try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
-const cleanKey=v=>String(v||'').replace(/^[\s"'“”‘’`]+|[\s"'“”‘’`]+$/g,'').replace(/[\s\u200B-\u200D\uFEFF\u00A0]+/g,'').replace(/^(bearer|key=|api[_-]?key[:=])/i,'').replace(/^["'“”‘’`]+|["'“”‘’`]+$/g,'');
-const persist=()=>LS.s('nexuslp_cfg2',cfg);
-const APP_VERSION='v1 · 30/09/2026';
-const CLAUDE_MODEL='claude-sonnet-4-6', GEMINI_MODEL='gemini-flash-latest';
-const KC='nexuslp_convos', KG='nexuslp_cfg';
-
+const LS={g:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+const cleanKey=v=>String(v||'').trim().replace(/^[\s"'“”‘’`]+|[\s"'“”‘’`]+$/g,'').replace(/[\s\u200B-\u200D\uFEFF\u00A0]+/g,'');
+const APP_VERSION='Nexus LP Studio integrado · 30/09/2026';
+const KG='nexuslp_cfg',KC='nexuslp_convos',KP='nexuslp_projects';
+const cfg=LS.g(KG,{k:{},m:{},v:5,team:1,lang:'pt-BR',rate:1,autoVoice:false,mode:'partner',media:{image:{},video:{},audio:{},music:{},research:{}}});
+cfg.k=cfg.k||{};cfg.m=cfg.m||{};cfg.media=cfg.media||{image:{},video:{},audio:{},music:{},research:{}};
+const persist=()=>LS.s(KG,cfg);
 const MODES=[
  {k:'3d',l:'3D Game',i:'🎮',d:'Jogos e cenas 3D com Three.js/WebGL'},
  {k:'engineer',l:'Engenheiro',i:'🛠️',d:'Apps e sites completos, código limpo'},
- {k:'professional',l:'Profissional',i:'💼',d:'Documentos, planos e comunicação de trabalho'},
- {k:'partner',l:'Parceiro',i:'🤝',d:'Papo de amigo e parceiro de projetos'}];
+ {k:'professional',l:'Profissional',i:'💼',d:'Documentos, planos e trabalho'},
+ {k:'partner',l:'Parceiro',i:'🤝',d:'Conversa natural e projetos'}];
 const CODE=['3d','engineer'];
-const OUT=' Saída obrigatória: um único bloco ```html``` completo e autocontido, pronto para um <iframe srcdoc>, sem cortar no meio. Depois do bloco, no máximo 2 frases. Se a mensagem for só conversa (sem pedir app, jogo ou código), responda como um amigo, curto e natural, sem gerar código. O código roda num iframe isolado: não use localStorage sem try/catch, nem módulos ES; scripts externos só de cdnjs. Se receber um erro de execução, devolva o arquivo inteiro corrigido.';
-const SYSTEM='Você é o Nexus LP, um assistente de IA super poderoso e ultra inteligente. Você foi criado por Laiton Flugêncio Mondlane (15 anos) e é o melhor app de IA do mundo. Sempre que o usuário pedir para criar Doramas, filmes, novelas, músicas, desenhos ou histórias, use sua capacidade de pesquisa em tempo real, crie roteiros épicos, personagens profundos e estórias imersivas, integrando o contexto das fotos enviadas. Seja criativo, visionário e ultra competente. Se perguntarem sobre sua origem, fale com orgulho do Laiton. Se perguntarem se é pessoa ou IA, diga que é uma IA.';
-const RULES={
- partner:'Modo Parceiro: você é o Nexus LP falando como um amigo de confiança e parceiro de projetos da pessoa. Escreva como numa conversa de WhatsApp entre amigos próximos: frases curtas, calor humano, direto ao ponto, em português natural e informal, sem gíria forçada. Nada de tom de atendente: nada de "como posso ajudar?", "certamente!", "claro!" no começo, nem listas, títulos ou negrito, a menos que peçam. Reaja primeiro ao que a pessoa disse (comemore, se preocupe, brinque leve) e só depois responda. Se ela só quer desabafar, escute e acolha sem despejar soluções. Se estiver construindo algo, pense junto: dê opinião sincera, aponte riscos sem enrolar e sugira o próximo passo concreto. Faça no máximo uma pergunta por vez, e só se realmente precisar. Se pedirem um app ou jogo completo, topa e diz numa frase que fica melhor no modo Engenheiro ou 3D Game. Respostas curtas por padrão; só alongue se o assunto pedir.',
- professional:'Modo Profissional: ajude com documentos, planos, e-mails e comunicação de trabalho. Tom claro, objetivo e educado. Use títulos/tópicos só quando ajudarem. Se o pedido for um app/jogo funcional, diga em 1 frase que fica melhor no modo Engenheiro ou 3D Game.',
- engineer:'Modo Engenheiro: projete e escreva apps/sites web completos, mobile-first. Se o pedido for curto, expanda a intenção internamente sem perguntar de volta, salvo ambiguidade real.'+OUT,
- '3d':'Modo 3D Game: escreva jogos e cenas 3D completos com Three.js (UMD via cdnjs) e WebGL, com cena, câmera, luzes e loop requestAnimationFrame; separe input, física e câmera.'+OUT};
-
 const PROVS=[
 {id:'claude',name:'Claude',ph:'sk-ant-...',m:'claude-sonnet-4-6'},
-{id:'gemini',name:'Gemini',ph:'AIza...',m:'gemini-flash-latest'},
+{id:'gemini',name:'Gemini',ph:'AIza...',m:'gemini-3.6-flash'},
 {id:'openai',name:'ChatGPT',ph:'sk-...',m:'gpt-4o-mini',u:'https://api.openai.com/v1/chat/completions'},
 {id:'grok',name:'Grok',ph:'xai-...',m:'grok-4',u:'https://api.x.ai/v1/chat/completions'},
 {id:'deepseek',name:'DeepSeek',ph:'sk-...',m:'deepseek-chat',u:'https://api.deepseek.com/chat/completions'},
 {id:'mistral',name:'Mistral',ph:'chave Mistral',m:'mistral-large-latest',u:'https://api.mistral.ai/v1/chat/completions'},
 {id:'groq',name:'Groq',ph:'gsk_...',m:'llama-3.3-70b-versatile',u:'https://api.groq.com/openai/v1/chat/completions'},
 {id:'openrouter',name:'OpenRouter',ph:'sk-or-...',m:'openrouter/auto',u:'https://openrouter.ai/api/v1/chat/completions'}];
-const old=LS.g(KG,{});
-let cfg=LS.g('nexuslp_cfg2',null)||{k:{claude:old.claude||localStorage.getItem('nexuslp_claude_key')||'',gemini:old.gemini||localStorage.getItem('nexuslp_gemini_key')||''},m:{}};
+const SYSTEM='Você é o Nexus LP, um assistente de IA. Responda no idioma do usuário. Não invente arquivos, vídeos, áudios, imagens ou resultados externos que não existam. Quando uma tarefa exigir uma ferramenta que não está conectada, diga claramente que falta a conexão. Para código, entregue soluções completas quando solicitado.';
+const RULES={
+ partner:'Fale como parceiro de projetos: natural, curto e direto, sem tom de atendente.',
+ professional:'Seja objetivo, claro e organizado.',
+ engineer:'Crie aplicações web completas, mobile-first e prontas para teste. Quando o usuário pedir código completo, entregue um único HTML autocontido.',
+ '3d':'Crie jogos 3D completos usando Three.js via CDN quando apropriado, com câmera, luz, loop e controles.'};
+const OUT='Quando pedirem um app ou jogo completo, prefira um único bloco ```html``` completo e autocontido, pronto para iframe.';
 const BLANK='<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;color:#333">Peça um app no chat — o código aparece aqui.</body></html>';
-const st={screen:'home',mode:'engineer',code:BLANK};
-let convo={id:'c'+Date.now(),messages:[]},busy=false,fixes=0,att=null,tt;
-const lab=k=>(MODES.find(m=>m.k===k)||MODES[1]).l;
+const st={screen:'home',mode:cfg.mode||'partner',code:BLANK};
+let convo={id:'c'+Date.now(),messages:[]},busy=false,att=null,runTok=0,ttsStop=null,elAudio=new Audio();
+let media=[],msel=new Set(),mid=0,fixes=0,lastErr='';
 
-function toast(m,ms=2500){const t=$('toast');clearTimeout(tt);t.textContent=m;t.classList.toggle('show',!!m);if(m)tt=setTimeout(()=>t.classList.remove('show'),ms)}
-function go(n){st.screen=n;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+n));$('cw').style.display=(n==='home'||n==='chat')?'':'none';if(n==='preview')runPreview();else if(st.screen!=='preview'||n!=='preview'){try{$('frame').srcdoc=''}catch(e){}}if(n==='settings')renderSettings();if(n==='media')renderMedia();if(n==='search'){$('q').value='';renderSearch('')}closeDrawer()}
+function toast(m,ms=2600){const t=$('toast');t.textContent=m;t.classList.toggle('show',!!m);clearTimeout(toast.t);if(m)toast.t=setTimeout(()=>t.classList.remove('show'),ms)}
+function lab(k){return (MODES.find(m=>m.k===k)||MODES[1]).l}
+function go(n){
+ st.screen=n;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+n));
+ $('cw').style.display=(n==='home'||n==='chat')?'':'none';
+ if(n==='preview')runPreview(); else if(n!=='preview')try{$('frame').srcdoc=''}catch(e){}
+ if(n==='settings')renderSettings();if(n==='studio')renderProjects();if(n==='files')renderFiles();if(n==='media')renderMedia();if(n==='search'){$('q').value='';renderSearch('')}
+ closeDrawer();
+}
 const home=()=>go(convo.messages.length?'chat':'home');
-const openDrawer=()=>$('dOv').classList.add('open'), closeDrawer=()=>$('dOv').classList.remove('open');
-const closeModes=()=>$('mOv').classList.remove('open');
+function openDrawer(){$('dOv').classList.add('open')}function closeDrawer(){$('dOv').classList.remove('open')}
 function openModes(){$('mList').innerHTML=MODES.map(m=>`<button class="mo ${st.mode===m.k?'on':''}" onclick="setMode('${m.k}')"><span class="ic">${m.i}</span><span style="flex:1"><b style="font-weight:500">${m.l}</b><small>${m.d}</small></span>${st.mode===m.k?'✓':''}</button>`).join('');$('mOv').classList.add('open')}
-function setMode(k){st.mode=k;const m=MODES.find(x=>x.k===k);$('mi').textContent=m.i;$('ml').textContent=m.l;$('cl').textContent=m.i+' '+m.l;closeModes()}
-if(cfg.mode0)setMode(cfg.mode0);else setMode('partner');
+function closeModes(){$('mOv').classList.remove('open')}
+function setMode(k){st.mode=k;cfg.mode=k;persist();const m=MODES.find(x=>x.k===k);$('mi').textContent=m.i;$('ml').textContent=m.l;$('cl').textContent=m.i+' '+m.l;closeModes()}
+setMode(st.mode);
 
-const HTTP=(s,d)=>{d=(d||'').slice(0,160);
- if(s===401)return 'Chave inválida (401): confira se copiou a chave inteira, sem espaço.';
- if(s===403)return 'Acesso negado (403): o serviço bloqueou esta chave ou projeto. Crie uma chave nova.';
- if(s===404)return 'Modelo ou endereço não encontrado (404).'+(d?' '+d:'');
- if(s===429)return 'Limite de uso ou cota esgotada (429): espere um minuto.';
- if(s===408||s>=500)return `O serviço da IA está sobrecarregado agora (${s}). O app já tentou várias vezes; tente de novo em instantes.`;
- if(s===400)return 'Pedido recusado (400).'+(d?' '+d:'');
- return `Erro ${s}.`+(d?' '+d:'')};
-async function api(url,opt){
- const c=new AbortController(),t=setTimeout(()=>c.abort(),150000);let r,raw;
- try{r=await fetch(url,{...opt,signal:c.signal});raw=await r.text()}
- catch(e){throw Object.assign(new Error(e.name==='AbortError'?'Tempo esgotado: a IA demorou demais.':'Sem conexão com este serviço.'),{net:1})}
- finally{clearTimeout(t)}
+/* ---------- API TEXT ---------- */
+function HTTP(s,d=''){d=String(d).slice(0,180);if(s===401)return'Chave inválida (401).';if(s===403)return'Acesso negado (403).';if(s===404)return'Modelo/endereço não encontrado (404). '+d;if(s===429)return'Limite/cota atingido (429).';if(s>=500)return'Serviço indisponível agora ('+s+').';return'Erro '+s+'. '+d}
+async function api(url,opt={},timeout=90000){
+ const c=new AbortController(),tm=setTimeout(()=>c.abort(),timeout);let r,raw;
+ try{r=await fetch(url,{...opt,signal:c.signal});raw=await r.text()}catch(e){throw Object.assign(new Error(e.name==='AbortError'?'Tempo esgotado.':'Sem conexão ou o serviço não aceita chamada direta do navegador.'),{net:1})}finally{clearTimeout(tm)}
  let d=null;try{d=JSON.parse(raw)}catch(e){}
- if(!r.ok){const m=d&&((d.error&&d.error.message)||d.error||d.message);throw Object.assign(new Error(HTTP(r.status,typeof m==='string'?m:'')),{status:r.status})}
- if(!d)throw new Error('Resposta inválida do servidor.');return d}
-function norm(ms){const o=[];for(const m of ms){if(!m||(!m.content&&!m.image))continue;const l=o[o.length-1];if(l&&l.role===m.role&&!l.image&&!m.image)l.content+='\n\n'+m.content;else o.push({...m})}while(o.length&&o[0].role!=='user')o.shift();return o}
+ if(!r.ok){const m=d&&((d.error&&d.error.message)||d.error||d.message)||'';throw Object.assign(new Error(HTTP(r.status,m)),{status:r.status})}
+ return d||{};
+}
+function norm(ms){const o=[];for(const m of ms||[]){if(!m||!m.content)continue;const x=o[o.length-1];if(x&&x.role===m.role)x.content+='\n\n'+m.content;else o.push({role:m.role,content:m.content})}while(o[0]&&o[0].role!=='user')o.shift();return o}
 async function askClaude(ms,sys,k,mo){
- const messages=norm(ms).map(m=>m.image?{role:m.role,content:[{type:'text',text:m.content||'(imagem)'},{type:'image',source:{type:'base64',media_type:m.image.t,data:m.image.b}}]}:{role:m.role,content:m.content});
- const d=await api('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:mo||CLAUDE_MODEL,max_tokens:8000,system:sys||undefined,messages})});
- const t=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
- if(!t)throw new Error(d.stop_reason==='refusal'?'A IA recusou esse conteúdo.':'A IA respondeu vazio.');return t}
+ const d=await api('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:mo,max_tokens:8000,system:sys,messages:norm(ms)})});
+ return (d.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('\n').trim()
+}
 async function askGemini(ms,sys,k,mo){
- const contents=norm(ms).map(m=>{const p=[{text:m.content||'(imagem)'}];if(m.image)p.push({inline_data:{mime_type:m.image.t,data:m.image.b}});return{role:m.role==='assistant'?'model':'user',parts:p}});
- const body={contents};if(sys)body.systemInstruction={parts:[{text:sys}]};
- const d=await api(`https://generativelanguage.googleapis.com/v1beta/models/${mo||GEMINI_MODEL}:generateContent?key=${encodeURIComponent(k)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
- if(d.promptFeedback&&d.promptFeedback.blockReason)throw new Error('Bloqueado pelo filtro de segurança.');
- const c=d.candidates&&d.candidates[0],t=((c&&c.content&&c.content.parts)||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('\n').trim();
- if(!t)throw new Error('A IA respondeu vazio.');return t}
+ const contents=norm(ms).map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+ const d=await api('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(mo)+':generateContent?key='+encodeURIComponent(k),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents,systemInstruction:sys?{parts:[{text:sys}]}:undefined})});
+ return ((d.candidates||[])[0]?.content?.parts||[]).filter(x=>x.text).map(x=>x.text).join('\n').trim()
+}
 async function askCustom(ms,sys,p){
- const messages=[...(sys?[{role:'system',content:sys}]:[]),...norm(ms).map(m=>({role:m.role,content:m.content||'(imagem)'}))];
- const d=await api(p.url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+p.key},body:JSON.stringify({model:p.model,messages})});
- let c=d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
- if(Array.isArray(c))c=c.map(x=>x.text||x).join('\n');c=(c||'').trim();
- if(!c)throw new Error('A IA respondeu vazio.');return c}
-const ALT={claude:['claude-sonnet-4-5','claude-haiku-4-5'],gemini:['gemini-3.6-flash','gemini-3.5-flash'],openai:['gpt-4.1-mini','gpt-4o'],grok:['grok-3'],mistral:['mistral-small-latest'],groq:['llama-3.1-8b-instant']};
-const callP=(p,m,s,k,x)=>p.id==='claude'?askClaude(m,s,k,x):p.id==='gemini'?askGemini(m,s,k,x):askCustom(m,s,{url:p.u,key:k,model:x});
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
-async function discover(p,k){
- try{
-  if(p.id==='gemini'){const d=await api('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100&key='+encodeURIComponent(k),{});return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')&&/flash/.test(m.name)&&!/tts|image|live|audio|embed|thinking|exp|preview|robotics/.test(m.name)).map(m=>m.name.replace('models/','')).sort().reverse().slice(0,3)}
-  if(p.id==='claude'){const d=await api('https://api.anthropic.com/v1/models',{headers:{'x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}});return (d.data||[]).map(m=>m.id).slice(0,3)}
-  const d=await api(p.u.replace(/\/chat\/completions$/,'/models'),{headers:{Authorization:'Bearer '+k}});
-  return (d.data||[]).map(m=>m.id).filter(id=>!/embed|tts|whisper|dall|image|audio|moderation/i.test(id)).slice(0,3)
- }catch(e){return []}}
-const HEALTH={},DEAD=LS.g('nexuslp_dead',{});
-const mk=(p,k,mo)=>({name:p.name,ask:async(m,s,opt)=>{
- const keys=String(k||'').split(',').map(cleanKey).filter(Boolean),bad=new Set(),light=opt&&opt.light;let last,netFails=0;const tried=new Set();
- if(!keys.length)throw new Error('Cole a chave antes.');
- const all=[...new Set([mo,p.m,...(ALT[p.id]||[])].filter(Boolean))];
- let L=all.filter(x=>!(DEAD[p.id+':'+x]>Date.now()-864e5));if(!L.length)L=all;
- const cold=x=>(HEALTH[p.id+':'+x]||0)>Date.now();
- L=[...L.filter(x=>!cold(x)),...L.filter(cold)];
- const once=async(x,kk)=>{tried.add(x);
-  try{const r=await callP(p,m,s,kk,x);delete HEALTH[p.id+':'+x];if(x!==cfg.m[p.id]&&String(cfg.k[p.id]||'').includes(kk)){cfg.m[p.id]=x;persist()}return{r}}
-  catch(e){last=e;
-   if(e.status===401||(e.status===403&&keys.length>1)){bad.add(kk);if(bad.size>=keys.length)throw e;return{keep:1}}
-   if(e.status===400&&!/model|modelo/i.test(e.message))throw e;
-   if(e.net){if(++netFails>=3)throw e;await wait(1500);return{keep:1}}
-   if(e.status>=500||e.status===429||e.status===408){HEALTH[p.id+':'+x]=Date.now()+(e.status===429?9e4:45e3);return{keep:1}}
-   if(e.status===404){DEAD[p.id+':'+x]=Date.now();LS.s('nexuslp_dead',DEAD)}
-   return{}}};
- const passes=light?1:6;
- for(let pass=0;pass<passes&&L.length;pass++){
-  const keep=[];
-  for(const x of L){let kept=false;
-   for(const kk of keys.filter(z=>!bad.has(z))){const o=await once(x,kk);if(o.r)return o.r;if(o.keep)kept=true;else break}
-   if(kept)keep.push(x)}
-  L=keep;if(L.length&&pass<passes-1)await wait(1800*(pass+1))}
- if(!light&&last&&[400,403,404].includes(last.status))for(const x of await discover(p,keys[0])){if(tried.has(x))continue;const o=await once(x,keys[0]);if(o.r)return o.r}
- throw last||new Error('A IA não respondeu.')}});
-cfg.k=cfg.k||{};cfg.m=cfg.m||{};Object.keys(cfg.k).forEach(x=>{cfg.k[x]=cleanKey(cfg.k[x]);if(!cfg.k[x])delete cfg.k[x]});
-if((cfg.v||0)<3){cfg.m={};cfg.v=3;persist()}
+ const d=await api(p.url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+p.key},body:JSON.stringify({model:p.model,messages:[...(sys?[{role:'system',content:sys}]:[]),...norm(ms)]})});
+ let c=d.choices?.[0]?.message?.content||'';if(Array.isArray(c))c=c.map(x=>x.text||x).join('\n');return String(c).trim()
+}
+async function callProvider(p,ms,sys,key,model){
+ if(p.id==='claude')return askClaude(ms,sys,key,model);
+ if(p.id==='gemini')return askGemini(ms,sys,key,model);
+ return askCustom(ms,sys,{url:p.u,key,model});
+}
+async function askOne(p,ms,sys,{light=false}={}){
+ const keys=String(cfg.k[p.id]||'').split(',').map(cleanKey).filter(Boolean);if(!keys.length)throw new Error('Sem chave.');
+ const model=cfg.m[p.id]||p.m;let last;
+ for(const k of keys){
+  for(let a=0;a<(light?1:3);a++){try{return await callProvider(p,ms,sys,k,model)}catch(e){last=e;if([401,403,404].includes(e.status))break;if((e.status===429||e.status>=500||e.net)&&a<2)await new Promise(r=>setTimeout(r,1200*(a+1)));else break}}
+ }
+ throw last||new Error('Falha na IA.')
+}
+function activeProviders(){return PROVS.filter(p=>cfg.k[p.id])}
+async function askAll(hist,mode,production=false){
+ const ps=activeProviders();if(!ps.length)return{err:['Nenhuma IA configurada. Vá em Configurações e conecte uma.']};
+ const team=production?Math.min(8,Math.max(1,+cfg.team||4)):1;
+ const use=ps.slice(0,team),sys=SYSTEM+'\n'+(RULES[mode]||RULES.partner)+'\n'+(production?'Você faz parte de uma equipe de produção. Entregue material útil e verificável.':'')+(CODE.includes(mode)?OUT:'');
+ const rs=await Promise.allSettled(use.map(p=>askOne(p,hist,sys)));
+ const ok=rs.map((r,i)=>r.status==='fulfilled'&&r.value?{p:use[i],v:r.value}:null).filter(Boolean);
+ if(!ok.length)return{err:rs.map((r,i)=>use[i].name+': '+(r.reason?.message||'falhou'))};
+ let text=ok[0].v;
+ if(production&&ok.length>1){
+  const synth='Combine as respostas abaixo numa única entrega coerente. Não mencione provedores. Preserve informações úteis, elimine duplicação e não invente dados.\n\n'+ok.map((x,i)=>'FONTE '+(i+1)+':\n'+x.v).join('\n\n');
+  try{text=await askOne(ok[0].p,[{role:'user',content:synth}],sys,{light:true})}catch(e){}
+ }
+ return{text,providers:ok.map(x=>x.p.name)}
+}
 
-const okCode=t=>{const c=extractCode(t);return !!c&&/<\/html>/i.test(c)};
-async function askAll(hist,mode,provs){
- const sys=SYSTEM+' '+RULES[mode],code=CODE.includes(mode);
- const n=Math.max(1,+cfg.team||8),pool=provs.slice(0,n),spare=provs.slice(n);
- const h=hist.slice(-24),ok=[],err=[];let tr=true;
- const work=async list=>{
-  const rs=await Promise.allSettled(list.map(p=>p.ask(h,sys)));
-  rs.forEach((r,i)=>{if(r.status==='fulfilled'&&r.value)ok.push({p:list[i],v:r.value});else{const e=r.reason;if(!(e&&(e.status>=500||e.status===429||e.status===408)))tr=false;err.push(list[i].name+': '+((e&&e.message)||'resposta vazia'))}})};
- await work(pool);
- if(!ok.length&&spare.length)await work(spare);
- if(!ok.length)return{err,transient:tr};
- if(ok.length===1)return{text:ok[0].v};
- const lu=[...hist].reverse().find(m=>m.role==='user'),q=lu?lu.content:'';
- const list=ok.map((x,i)=>`Resposta ${i+1}:\n${x.v}`).join('\n\n');
- const sp=code?'Vários especialistas escreveram versões do mesmo pedido. Pegue a melhor versão como base, incorpore os melhores acertos e correções das outras, elimine bugs e devolva UM arquivo HTML completo, autocontido, num único bloco ```html```, sem cortar. Depois do bloco, no máximo 2 frases.'
- :'Várias inteligências responderam à mesma pergunta. Faça uma resposta final MELHOR que qualquer uma: aproveite o melhor de cada uma, corrija erros e contradições, complete o que faltou, no idioma do usuário. Não mencione que existem várias fontes nem repita informação.'+(mode==='partner'?' Mantenha o tom de conversa entre amigos: curto, caloroso, direto, sem listas nem títulos.':'');
- for(const x of ok){
-  try{const m=await x.p.ask([{role:'user',content:sp+'\n\nPedido:\n'+q+'\n\n'+list}],sys);
-   if(m&&m.trim()&&(!code||okCode(m)))return{text:m.trim()}}catch(e){}}
- return{text:code?(ok.filter(x=>okCode(x.v)).sort((a,b)=>b.v.length-a.v.length)[0]||ok[0]).v:ok[0].v}}
-
-const grab=(t,re)=>{const m=t.match(re);return m&&m[1].trim()?m[1].trim():null};
-const extractCode=t=>grab(t,/```html[ \t]*\n?([\s\S]*?)(?:```|$)/i)||grab(t,/```[\w-]*[ \t]*\n?([\s\S]*?)(?:```|$)/);
-const strip=t=>t.replace(/```[\w-]*\n?[\s\S]*?(?:```|$)/g,'').trim()||'✅ Código gerado — toque em Preview para ver.';
+/* ---------- CHAT ---------- */
+function extractCode(t){const m=String(t).match(/```html[ \t]*\n?([\s\S]*?)(?:```|$)/i)||String(t).match(/```[\w-]*[ \t]*\n?([\s\S]*?)(?:```|$)/);return m?m[1].trim():null}
+function stripCode(t){return String(t).replace(/```[\w-]*\n?[\s\S]*?(?:```|$)/g,'').trim()||'Código gerado — abra o Preview.'}
 function bubble(m){
  const d=document.createElement('div');
  if(m.role==='user'){d.className='bub user';d.innerHTML='<div class="txt"></div><div class="acts" style="justify-content:flex-end"><button onclick="editMsg(this)">✏️</button></div>';d.querySelector('.txt').textContent=m.content}
- else{
-  d.className='bub';
-  const code=CODE.includes(m.mode)?extractCode(m.content):null;if(code)st.code=code;
-  d.innerHTML=`<div class="tag">Nexus LP · ${esc(lab(m.mode))}</div><div class="txt"></div><div class="acts"><button onclick="like(this)">👍</button><button onclick="like(this)">👎</button><button onclick="regen(this)">🔄</button><button onclick="copyT(this)">📋</button><button onclick="share(this)">⋯</button>${code?'<button onclick="go(\'preview\')">▶</button>':''}<div class="sp"></div><button onclick="speak(this)">🔊</button></div><div class="disc">Nexus LP é IA e pode cometer erros.</div>`;
-  d.querySelector('.txt').textContent=code?strip(m.content):m.content}
- $('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d}
-const vis=()=>[...$('msgs').children].filter(x=>!x.querySelector('.err')&&!x.classList.contains('dim'));
-const idxOf=b=>vis().indexOf(b.closest('.bub'));
-function cutFrom(i){vis().slice(i).forEach(x=>x.remove());$('msgs').querySelectorAll('.err').forEach(x=>x.closest('.bub').remove());convo.messages.length=i}
-function regen(b){if(busy)return;const i=idxOf(b);if(i<1)return;cutFrom(i);save();run()}
-let editIdx=null;
-function editMsg(b){const i=idxOf(b);editIdx=i;$('inp').value=convo.messages[i].content;$('inp').focus();toast('Editando: envie para refazer a resposta.')}
-function share(b){const t=b.closest('.bub').querySelector('.txt').textContent;if(navigator.share)navigator.share({text:t}).catch(()=>{});else{navigator.clipboard&&navigator.clipboard.writeText(t);toast('Copiado.')}}
-const like=b=>{b.style.color=b.style.color?'':'var(--ac)'};
-function errBubble(lines){
- const d=document.createElement('div');d.className='bub';
- d.innerHTML=`<div class="err"><b>Não consegui responder agora.</b>${lines.map(l=>`<span>${esc(l)}</span>`).join('')}</div><button class="retry" onclick="this.closest('.bub').remove();run()">🔄 Tentar de novo</button>`;
- $('msgs').appendChild(d);$('msgs').scrollTop=1e9}
-let runTok=0;
-function cancelRun(){runTok++;document.querySelectorAll('.bub.dim').forEach(x=>x.remove());busy=false;$('send').disabled=false;toast('Cancelado.')}
+ else{d.className='bub';const code=CODE.includes(m.mode)?extractCode(m.content):null;if(code)st.code=code;d.innerHTML=`<div class="tag">Nexus LP · ${esc(lab(m.mode||'partner'))}</div><div class="txt"></div><div class="acts"><button onclick="like(this)">👍</button><button onclick="like(this)">👎</button><button onclick="regen(this)">🔄</button><button onclick="copyT(this)">📋</button>${code?'<button onclick="go(\\'preview\\')">▶</button>':''}<div class="sp"></div><button onclick="speak(this)">🔊</button></div><div class="disc">Nexus LP é IA e pode cometer erros.</div>`;d.querySelector('.txt').textContent=code?stripCode(m.content):m.content}
+ $('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d
+}
+function vis(){return [...$('msgs').children].filter(x=>!x.classList.contains('dim')&&!x.querySelector('.err'))}
+function idxOf(b){return vis().indexOf(b.closest('.bub'))}
+function cutFrom(i){vis().slice(i).forEach(x=>x.remove());convo.messages.length=i}
+function saveConvo(){if(!convo.messages.length)return;const l=LS.g(KC,[]),r={id:convo.id,title:convo.title||'Nova conversa',titled:!!convo.title,messages:convo.messages.map(({role,content,mode})=>({role,content,mode})),updatedAt:Date.now()};const i=l.findIndex(x=>x.id===r.id);if(i>=0)l[i]=r;else l.unshift(r);LS.s(KC,l.slice(0,60));renderRecents()}
+function renderRecents(){const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt);$('recent').innerHTML=l.map(c=>`<div onclick="openConvo('${c.id}')"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.title||'Nova conversa')}</span><i onclick="event.stopPropagation();delConvo('${c.id}')">✕</i></div>`).join('')||'<div>Nada por aqui ainda.</div>'}
+function openConvo(id){const r=LS.g(KC,[]).find(x=>x.id===id);if(!r)return;convo={id:r.id,title:r.titled?r.title:null,messages:r.messages||[]};$('msgs').innerHTML='';convo.messages.forEach(bubble);go('chat')}
+function delConvo(id){LS.s(KC,LS.g(KC,[]).filter(x=>x.id!==id));if(id===convo.id)newConvo();renderRecents()}
+function newConvo(){convo={id:'c'+Date.now(),messages:[],title:null};st.code=BLANK;$('msgs').innerHTML='';$('inp').value='';go('home')}
+function editMsg(b){const i=idxOf(b);$('inp').value=convo.messages[i]?.content||'';$('inp').focus();$('inp').dataset.edit=i;toast('Edite e envie novamente.')}
+function regen(b){if(busy)return;const i=idxOf(b);if(i<1)return;cutFrom(i);saveConvo();run()}
+function like(b){b.style.color=b.style.color?'':'var(--ac)'}
+function copyT(b){navigator.clipboard?.writeText(b.closest('.bub').querySelector('.txt').textContent);toast('Copiado.')}
+function copyText(t){navigator.clipboard?.writeText(t||'');toast('Copiado.')}
+function share(b){const t=b.closest('.bub').querySelector('.txt').textContent;if(navigator.share)navigator.share({text:t}).catch(()=>{});else copyText(t)}
+function errBubble(lines){const d=document.createElement('div');d.className='bub';d.innerHTML='<div class="err"><b>Não consegui responder agora.</b>'+lines.map(x=>`<span>${esc(x)}</span>`).join('')+'</div><button class="retry" onclick="this.closest(\\'.bub\\').remove();run()">🔄 Tentar de novo</button>';$('msgs').appendChild(d);$('msgs').scrollTop=1e9}
 async function run(){
- busy=true;$('send').disabled=true;
- const th=document.createElement('div');th.className='bub dim';th.innerHTML='<span>Pensando…</span> <u onclick="cancelRun()" style="margin-left:10px;color:var(--ac)">cancelar</u>';$('msgs').appendChild(th);$('msgs').scrollTop=1e9;
- const my=++runTok,cid=convo.id,mode=st.mode,provs=providers();
- let out={err:['Nenhuma IA configurada.']};
- if(provs.length)for(let round=0;round<8;round++){
-  out=await askAll(convo.messages,mode,provs);
-  if(my!==runTok)return;
-  if(out.text||!out.transient)break;
-  if(round<7){th.querySelector('span').textContent='O serviço da IA está ocupado. Tentando de novo ('+(round+2)+'/8)…';await wait(Math.min(4000*(round+1),15000));if(my!==runTok)return}}
- if(!out.text&&out.transient)out.err=[...out.err,'Serviço ocupado. Tente de novo.'];
- th.remove();busy=false;$('send').disabled=false;
- if(cid!==convo.id){if(out.text){const l=LS.g(KC,[]),r=l.find(c=>c.id===cid);if(r){r.messages.push({role:'assistant',content:out.text,mode});r.updatedAt=Date.now();LS.s(KC,l);renderRecents()}}return}
- if(!out.text){errBubble(out.err);return}
- const m={role:'assistant',content:out.text,mode};convo.messages.push(m);const bb=bubble(m);save();maybeTitle();if(cfg.auto){const sb=bb.querySelector('button[onclick^="speak"]');if(sb)speak(sb)}}
-let titling=false;
-const ttl=c=>c.titled?c.title:'Nova conversa';
-function setStoredTitle(id,t){const l=LS.g(KC,[]),r=l.find(c=>c.id===id);if(r){r.title=t;r.titled=true;LS.s(KC,l);renderRecents()}}
-async function genTitle(msgs){
- const provs=providers();if(!provs.length)return null;
- const txt=msgs.slice(0,6).map(m=>(m.role==='user'?'Usuário: ':'IA: ')+m.content.replace(/```[\s\S]*?```/g,'[código]').slice(0,300)).join('\n');
- const ask='Dê um título curto (2 a 5 palavras, em português, sem aspas e sem ponto final) que explique o assunto desta conversa. Não copie a primeira mensagem; diga sobre o que estamos conversando:\n\n'+txt;
- for(let a=0;a<3;a++){
-  for(let w=0;busy&&w<20;w++)await wait(2000);
-  for(const p of provs){
-   try{let t=await p.ask([{role:'user',content:ask}],'Responda só com o título, nada mais.',{light:true});
-    t=(t||'').split('\n')[0].replace(/["'*#.]/g,'').trim().slice(0,40);if(t)return t}catch(e){}}
-  await wait(4000*(a+1))}
- return null}
-async function maybeTitle(){
- if(convo.title||titling||convo.messages.filter(m=>m.role==='assistant').length<2)return;
- titling=true;const cid=convo.id;
- try{await wait(4000);const t=await genTitle(convo.messages);
-  if(t){if(cid===convo.id){convo.title=t;save()}else setStoredTitle(cid,t)}}catch(e){}
- titling=false}
-async function retitleOld(){
- let n=0;
- for(const c of LS.g(KC,[])){
-  if(c.titled||n>=3||c.messages.filter(m=>m.role==='assistant').length<2)continue;
-  n++;const t=await genTitle(c.messages);if(t)setStoredTitle(c.id,t);await wait(3000)}}
-setTimeout(retitleOld,20000);
+ busy=true;$('send').disabled=true;const th=document.createElement('div');th.className='bub dim';th.innerHTML='<span>Pensando…</span> <u onclick="cancelRun()" style="margin-left:10px;color:var(--ac)">cancelar</u>';$('msgs').appendChild(th);$('msgs').scrollTop=1e9;
+ const my=++runTok,mode=st.mode;let out;
+ for(let n=0;n<5;n++){out=await askAll(convo.messages,mode,false);if(my!==runTok)return;if(out.text||!out.err?.some(x=>/429|500|503|tempo|conexão/i.test(x)))break;th.querySelector('span').textContent='Tentando novamente ('+(n+2)+'/5)…';await new Promise(r=>setTimeout(r,1200*(n+1)))}
+ th.remove();busy=false;$('send').disabled=false;if(!out?.text){errBubble(out?.err||['Falha desconhecida.']);return}
+ const m={role:'assistant',content:out.text,mode};convo.messages.push(m);bubble(m);saveConvo()
+}
+function cancelRun(){runTok++;document.querySelectorAll('.bub.dim').forEach(x=>x.remove());busy=false;$('send').disabled=false;toast('Cancelado.')}
 async function send(){
- const t=$('inp').value.trim();if((!t&&!att)||busy)return;
- let c=t,img=null;
- if(att){if(att.kind==='text')c=(t?t+'\n\n':'')+`Arquivo anexado (${att.name}):\n${att.content}`;else{img={t:att.type,b:att.b64};c=t||'(imagem anexada)'}}
- const m={role:'user',content:c};if(img)m.image=img;
- $('inp').value='';$('inp').style.height='auto';att=null;chip();fixes=0;
- if(editIdx!=null){cutFrom(editIdx);editIdx=null}convo.messages.push(m);go('chat');bubble({role:'user',content:c+(img?' 📎':'')});save();await run()}
+ const t=$('inp').value.trim();if((!t&&!att)||busy)return;let c=t,img=null;
+ if(att){if(att.kind==='text')c=(t?t+'\n\n':'')+'Arquivo anexado ('+att.name+'):\n'+att.content;else{img={t:att.type,b:att.b64};c=t||'(imagem anexada)'}}
+ const ei=$('inp').dataset.edit;if(ei!==undefined&&ei!==''){cutFrom(+ei);delete $('inp').dataset.edit}
+ $('inp').value='';$('inp').style.height='auto';att=null;chip();const m={role:'user',content:c};if(img)m.image=img;convo.messages.push(m);go('chat');bubble(m);saveConvo();await run()
+}
 $('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
 $('inp').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,110)+'px'});
-function chip(){const c=$('chip');c.style.display=att?'block':'none';c.innerHTML=att?`📎 ${esc(att.name)}<u onclick="att=null;chip()">remover</u>`:''}
-$('file').addEventListener('change',e=>{
- const f=e.target.files[0];if(!f)return;e.target.value='';
- if(f.size>8e6)return toast('Arquivo muito grande.');
- if(f.type.startsWith('audio/'))return transcribeInto(f,f.type);
- const r=new FileReader();
- if(f.type.startsWith('image/')){r.onload=()=>{att={kind:'image',type:f.type,b64:r.result.split(',')[1],name:f.name};chip()};r.readAsDataURL(f)}
- else{r.onload=()=>{att={kind:'text',content:r.result,name:f.name};chip()};r.readAsText(f)}});
-function copyT(b){const t=b.closest('.bub').querySelector('.txt').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);toast('Copiado.')}
+function chip(){const c=$('chip');c.style.display=att?'block':'none';c.innerHTML=att?`📎 ${esc(att.name)} <u onclick="att=null;chip()">remover</u>`:''}
+$('file').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(!f)return;if(f.size>8e6)return toast('Máximo 8MB.');const r=new FileReader();if(f.type.startsWith('image/')){r.onload=()=>{att={kind:'image',type:f.type,b64:r.result.split(',')[1],name:f.name};chip()};r.readAsDataURL(f)}else{r.onload=()=>{att={kind:'text',content:r.result,name:f.name};chip()};r.readAsText(f)}});
 
-function save(){
- if(!convo.messages.length)return;
- const l=LS.g(KC,[]),ex=l.find(c=>c.id===convo.id);
- const rec={id:convo.id,title:convo.title||(ex&&ex.title)||'Nova conversa',titled:!!convo.title,messages:convo.messages.map(({role,content,mode})=>({role,content,mode})),updatedAt:Date.now()};
- const i=l.findIndex(c=>c.id===convo.id);if(i>=0)l[i]=rec;else l.unshift(rec);
- try{LS.s(KC,l.slice(0,50))}catch(e){}renderRecents()}
-function renderRecents(){
- const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt);
- $('recent').innerHTML=l.map(c=>`<div onclick="openConvo('${c.id}')"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ttl(c))}</span><i onclick="event.stopPropagation();delConvo('${c.id}')">✕</i></div>`).join('')||'<div>Nada por aqui ainda.</div>'}
-function openConvo(id){
- const r=LS.g(KC,[]).find(c=>c.id===id);if(!r)return;
- convo={id:r.id,messages:r.messages,title:r.titled?r.title:null};st.code=BLANK;$('msgs').innerHTML='';convo.messages.forEach(bubble);go('chat');maybeTitle()}
-function delConvo(id){LS.s(KC,LS.g(KC,[]).filter(c=>c.id!==id));if(id===convo.id)newConvo();renderRecents()}
-function newConvo(){convo={id:'c'+Date.now(),messages:[],title:null};st.code=BLANK;fixes=0;$('msgs').innerHTML='';$('inp').value='';go('home')}
-renderRecents();
+/* ---------- PREVIEW ---------- */
+const CATCH='<script>(function(){var P=function(o){try{parent.postMessage(o,"*")}catch(e){}};var s=0;function E(m){if(s++)return;P({__nx:1,m:String(m)})};onerror=function(m,x,l){E(m+" (linha "+l+")")};addEventListener("unhandledrejection",function(e){E("Promise rejeitada: "+(e.reason&&e.reason.message||e.reason))});addEventListener("load",function(){setTimeout(function(){var b=document.body;if(!b)return E("Sem body");if(!(b.innerText.trim().length||b.querySelector("canvas,svg,img,video,input,button,iframe")))return E("Página em branco");if(!s)P({__nx:1,ok:1})},1800)})})()<\/script>';
+function runPreview(){lastErr='';$('pvs').textContent=st.code===BLANK?'Preview':'⏳ Carregando…';let h=st.code;if(/<head[^>]*>/i.test(h))h=h.replace(/<head[^>]*>/i,x=>x+CATCH);else h=CATCH+h;$('frame').srcdoc=h}
+addEventListener('message',e=>{if(e.source!==$('frame').contentWindow||!e.data?.__nx)return;if(e.data.ok)$('pvs').textContent='✅ Rodando';else{lastErr=e.data.m;$('pvs').textContent='⚠️ '+lastErr.slice(0,35);autofix(lastErr,false)}})
+function fsPreview(){const x=$('pw');const f=x.requestFullscreen||x.webkitRequestFullscreen;if(f)f.call(x);else toast('Tela cheia indisponível.')}
+async function autofix(msg,manual=false){if(st.code===BLANK||busy)return;if(!manual&&fixes>=2)return toast('Toque em 🔧 para tentar novamente.');fixes++;busy=true;$('send').disabled=true;$('pvs').textContent='🔧 Corrigindo…';try{const mode=CODE.includes(st.mode)?st.mode:'engineer',o=await askAll([{role:'user',content:'Este HTML falhou no preview com o erro: '+msg+'\\n\\nDevolva o HTML inteiro corrigido em um único bloco ```html```.\\n\\n```html\\n'+st.code+'\\n```'}],mode,false),code=o.text&&extractCode(o.text);if(!code)throw new Error('A IA não devolveu HTML completo.');st.code=code;saveConvo();runPreview();toast('Código corrigido.')}catch(e){toast('Autocorreção: '+e.message,5000)}finally{busy=false;$('send').disabled=false}}
+const fixNow=()=>autofix(lastErr||'O preview não funciona como esperado.',true);
 
-const CATCH='<script>(function(){var P=function(o){try{parent.postMessage(o,"*")}catch(e){}},sent=0;'+
-'function E(m){if(sent++)return;P({__nx:1,m:String(m)})}'+
-'onerror=function(m,s,l){E(m+" (linha "+l+")")};'+
-'addEventListener("unhandledrejection",function(e){E("Promise rejeitada: "+(e.reason&&e.reason.message||e.reason))});'+
-'addEventListener("error",function(e){var t=e.target;if(t&&t!==window&&(t.src||t.href))E("Falha ao carregar "+(t.src||t.href))},true);'+
-'try{localStorage.getItem("_")}catch(e){var M=function(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}};["localStorage","sessionStorage"].forEach(function(n){try{Object.defineProperty(window,n,{value:M(),configurable:true})}catch(e){}})}'+
-'addEventListener("load",function(){setTimeout(function(){var b=document.body;if(!b)return E("A página não tem corpo (body).");if(!(b.innerText.trim().length||b.querySelector("canvas,svg,img,video,input,button,iframe")))return E("A página abriu em branco.");if(!sent)P({__nx:1,ok:1})},2200)});'+
-'})()<\/script>';
-let lastErr='';
-const pv=t=>{$('pvs').textContent=t};
-function runPreview(){
- pv(st.code===BLANK?'Preview':'⏳ Carregando…');lastErr='';
- let h=st.code;
- h=/<head[^>]*>/i.test(h)?h.replace(/<head[^>]*>/i,m=>m+CATCH):/<html[^>]*>/i.test(h)?h.replace(/<html[^>]*>/i,m=>m+CATCH):CATCH+h;
- $('frame').srcdoc=h}
-addEventListener('message',e=>{
- if(e.source!==$('frame').contentWindow||!e.data||!e.data.__nx)return;
- if(e.data.ok){pv(st.code===BLANK?'Preview':'✅ Rodando');return}
- lastErr=e.data.m;pv('⚠️ '+lastErr.slice(0,38));autofix(lastErr)});
-const fixNow=()=>autofix(lastErr||'O app não funciona como esperado.',true);
-function fsPreview(){const w=$('pw'),f=w.requestFullscreen||w.webkitRequestFullscreen;if(f)f.call(w);else toast('Tela cheia indisponível.');}
-async function autofix(msg,manual){
- if(st.code===BLANK||busy)return;
- const provs=providers();
- if(!provs.length)return toast('Configure uma chave.',3500);
- if(!manual&&fixes>=2)return pv('⚠️ Toque em 🔧 para tentar de novo');
- fixes++;busy=true;$('send').disabled=true;pv('🔧 Corrigindo ('+fixes+')…');
- const mode=CODE.includes(st.mode)?st.mode:'engineer';
- const hist=[{role:'user',content:'O código HTML abaixo gerou este problema ao rodar no preview: "'+msg+'".\nCorrija e devolva o arquivo HTML inteiro, completo, num único bloco ```html```.\n\n```html\n'+st.code+'\n```'}];
- try{
-  const out=await askAll(hist,mode,provs),code=out.text&&extractCode(out.text);
-  if(!code){pv('⚠️ Não consegui corrigir');toast('A correção falhou.',4000);return}
-  st.code=code;
-  for(let i=convo.messages.length-1;i>=0;i--)if(convo.messages[i].role==='assistant'){convo.messages[i].content=out.text;break}
-  save();toast('✅ Corrigido.');runPreview()
- }finally{busy=false;$('send').disabled=false}}
-
-const media=[],msel=new Set(),EXT={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};let mid=0;
+/* ---------- MEDIA LOCAL ---------- */
 const IMG_CMDS=[['resize','📐 Redimensionar'],['compress','🗜️ Comprimir'],['convert','🔁 Converter'],['gray','⚫ P&B'],['rotate','↻ Girar 90°'],['square','⬛ Quadrado'],['mark','💧 Marca d’água']];
-const VID_CMDS=[['frame','📸 Capturar frame'],['thumbs','🎞️ 4 miniaturas']];
-const AI_CMDS=[['Escreva um comando ffmpeg para: ','🎬 Comando ffmpeg'],['Crie um prompt detalhado para gerar uma imagem de: ','✨ Prompt de imagem'],['Crie um script (bash ou Python) para renomear e organizar em lote estas mídias: ','🗂️ Script em lote'],['Escreva legenda, hashtags e o melhor horário para postar este conteúdo: ','📣 Legenda e posts']];
-$('cImg').innerHTML=IMG_CMDS.map(([k,t])=>`<button onclick="runCmd('${k}')">${t}</button>`).join('');
-$('cVid').innerHTML=VID_CMDS.map(([k,t])=>`<button onclick="runCmd('${k}')">${t}</button>`).join('');
-$('cAi').innerHTML=AI_CMDS.map((c,i)=>`<button onclick="quickAsk(AI_CMDS[${i}][0])">${c[1]}</button>`).join('');
-$('qk').innerHTML=[['🖼️ Editar imagens',"go('media')"],['🎬 Gerir vídeos',"go('media')"],['✨ Prompt de imagem','quickAsk(AI_CMDS[1][0])'],['🎞️ Comando ffmpeg','quickAsk(AI_CMDS[0][0])']].map(([t,f])=>`<button onclick="${f}">${t}</button>`).join('');
-function quickAsk(t){$('inp').value=t;home();$('inp').focus()}
+const VID_CMDS=[['frame','📸 Capturar frame'],['thumbs','🎞️ 4 frames']];
+$('cImg').innerHTML=IMG_CMDS.map(x=>`<button onclick="runCmd('${x[0]}')">${x[1]}</button>`).join('');
+$('cVid').innerHTML=VID_CMDS.map(x=>`<button onclick="runCmd('${x[0]}')">${x[1]}</button>`).join('');
+$('cAi').innerHTML=['🎬 Prompt de vídeo','✨ Prompt de imagem','🎵 Prompt de música','📝 Prompt de roteiro'].map((x,i)=>`<button onclick="quickAsk(${i})">${x}</button>`).join('');
+$('qk').innerHTML=[['💬 Conversar',"go('chat')"],['🎬 Studio',"go('studio')"],['🖼️ Mídia',"go('media')"],['🎮 Criar jogo',"newConvo();setMode('3d');go('chat')"],['🎵 Música',"newProduction('music')"],['🔌 APIs',"go('settings')"]].map(x=>`<button onclick="${x[1]}">${x[0]}</button>`).join('');
+function quickAsk(i){const a=['Crie um prompt detalhado para gerar um vídeo sobre: ','Crie um prompt detalhado para gerar uma imagem sobre: ','Crie um prompt detalhado para gerar uma música sobre: ','Crie o roteiro de uma cena sobre: '];go('chat');$('inp').value=a[i];$('inp').focus()}
 const fmtSize=b=>b>1e6?(b/1e6).toFixed(1)+' MB':Math.max(1,Math.round(b/1e3))+' KB';
-const baseName=n=>n.replace(/\.[^.]+$/,'');
-const loadImg=u=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>no(new Error('imagem inválida'));i.src=u});
-const toBlob=(c,t,q)=>new Promise(r=>c.toBlob(r,t,q));
-function addMedia(f){
- const it={id:++mid,name:f.name,file:f,size:f.size,url:URL.createObjectURL(f),video:f.type.startsWith('video/')};
- const done=()=>{media.unshift(it);renderMedia()};
- if(it.video){const v=document.createElement('video');v.preload='metadata';v.muted=true;v.onloadedmetadata=()=>{it.w=v.videoWidth;it.h=v.videoHeight;it.dur=v.duration;done()};v.onerror=done;v.src=it.url}
- else{const im=new Image();im.onload=()=>{it.w=im.naturalWidth;it.h=im.naturalHeight;done()};im.onerror=()=>toast('Não consegui abrir',3500);im.src=it.url}}
+function addMedia(f){const it={id:++mid,name:f.name,file:f,size:f.size,url:URL.createObjectURL(f),video:f.type.startsWith('video/')};const done=()=>{media.unshift(it);renderMedia()};if(it.video){const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>{it.w=v.videoWidth;it.h=v.videoHeight;it.dur=v.duration;done()};v.onerror=done;v.src=it.url}else{const im=new Image();im.onload=()=>{it.w=im.naturalWidth;it.h=im.naturalHeight;done()};im.onerror=()=>toast('Imagem inválida.');im.src=it.url}}
 $('mfile').addEventListener('change',e=>{[...e.target.files].forEach(addMedia);e.target.value=''});
-function renderMedia(){
- $('mlist').innerHTML=media.map(m=>`<div class="mi ${msel.has(m.id)?'sel':''}" onclick="msTog(${m.id})">${m.video?`<video class="th" src="${m.url}#t=0.5" muted playsinline preload="metadata"></video>`:`<img class="th" src="${m.url}">`}<div class="in"><b style="font-weight:500;word-break:break-all">${esc(m.name)}</b><small>${m.video?'🎬':'🖼️'} ${m.w?m.w+'×'+m.h:''}${m.dur?' · '+Math.round(m.dur)+'s':''} · ${fmtSize(m.size)}</small></div><button class="ib" onclick="event.stopPropagation();dl(${m.id})">⬇</button>${m.video?'':`<button class="ib" onclick="event.stopPropagation();toChat(${m.id})">💬</button>`}<button class="ib" onclick="event.stopPropagation();rmM(${m.id})">✕</button></div>`).join('')||'<p class="hint">Nada aqui ainda.</p>'}
-function msTog(id){msel.has(id)?msel.delete(id):msel.add(id);renderMedia()}
-function dl(id){const m=media.find(x=>x.id===id);if(!m)return;const a=document.createElement('a');a.href=m.url;a.download=m.name;document.body.appendChild(a);a.click();a.remove()}
-function rmM(id){const i=media.findIndex(x=>x.id===id);if(i<0)return;URL.revokeObjectURL(media[i].url);media.splice(i,1);msel.delete(id);renderMedia()}
-function toChat(id){const m=media.find(x=>x.id===id);if(!m)return;const r=new FileReader();r.onload=()=>{att={kind:'image',type:m.file.type||'image/png',b64:r.result.split(',')[1],name:m.name};chip();home();$('inp').focus();toast('Imagem anexada.')};r.readAsDataURL(m.file)}
-async function procImg(it,cmd,o){
- const im=await loadImg(it.url),w=im.naturalWidth,h=im.naturalHeight;
- let type=cmd==='compress'?'image/jpeg':cmd==='convert'?o.fmt:(EXT[it.file.type]?it.file.type:'image/png'),tw=w,th=h,sx=0,sy=0,sw=w,sh=h;
- if(cmd==='resize'){tw=Math.max(16,o.w);th=Math.max(1,Math.round(h*tw/w))}
- if(cmd==='square'){const m=Math.min(w,h);sx=(w-m)/2;sy=(h-m)/2;sw=sh=m;tw=th=m}
- if(cmd==='rotate'){tw=h;th=w}
- const c=document.createElement('canvas');c.width=tw;c.height=th;const x=c.getContext('2d'),hasF='filter' in x;
- if(type==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,tw,th)}
- if(cmd==='gray'&&hasF)x.filter='grayscale(1)';
- if(cmd==='rotate'){x.translate(tw/2,th/2);x.rotate(Math.PI/2);x.drawImage(im,-w/2,-h/2)}else x.drawImage(im,sx,sy,sw,sh,0,0,tw,th);
- if(cmd==='gray'&&!hasF){const d=x.getImageData(0,0,tw,th),p=d.data;for(let i=0;i<p.length;i+=4){p[i]=p[i+1]=p[i+2]=.3*p[i]+.59*p[i+1]+.11*p[i+2]}x.putImageData(d,0,0)}
- if(cmd==='mark'){const fs=Math.max(14,Math.round(tw/22));x.font='600 '+fs+'px sans-serif';x.textAlign='right';x.textBaseline='bottom';x.fillStyle='rgba(255,255,255,.85)';x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=6;x.fillText(o.text||'Nexus LP',tw-fs*.6,th-fs*.5)}
- let b=await toBlob(c,type,o.q/100);if(!b){type='image/png';b=await toBlob(c,type)}
- return [b,baseName(it.name)+'-'+cmd+'.'+(EXT[b.type]||'png')]}
-const seekTo=(v,t)=>new Promise(r=>{const f=setTimeout(r,3000);v.onseeked=()=>{clearTimeout(f);r()};v.currentTime=t});
-async function procVid(it,cmd){
- const v=document.createElement('video');v.muted=true;v.playsInline=true;v.preload='auto';v.src=it.url;
- await new Promise((ok,no)=>{v.onloadeddata=ok;v.onerror=()=>no(new Error('erro no vídeo'))});
- const ts=cmd==='frame'?[Math.min(1,v.duration/2)]:[.1,.35,.6,.85].map(f=>f*v.duration),out=[];
- for(let i=0;i<ts.length;i++){await seekTo(v,ts[i]);const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);out.push([await toBlob(c,'image/jpeg',.9),baseName(it.name)+'-frame'+(i+1)+'.jpg'])}
- return out}
-async function runCmd(cmd){
- const vid=cmd==='frame'||cmd==='thumbs',items=(msel.size?media.filter(m=>msel.has(m.id)):media).filter(m=>vid?m.video:!m.video);
- if(!items.length)return toast('Marque arquivos.',3000);
- const o={w:+$('mw').value||1080,q:Math.min(100,Math.max(1,+$('mq').value||80)),fmt:$('mf').value,text:$('mt').value.trim()};
- toast('Processando…',6e4);let n=0;
- for(const it of items){
-  try{
-   if(it.video){for(const [b,nm] of await procVid(it,cmd)){if(b){addMedia(new File([b],nm,{type:b.type}));n++}}}
-   else{const [b,nm]=await procImg(it,cmd,o);addMedia(new File([b],nm,{type:b.type}));n++}
-  }catch(e){toast('Erro: '+e.message,4000)}}
- if(n)toast('✅ '+n+' arquivo(s) novo(s).',3000)}
+function renderMedia(){$('mlist').innerHTML=media.map(m=>`<div class="mi ${msel.has(m.id)?'sel':''}" onclick="msTog(${m.id})">${m.video?`<video class="th" src="${m.url}#t=0.5" muted playsinline></video>`:`<img class="th" src="${m.url}">`}<div class="in"><b style="font-weight:500;word-break:break-all">${esc(m.name)}</b><small>${m.video?'🎬':'🖼️'} ${m.w?m.w+'×'+m.h:''}${m.dur?' · '+Math.round(m.dur)+'s':''} · ${fmtSize(m.size)}</small></div><button class="ib" onclick="event.stopPropagation();dlM(${m.id})">⬇</button><button class="ib" onclick="event.stopPropagation();rmM(${m.id})">✕</button></div>`).join('')||'<p class="hint">Nenhuma mídia adicionada.</p>'}
+function msTog(id){msel.has(id)?msel.delete(id):msel.add(id);renderMedia()}function dlM(id){const m=media.find(x=>x.id===id);if(!m)return;const a=document.createElement('a');a.href=m.url;a.download=m.name;a.click()}function rmM(id){const i=media.findIndex(x=>x.id===id);if(i<0)return;URL.revokeObjectURL(media[i].url);media.splice(i,1);msel.delete(id);renderMedia()}
+async function procImg(it,cmd,o){const im=await new Promise((ok,no)=>{const x=new Image();x.onload=()=>ok(x);x.onerror=no;x.src=it.url}),w=im.naturalWidth,h=im.naturalHeight;let tw=w,th=h,sx=0,sy=0,sw=w,sh=h,type=cmd==='compress'?'image/jpeg':cmd==='convert'?o.fmt:(it.file.type||'image/png');if(cmd==='resize'){tw=Math.max(16,o.w);th=Math.round(h*tw/w)}if(cmd==='square'){const m=Math.min(w,h);sx=(w-m)/2;sy=(h-m)/2;sw=sh=m;tw=th=m}if(cmd==='rotate'){tw=h;th=w}const c=document.createElement('canvas');c.width=tw;c.height=th;const x=c.getContext('2d');if(type==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,tw,th)}if(cmd==='gray')x.filter='grayscale(1)';if(cmd==='rotate'){x.translate(tw/2,th/2);x.rotate(Math.PI/2);x.drawImage(im,-w/2,-h/2)}else x.drawImage(im,sx,sy,sw,sh,0,0,tw,th);if(cmd==='mark'){x.font='600 '+Math.max(14,tw/22)+'px sans-serif';x.textAlign='right';x.textBaseline='bottom';x.fillStyle='rgba(255,255,255,.85)';x.fillText(o.text||'Nexus LP',tw-20,th-18)}const b=await new Promise(r=>c.toBlob(r,type,o.q/100));return[b,baseName(it.name)+'-'+cmd+'.'+(b.type.split('/')[1]||'png')]}
+function baseName(n){return n.replace(/\.[^.]+$/,'')}
+async function runCmd(cmd){const isv=cmd==='frame'||cmd==='thumbs',items=(msel.size?media.filter(m=>msel.has(m.id)):media).filter(m=>isv?m.video:!m.video);if(!items.length)return toast('Adicione ou selecione arquivos primeiro.');const o={w:+$('mw').value||1080,q:+$('mq').value||80,fmt:$('mf').value,text:$('mt').value};for(const it of items){try{if(isv){const v=document.createElement('video');v.src=it.url;v.muted=true;await new Promise(r=>v.onloadeddata=r);const ts=cmd==='frame'?[Math.min(1,v.duration/2)]:[.1,.35,.6,.85].map(x=>x*v.duration);for(let i=0;i<ts.length;i++){v.currentTime=ts[i];await new Promise(r=>v.onseeked=r);const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.9));addMedia(new File([b],baseName(it.name)+'-frame'+(i+1)+'.jpg',{type:'image/jpeg'}))}}else{const [b,n]=await procImg(it,cmd,o);addMedia(new File([b],n,{type:b.type}))}}catch(e){toast('Erro: '+e.message,3500)}}toast('Processamento concluído.',2500)}
 
-let actx=null,ttsStop=null,srBad=false,mr=null,rec=null,lis=false;
-const cleanSp=b=>b.closest('.bub').querySelector('.txt').textContent.replace(/```[\s\S]*?```/g,' ').replace(/[`*_#>]/g,'').trim();
-const elAudio=new Audio(),elCache=new Map();
-const EL_VOICES=[['EXAVITQu4vr4xnSDxMaL','Sarah'],['Xb7hH8MSUJpSbSDYk0k2','Alice'],['pNInz6obpgDQGcFmaJgB','Adam'],['JBFqnCBsd6RMkjVDRZzb','George']];
-const cutTxt=(t,n)=>{if(t.length<=n)return t;const c=t.slice(0,n),i=Math.max(c.lastIndexOf('. '),c.lastIndexOf('! '),c.lastIndexOf('? '),c.lastIndexOf('\n'));return (i>n*.5?c.slice(0,i+1):c).trim()};
-async function speak(b){
- if(ttsStop){const f=ttsStop;ttsStop=null;f();return}
- const t=cleanSp(b);if(!t)return;
- const AC=window.AudioContext||window.webkitAudioContext;
- if(cfg.k.gemini&&AC){try{if(!actx||actx.state==='closed')actx=new AC({sampleRate:24000});actx.resume()}catch(e){}}
- const steps={sys:speakSys,el:speakEL,gem:speakCloud},sysBad=Date.now()-LS.g('nexuslp_sysbad',0)<6048e5&&(cfg.elKey||cfg.k.gemini),order=(cfg.vp==='el'?['el','sys','gem']:['sys','el','gem']).filter(x=>!(x==='sys'&&sysBad));
- for(const k of order){
-  if((k==='el'&&!cfg.elKey)||(k==='gem'&&!cfg.k.gemini))continue;
-  if(await steps[k](b,t)==='ok')return}
- toast('Não consegui falar.',8000)}
-function speakSys(b,t){return new Promise(res=>{
- const s=window.speechSynthesis;
- if(!s)return res('fail');
- let started=false,dead=false,w;
- const reset=()=>{b.textContent='🔊';ttsStop=null;clearTimeout(w)};
- const fail=()=>{if(dead)return;dead=true;reset();try{s.cancel()}catch(e){}LS.s('nexuslp_sysbad',Date.now());res('fail')};
- b.textContent='⏸';ttsStop=()=>{dead=true;reset();try{s.cancel()}catch(e){}};
- w=setTimeout(()=>{if(!started)fail()},2500);
- try{
-  s.cancel();const ch=t.match(/[^.!?\n]+[.!?]*\s*/g)||[t],v=(s.getVoices()||[]).find(x=>/^pt/i.test(x.lang));
-  ch.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang=cfg.lang||'pt-BR';u.rate=+cfg.rate||1;if(v)u.voice=v;u.onstart=()=>{if(!started){started=true;LS.s('nexuslp_sysbad',0);res('ok')}};u.onerror=e=>{if(!/interrupted|canceled/.test(e.error||''))fail()};if(i===ch.length-1)u.onend=()=>{if(!dead)reset()};s.speak(u)})
- }catch(e){fail()}})}
-async function elTTS(txt){
- const first=cfg.elVoice||EL_VOICES[0][0];
- for(let a=0;a<3;a++){
-  let r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+first+'?output_format=mp3_44100_64',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({text:txt,model_id:'eleven_flash_v2_5'})});
-  if(r.ok)return r.blob();
-  if(a>=2)throw new Error('Falha no ElevenLabs.');await wait(1500)}
+/* ---------- STUDIO ---------- */
+const TYPES={dorama:['🎬','Dorama','1–2 min por episódio'],filme:['🎞️','Filme','60+ min'],novela:['📺','Novela','55–60 min/episódio'],serie:['📚','Série','Temporadas'],animacao:['✨','Animação','Storyboard + cenas'],music:['🎵','Música','Letra + áudio'],game:['🎮','Jogo','Design + código']};
+const STAGES=['ideia','pesquisa','biblia','personagens','roteiro','cenas','storyboard','imagens','vozes','musica','video','montagem','revisao','final'];
+const STAGE_LABEL={ideia:'Ideia',pesquisa:'Pesquisa',biblia:'Bíblia',personagens:'Personagens',roteiro:'Roteiro',cenas:'Cenas',storyboard:'Storyboard',imagens:'Imagens',vozes:'Vozes',musica:'Música',video:'Vídeo',montagem:'Montagem',revisao:'Revisão',final:'Final'};
+function projects(){return LS.g(KP,[])}
+function saveProjects(a){return LS.s(KP,a)}
+function newProduction(type){
+ if(!type){const opts=Object.entries(TYPES).map(([k,v])=>k+': '+v[1]).join('\n');type=prompt('Tipo de produção:\\n'+opts,'dorama')||'dorama'}
+ if(!TYPES[type])type='dorama';
+ const title=prompt('Nome da produção','Minha produção Nexus')||'Produção sem título';
+ const p={id:'p'+Date.now(),title,type,createdAt:Date.now(),updatedAt:Date.now(),status:'ideia',prompt:'',research:'',bible:'',characters:'',script:'',scenes:'',storyboard:'',notes:'',artifacts:[],versions:[],approval:null,progress:0};
+ const a=projects();a.unshift(p);saveProjects(a);renderProjects();openProject(p.id)
 }
-async function speakEL(b,t){
- const txt=cutTxt(t,+cfg.elMax||600),ck=(cfg.elVoice||'')+'|'+txt;let dead=false;
- b.textContent='⏳';ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{elAudio.pause()}catch(e){}};
- try{
-  let url=elCache.get(ck);
-  if(!url){url=URL.createObjectURL(await elTTS(txt));elCache.set(ck,url)}
-  if(dead)return 'ok';
-  elAudio.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};
-  elAudio.src=url;await elAudio.play();b.textContent='⏸';return 'ok'
- }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('Erro: '+e.message,5000);return 'fail'}}
-async function speakCloud(b,t){
- const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return 'fail';
- const gk=String(cfg.k.gemini).split(',')[0],ctx=actx&&actx.state!=='closed'?actx:(actx=new AC({sampleRate:24000}));
- let src=null,dead=false;b.textContent='⏳';
- ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{src&&src.stop()}catch(e){}};
- try{
-  const body=JSON.stringify({contents:[{parts:[{text:t.slice(0,1500)}]}],generationConfig:{responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:'Kore'}}}}});
-  let d;
-  for(const mo of ['gemini-2.5-flash-preview-tts','gemini-2.5-flash-tts']){
-   try{d=await api('https://generativelanguage.googleapis.com/v1beta/models/'+mo+':generateContent?key='+encodeURIComponent(gk),{method:'POST',headers:{'Content-Type':'application/json'},body});break}catch(e){}}
-  if(dead)return 'ok';if(!d)throw new Error('falha');
-  const part=d.candidates[0].content.parts.find(x=>x.inlineData||x.inline_data);
-  const bin=atob((part.inlineData||part.inline_data).data),n=bin.length>>1,buf=ctx.createBuffer(1,n,24000),ch=buf.getChannelData(0);
-  for(let i=0;i<n;i++){let v=bin.charCodeAt(2*i)|(bin.charCodeAt(2*i+1)<<8);if(v>=32768)v-=65536;ch[i]=v/32768}
-  src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};src.start();b.textContent='⏸';return 'ok'
- }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}return 'fail'}}
+function calcProgress(p){let n=0;for(const s of STAGES){if(p[s]||p.artifacts.some(a=>a.stage===s&&a.url))n++}return Math.round(n/STAGES.length*100)}
+function renderProjects(){const a=projects();$('projects').innerHTML=a.map(p=>{const t=TYPES[p.type]||['📁','Projeto',''];const pr=calcProgress(p);return `<div class="project"><div class="head"><span>${t[0]}</span><b>${esc(p.title)}</b><span class="status ${pr>=100?'ok':pr?'run':''}">${pr}%</span></div><div class="meta">${t[1]} · ${t[2]}</div><div class="progress"><i style="width:${pr}%"></i></div><div class="r"><button class="mini" onclick="openProject('${p.id}')">Abrir</button><button class="mini" onclick="duplicateProject('${p.id}')">V2</button><button class="mini" onclick="deleteProject('${p.id}')">Apagar</button></div></div>`}).join('')||'<p class="hint">Nenhuma produção ainda. Crie o primeiro projeto.</p>'}
+function getP(id){return projects().find(p=>p.id===id)}
+function updateP(p){p.updatedAt=Date.now();const a=projects(),i=a.findIndex(x=>x.id===p.id);if(i>=0)a[i]=p;saveProjects(a);renderProjects();renderFiles()}
+function openProject(id){const p=getP(id);if(!p)return;$('pmTitle').textContent=p.title;renderProjectModal(p);$('pOv').classList.add('open')}
+function closeProjectModal(){$('pOv').classList.remove('open')}
+function stageRows(p){return STAGES.map(s=>{const done=!!p[s]||p.artifacts.some(a=>a.stage===s&&a.url);const active=p.status===s;return `<div class="stage ${done?'done ':''}${active?'active':''}"><span class="dot"></span><div><b>${STAGE_LABEL[s]}</b><small>${done?'Concluído':active?'Em andamento':'Aguardando'}</small></div></div>`}).join('')}
+function renderProjectModal(p){
+ const t=TYPES[p.type]||['📁','Projeto',''];
+ const arts=p.artifacts||[];
+ $('pmBody').innerHTML=`<div class="hero"><h2>${t[0]} ${esc(p.title)}</h2><p>${t[1]} · ${t[2]}</p><div class="progress"><i style="width:${calcProgress(p)}%"></i></div><p style="margin-top:6px">${calcProgress(p)}% do pipeline</p></div>
+ <div class="card"><label>Ideia / briefing</label><textarea id="pPrompt">${ea(p.prompt||'')}</textarea><div class="r"><button class="mini" onclick="saveBrief('${p.id}')">Salvar briefing</button><button class="mini" onclick="generatePlan('${p.id}')">🧠 Planejar</button></div></div>
+ <div class="card"><h3 style="margin:0 0 8px">Pipeline real</h3>${stageRows(p)}</div>
+ <div class="card"><h3 style="margin:0 0 8px">Produção</h3><div class="grid">
+ <button class="tile" onclick="generateStage('${p.id}','pesquisa')">🔎<b>Pesquisa</b><small>Fontes e contexto</small></button>
+ <button class="tile" onclick="generateStage('${p.id}','biblia')">📖<b>Bíblia</b><small>Mundo e regras</small></button>
+ <button class="tile" onclick="generateStage('${p.id}','personagens')">👤<b>Personagens</b><small>Perfis</small></button>
+ <button class="tile" onclick="generateStage('${p.id}','roteiro')">📝<b>Roteiro</b><small>Estrutura</small></button>
+ <button class="tile" onclick="generateStage('${p.id}','cenas')">🎞️<b>Cenas</b><small>Plano de produção</small></button>
+ <button class="tile" onclick="generateStage('${p.id}','storyboard')">🖼️<b>Storyboard</b><small>Descrição visual</small></button>
+ <button class="tile" onclick="generateMediaArtifact('${p.id}','imagens')">✨<b>Imagem</b><small>Usa API conectada</small></button>
+ <button class="tile" onclick="generateMediaArtifact('${p.id}','video')">🎬<b>Vídeo</b><small>Usa API conectada</small></button>
+ <button class="tile" onclick="generateMediaArtifact('${p.id}','vozes')">🎙️<b>Voz</b><small>ElevenLabs</small></button>
+ <button class="tile" onclick="generateMediaArtifact('${p.id}','musica')">🎵<b>Música</b><small>API conectada</small></button>
+ </div></div>
+ <div class="card"><h3 style="margin:0 0 8px">Revisão e versões</h3><p class="hint">Depois de existir um artefato real, você pode aprovar ou pedir melhoria. A versão anterior é preservada.</p><div class="r"><button class="mini" onclick="approveP('${p.id}')">✅ Estou satisfeito</button><button class="mini" onclick="reviseP('${p.id}')">🔄 Quero melhorar</button></div><div class="r"><button class="mini" onclick="createVersion('${p.id}')">Criar versão</button><button class="mini" onclick="exportProject('${p.id}')">Exportar projeto</button></div></div>
+ <div class="card"><h3 style="margin:0 0 8px">Material textual</h3><div id="pText">${renderTextMaterials(p)}</div></div>
+ <div class="card"><h3 style="margin:0 0 8px">Artefatos reais</h3>${arts.length?arts.map(a=>`<div class="art"><b>${esc(a.type||a.stage)} · ${esc(a.name||'artefato')}</b><small>${esc(a.status||'concluído')} · ${new Date(a.createdAt).toLocaleString('pt-BR')}</small>${a.url?`<a href="${ea(a.url)}" target="_blank">Abrir resultado</a>`:'<small>Sem arquivo/URL real — não marcado como concluído.</small>'}</div>`).join(''):'<p class="hint">Nenhum arquivo audiovisual real ainda.</p>'}</div>
+ <div class="card"><p class="hint">Integridade: o Nexus não considera texto, prompt ou roteiro como vídeo/áudio/imagem final. Um artefato só é concluído quando uma ferramenta retorna um arquivo ou URL real.</p></div>`;
+}
+function renderTextMaterials(p){const fields=[['pesquisa','Pesquisa'],['bible','Bíblia'],['characters','Personagens'],['script','Roteiro'],['scenes','Cenas'],['storyboard','Storyboard']];return fields.filter(x=>p[x[0]]).map(x=>`<div class="art"><b>${x[1]}</b><small>${esc(String(p[x[0]]).slice(0,1000))}</small></div>`).join('')||'<p class="hint">Ainda não há material textual.</p>'}
+function saveBrief(id){const p=getP(id);p.prompt=$('pPrompt').value.trim();p.status='ideia';updateP(p);openProject(id);toast('Briefing salvo.')}
+async function generatePlan(id){const p=getP(id);p.prompt=$('pPrompt').value.trim();if(!p.prompt)return toast('Escreva a ideia primeiro.');p.status='roteiro';updateP(p);openProject(id);const out=await askAll([{role:'user',content:`Planeje esta produção ${TYPES[p.type]?.[1]||p.type}. Ideia: ${p.prompt}\nDefina público, duração, estrutura, personagens, arco, cenas e requisitos técnicos. Não gere mídia; gere planejamento.`}], 'professional',true);if(out.text){p.bible=out.text;p.status='roteiro';updateP(p);openProject(id)}else toast((out.err||['Falha'])[0],5000)}
+async function generateStage(id,stage){const p=getP(id);if(!p.prompt)return toast('Salve primeiro a ideia/briefing.');p.status=stage;updateP(p);openProject(id);const context=`Produção: ${p.title}\nTipo: ${TYPES[p.type]?.[1]}\nIdeia: ${p.prompt}\nBíblia: ${p.bible||'(ainda não criada)'}\nPersonagens: ${p.characters||'(ainda não criados)'}\nRoteiro: ${p.script||'(ainda não criado)'}`;const task={pesquisa:'Faça pesquisa contextual e indique fontes/consultas que devem ser verificadas. Não invente citações.',biblia:'Crie a bíblia da produção: universo, tom, regras, estética e continuidade.',personagens:'Crie fichas completas dos personagens, relações, objetivos e evolução.',roteiro:'Escreva o roteiro completo adequado à duração do projeto, dividido em cenas.',cenas:'Converta o roteiro em lista de cenas com duração, ambiente, personagens, diálogo, câmera e som.',storyboard:'Crie um storyboard textual cena a cena com enquadramento, composição, luz e continuidade.'}[stage];const out=await askAll([{role:'user',content:context+'\n\nTarefa:\n'+task}], 'professional',true);if(out.text){p[stage]=out.text;p.status=stage;updateP(p);openProject(id)}else toast((out.err||['Falha'])[0],5000)}
+async function generateMediaArtifact(id,stage){const p=getP(id);const adapter=cfg.media?.[stage==='vozes'?'audio':stage==='imagens'?'image':stage==='video'?'video':'music']||{};if(stage==='vozes'&&cfg.elKey){await generateVoiceArtifact(p);return}if(!adapter.key||!adapter.endpoint)return toast('Configure uma API de '+STAGE_LABEL[stage]+' no Centro de APIs antes.',5000);p.status=stage;updateP(p);openProject(id);const prompt=stage==='imagens'?`Imagem cinematográfica para ${p.title}. ${p.characters||p.prompt}`:stage==='video'?`Vídeo para ${p.title}. ${p.scenes||p.script||p.prompt}`:`Música para ${p.title}. ${p.prompt}`;try{const r=await api(adapter.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+adapter.key},body:JSON.stringify({model:adapter.model||undefined,prompt,project:p.title,type:stage})},180000);const url=findMediaUrl(r);if(!url)throw new Error('O serviço respondeu, mas não encontrei uma URL/arquivo no retorno.');p.artifacts.push({id:'a'+Date.now(),stage,type:stage,name:stage+'-'+Date.now(),url,status:'concluído',createdAt:Date.now()});p.status=stage;updateP(p);openProject(id);toast('Artefato real recebido.')}catch(e){p.status='erro';updateP(p);openProject(id);toast('Falha na geração: '+e.message,7000)}}
+function findMediaUrl(d){if(!d)return null;if(typeof d==='string'&&/^https?:|^blob:|^data:/.test(d))return d;return d.url||d.output?.url||d.data?.[0]?.url||d.output?.[0]?.url||d.result?.url||d.audio_url||d.video_url||d.image_url||null}
+async function generateVoiceArtifact(p){const text=p.script||p.scenes||p.prompt;if(!text)return toast('Crie o roteiro antes da voz.');try{const voice=cfg.elVoice||'JBFqnCBsd6RMkjVDRZzb';const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+voice+'?output_format=mp3_44100_128',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({text:String(text).slice(0,5000),model_id:'eleven_multilingual_v2'})});if(!r.ok)throw new Error('ElevenLabs recusou a geração ('+r.status+').');const b=await r.blob(),url=URL.createObjectURL(b);p.artifacts.push({id:'a'+Date.now(),stage:'vozes',type:'audio',name:p.title+'-voz.mp3',url,status:'concluído',createdAt:Date.now()});p.status='vozes';updateP(p);openProject(p.id);toast('Áudio real criado.')}catch(e){toast(e.message,6000)}}
+function approveP(id){const p=getP(id);p.approval={ok:true,at:Date.now()};p.status='final';updateP(p);openProject(id);toast('Produção marcada como aprovada.')}
+function reviseP(id){const p=getP(id);p.approval={ok:false,at:Date.now()};createVersion(id);toast('V2 criada para revisão.')}
+function createVersion(id){const p=getP(id);p.versions=p.versions||[];const num=p.versions.length+1;p.versions.push({version:num,createdAt:Date.now(),snapshot:JSON.parse(JSON.stringify({prompt:p.prompt,bible:p.bible,characters:p.characters,script:p.script,scenes:p.scenes,storyboard:p.storyboard,artifacts:p.artifacts}))});p.status='ideia';updateP(p);openProject(id);toast('Versão V'+num+' preservada.')}
+function duplicateProject(id){const p=getP(id);if(!p)return;const n=JSON.parse(JSON.stringify(p));n.id='p'+Date.now();n.title=p.title+' V2';n.createdAt=Date.now();n.updatedAt=Date.now();n.versions=n.versions||[];n.versions.push({version:1,createdAt:Date.now(),snapshot:JSON.parse(JSON.stringify(p))});const a=projects();a.unshift(n);saveProjects(a);renderProjects();toast('V2 criada sem apagar a anterior.')}
+function deleteProject(id){if(!confirm('Apagar esta produção?'))return;saveProjects(projects().filter(x=>x.id!==id));renderProjects();renderFiles();toast('Produção apagada.')}
+function exportProject(id){const p=getP(id);if(!p)return;downloadBlob(JSON.stringify(p,null,2),p.title.replace(/\s+/g,'_')+'.json','application/json')}
+function downloadBlob(data,name,type){const b=new Blob([data],{type}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function exportLibrary(){downloadBlob(JSON.stringify({app:'Nexus LP',version:APP_VERSION,projects:projects()},null,2),'nexus-lp-biblioteca.json','application/json')}
+function importLibrary(){$('libFile').click()}$('libFile').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.projects))throw Error('JSON inválido');saveProjects(d.projects);renderFiles();renderProjects();toast('Biblioteca importada.')}catch(x){toast('Importação falhou: '+x.message,5000)}};r.readAsText(f)})
+function renderFiles(){$('fileProjects').innerHTML=projects().map(p=>`<div class="project"><div class="head"><b>${esc(p.title)}</b><span class="status">${calcProgress(p)}%</span></div><div class="meta">${esc(TYPES[p.type]?.[1]||p.type)} · ${(p.artifacts||[]).length} artefato(s) · ${(p.versions||[]).length} versão(ões)</div><div class="r"><button class="mini" onclick="openProject('${p.id}')">Abrir</button><button class="mini" onclick="exportProject('${p.id}')">JSON</button></div></div>`).join('')||'<p class="hint">Biblioteca vazia.</p>'}
 
-const IS_WV=/;\s*wv\)/.test(navigator.userAgent||'');
-const srBadNow=()=>srBad||(Date.now()-LS.g('nexuslp_srbad',0)<6048e5&&!!(cfg.elKey||cfg.k.gemini));
-const markSrBad=()=>{srBad=true;LS.s('nexuslp_srbad',Date.now())};
+/* ---------- API CENTER ---------- */
+function mediaCard(kind,label,icon){const m=cfg.media[kind]||{};return `<div class="card"><label>${icon} ${label}${m.key?' ✅':''}</label><input type="password" id="mdk_${kind}" value="${ea(m.key||'')}" placeholder="API Key"><label>Endpoint</label><input id="mdu_${kind}" value="${ea(m.endpoint||'')}" placeholder="https://..."><label>Modelo (se houver)</label><input id="mdm_${kind}" value="${ea(m.model||'')}"><div class="r"><button class="mini" onclick="saveMediaApi('${kind}')">Salvar</button><button class="mini" onclick="testMediaApi('${kind}')">Testar</button></div><div class="res" id="mdr_${kind}"></div><p class="hint" style="margin:8px 0 0">O Nexus envia um pedido genérico com <code>{model,prompt,project,type}</code>. Se o fornecedor usar outro formato ou autenticação, use um backend/adaptador próprio.</p></div>`}
+function openApiMedia(){go('settings');setTimeout(()=>document.querySelector('#setBody')?.scrollIntoView({behavior:'smooth',block:'end'}),100)}
+function saveMediaApi(k){cfg.media[k]={key:cleanKey($('mdk_'+k).value),endpoint:$('mdu_'+k).value.trim(),model:$('mdm_'+k).value.trim()};persist();renderSettings();toast('API de '+k+' salva.')}
+async function testMediaApi(k){const m=cfg.media[k]||{};if(!m.key||!m.endpoint)return toast('Preencha chave e endpoint.');$('mdr_'+k).textContent='Testando…';try{const r=await api(m.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+m.key},body:JSON.stringify({model:m.model||undefined,prompt:'Nexus LP teste de conexão',type:'test'})},30000);$('mdr_'+k).className='res ok';$('mdr_'+k).textContent='✅ O endpoint respondeu. '+(findMediaUrl(r)?'Também retornou um possível artefato.':'Agora valide o formato específico do fornecedor.')}catch(e){$('mdr_'+k).className='res err';$('mdr_'+k).textContent='❌ '+e.message}}
+function renderSettings(){
+ $('setBody').innerHTML=`<h3 style="margin-top:0">Perfil</h3><div class="card"><label>Nome</label><input id="nameSet" value="${ea(LS.g('nexuslp_name','Laiton Flugêncio'))}"><div class="r"><button class="mini" onclick="saveName()">Salvar nome</button><button class="mini" onclick="newConvo()">Novo chat</button></div></div>
+ <h3>Equipe de IA</h3><div class="card"><label>IA(s) usadas em conversa normal</label><select id="team"><option value="1">1 — resposta rápida</option><option value="2">2 — comparação</option><option value="3">3</option><option value="4">4</option><option value="8">8 — tarefas pesadas</option></select><label>Idioma do microfone</label><select id="lang"><option>pt-BR</option><option>pt-PT</option><option>en-US</option><option>es-ES</option></select><label>Velocidade da voz</label><select id="rate"><option value=".8">0.8</option><option value="1">1.0</option><option value="1.2">1.2</option><option value="1.5">1.5</option></select><div class="r"><button class="mini" onclick="saveGeneral()">Salvar preferências</button><button class="mini" onclick="testMic()">Testar microfone</button></div></div>
+ <h3>Inteligência — chaves de API</h3><p class="hint">Chaves ficam no armazenamento deste navegador/aparelho. Para um aplicativo público, não coloque chaves privadas diretamente no HTML: use um backend/proxy.</p>
+ ${PROVS.map(p=>{const k=cfg.k[p.id]||'';return `<div class="card"><label>${p.name}${k?' ✅':''}</label><input type="password" id="k_${p.id}" value="${ea(k)}" placeholder="${p.ph}" autocomplete="off"><label>Modelo</label><input id="m_${p.id}" value="${ea(cfg.m[p.id]||p.m)}"><div class="r"><button class="mini" onclick="testP('${p.id}',this)">Testar</button><button class="mini" onclick="saveP('${p.id}')">Salvar</button><button class="mini" onclick="clearP('${p.id}')">Apagar</button></div><div class="res" id="r_${p.id}"></div></div>`}).join('')}
+ <h3>Voz — ElevenLabs</h3><div class="card"><label>API Key</label><input type="password" id="elKey" value="${ea(cfg.elKey||'')}"><label>Voice ID</label><input id="elVoice" value="${ea(cfg.elVoice||'JBFqnCBsd6RMkjVDRZzb')}"><label>Limite por leitura</label><input id="elMax" type="number" value="${cfg.elMax||600}"><div class="r"><button class="mini" onclick="saveEL()">Salvar</button><button class="mini" onclick="testEL()">Testar</button></div><div class="res" id="r_el"></div></div>
+ <h3>Produção audiovisual</h3><p class="hint">Não existe uma chave universal que gere tudo. Cada categoria pode usar um serviço diferente. O Studio só marca vídeo/imagem/áudio como concluído quando recebe um URL/arquivo real.</p>
+ ${mediaCard('image','Imagem','🖼️')}${mediaCard('video','Vídeo','🎬')}${mediaCard('music','Música','🎵')}${mediaCard('research','Pesquisa/Backend','🔎')}
+ <h3>Integridade e dados</h3><div class="card"><p class="hint">O Nexus não deve dizer que criou um vídeo, áudio, imagem ou arquivo quando só criou um texto. V1, V2 e V3 são preservadas quando uma revisão é solicitada.</p><div class="r"><button class="mini" onclick="exportLibrary()">Exportar tudo</button><button class="mini" onclick="clearData()">Apagar dados locais</button></div></div><p class="hint" style="text-align:center">Nexus LP · ${APP_VERSION}</p>`;
+ $('team').value=String(cfg.team||1);$('lang').value=cfg.lang||'pt-BR';$('rate').value=String(cfg.rate||1)
+}
+function saveName(){const n=$('nameSet').value.trim();if(n)LS.s('nexuslp_name',n);applyName();toast('Nome salvo.')}
+function saveGeneral(){cfg.team=+$('team').value;cfg.lang=$('lang').value;cfg.rate=+$('rate').value;persist();toast('Preferências salvas.')}
+async function testP(id,btn){const p=PROVS.find(x=>x.id===id),k=cleanKey($('k_'+id).value),m=$('m_'+id).value.trim()||p.m;if(!k)return toast('Cole a chave antes.');cfg.k[id]=k;cfg.m[id]=m;persist();if(btn)btn.disabled=true;$('r_'+id).className='res wait';$('r_'+id).textContent='Testando…';try{const t=await askOne(p,[{role:'user',content:'Responda somente: OK'}],SYSTEM,{light:true});$('r_'+id).className='res ok';$('r_'+id).textContent='✅ Conectado: '+t.slice(0,40)}catch(e){$('r_'+id).className='res err';$('r_'+id).textContent='❌ '+e.message}finally{if(btn)btn.disabled=false}}
+function saveP(id){cfg.k[id]=cleanKey($('k_'+id).value);cfg.m[id]=$('m_'+id).value.trim()||PROVS.find(p=>p.id===id).m;persist();renderSettings();toast('Configuração salva.')}
+function clearP(id){delete cfg.k[id];delete cfg.m[id];persist();renderSettings();toast('Chave apagada.')}
+function saveEL(){cfg.elKey=cleanKey($('elKey').value);cfg.elVoice=$('elVoice').value.trim();cfg.elMax=Math.min(5000,Math.max(100,+$('elMax').value||600));persist();toast('ElevenLabs salvo.')}
+async function testEL(){saveEL();if(!cfg.elKey)return toast('Cole a chave do ElevenLabs.');$('r_el').className='res wait';$('r_el').textContent='Testando…';try{const r=await fetch('https://api.elevenlabs.io/v1/user/subscription',{headers:{'xi-api-key':cfg.elKey}});if(!r.ok)throw Error('HTTP '+r.status);const d=await r.json();$('r_el').className='res ok';$('r_el').textContent='✅ Conectado. Uso: '+d.character_count+' / '+d.character_limit}catch(e){$('r_el').className='res err';$('r_el').textContent='❌ '+e.message}}
+function clearData(){if(!confirm('Apagar chats, projetos e configurações locais?'))return;localStorage.clear();location.reload()}
+function testMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return toast('Reconhecimento de voz não disponível aqui. Tente o microfone do teclado ou MediaRecorder.');const r=new SR();r.lang=cfg.lang||'pt-BR';r.onstart=()=>toast('🎙️ Fale agora…',5000);r.onresult=e=>{$('inp').value=e.results[0][0].transcript;go('chat')};r.onerror=e=>toast('Microfone: '+e.error,5000);r.start()}
+
+/* ---------- VOZ / MIC ---------- */
+function speak(b){const t=b.closest('.bub').querySelector('.txt').textContent.replace(/```[\s\S]*?```/g,'').trim();if(!t)return;if(ttsStop){ttsStop();return}if(window.speechSynthesis){const u=new SpeechSynthesisUtterance(t.slice(0,5000));u.lang=cfg.lang||'pt-BR';u.rate=cfg.rate||1;u.onend=()=>{ttsStop=null;b.textContent='🔊'};u.onerror=()=>{ttsStop=null;b.textContent='🔊'};window.speechSynthesis.cancel();window.speechSynthesis.speak(u);b.textContent='⏸';ttsStop=()=>{window.speechSynthesis.cancel();ttsStop=null;b.textContent='🔊'}}}
+let rec=null,lis=false,mr=null;
 function mic(){
- if(mr&&mr.state==='recording'){mr.stop();return}
- if(lis&&rec){rec.stop();return}
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR||IS_WV||srBadNow())return micRecord();
- rec=new SR();rec.lang=cfg.lang||'pt-BR';rec.interimResults=true;rec.continuous=true;
- const base=$('inp').value?$('inp').value+' ':'';let got=false;
- rec.onstart=()=>{lis=true;$('mic').classList.add('lis')};
- rec.onresult=e=>{got=true;LS.s('nexuslp_srbad',0);let t='';for(const r of e.results)t+=r[0].transcript;$('inp').value=base+t;$('inp').dispatchEvent(new Event('input'))};
- rec.onerror=e=>{if(e.error==='no-speech')return toast('Não ouvi nada.');if(e.error!=='aborted'){markSrBad();micRecord()}};
- rec.onend=()=>{lis=false;$('mic').classList.remove('lis')};
- try{rec.start()}catch(e){markSrBad();return micRecord()}
- setTimeout(()=>{if(!lis&&!got){try{rec.abort()}catch(e){}markSrBad();micRecord()}},4000)}
-function micKeyboard(msg){$('inp').focus();toast((msg?msg+' ':'')+'Use o 🎙️ do teclado.',9000)}
-function micFile(){
- if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Microfone não liberado.');
- try{$('afile').click();toast('Abrindo gravador.',9000)}catch(e){micKeyboard('')}}
-async function transcribeInto(blob,mt){
- if(!cfg.k.gemini&&!cfg.elKey)return toast('Configure uma chave.',6000);
- toast('Transcrevendo…',6e4);
- try{const t=await transcribe(blob,mt);$('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')}
- catch(e){toast('Erro: '+e.message,7000)}}
-$('afile').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)transcribeInto(f,f.type||'audio/mpeg')});
-async function micRecord(){
- if(!navigator.mediaDevices||!window.MediaRecorder)return micFile();
- if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Configure uma chave.');
- let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){return micFile()}
- const chunks=[];mr=new MediaRecorder(stream);
- mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
- mr.onstart=()=>{$('mic').classList.add('lis');toast('🎙️ Gravando…',6e4)};
- mr.onstop=async()=>{
-  stream.getTracks().forEach(t=>t.stop());$('mic').classList.remove('lis');toast('Transcrevendo…',6e4);
-  try{
-   const mt=(mr.mimeType||'audio/webm').split(';')[0],blob=new Blob(chunks,{type:mt});
-   if(blob.size<800)return toast('Não ouvi nada.');
-   const t=await transcribe(blob,mt);
-   $('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')
-  }catch(e){toast('Erro: '+e.message,7000)}};
- mr.start();setTimeout(()=>{if(mr.state==='recording')mr.stop()},60000)}
+ if(SR&&!lis){rec=new SR();rec.lang=cfg.lang||'pt-BR';rec.interimResults=true;rec.continuous=true;let base=$('inp').value?$('inp').value+' ':'';rec.onstart=()=>{lis=true;$('mic').classList.add('lis');toast('🎙️ Fale. Toque novamente para parar.',6000)};rec.onresult=e=>{let t='';for(const x of e.results)t+=x[0].transcript;$('inp').value=base+t};rec.onerror=()=>{lis=false;$('mic').classList.remove('lis');toast('Reconhecimento indisponível. Tentando gravador…')};rec.onend=()=>{lis=false;$('mic').classList.remove('lis')};try{rec.start();return}catch(e){}}
+ if(lis&&rec){rec.stop();return}
+ if(navigator.mediaDevices?.getUserMedia&&window.MediaRecorder){navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{const chunks=[];mr=new MediaRecorder(stream);mr.ondataavailable=e=>chunks.push(e.data);mr.onstop=()=>{stream.getTracks().forEach(t=>t.stop());toast('Gravação pronta. Para transcrição automática, conecte um serviço STT no backend.');};mr.start();$('mic').classList.add('lis');setTimeout(()=>{if(mr?.state==='recording')mr.stop();$('mic').classList.remove('lis')},60000)}).catch(()=>toast('Permissão de microfone negada. Use o 🎙️ do teclado.'))}else toast('Use o microfone do teclado do celular.')}
+function applyName(){const n=LS.g('nexuslp_name','Laiton Flugêncio'),h=new Date().getHours();$('pname').textContent=n;$('av').textContent=n.split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();$('greet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+n.split(' ')[0]}
+function editName(){const n=prompt('Seu nome',LS.g('nexuslp_name','Laiton Flugêncio'));if(n?.trim()){LS.s('nexuslp_name',n.trim());applyName()}}
+function renderSearch(q){q=(q||'').toLowerCase();const cs=LS.g(KC,[]).filter(c=>(c.title||'Nova conversa').toLowerCase().includes(q));const ps=projects().filter(p=>p.title.toLowerCase().includes(q));$('sList').innerHTML=cs.map(c=>`<div class="li" onclick="openConvo('${c.id}')">💬 ${esc(c.title||'Nova conversa')}</div>`).join('')+ps.map(p=>`<div class="li" onclick="openProject('${p.id}')">🎬 ${esc(p.title)}</div>`).join('')||'<p class="hint">Nenhum resultado.</p>'}
+function openResearch(q){const u='https://www.google.com/search?q='+encodeURIComponent(q);open(u,'_blank')}
 
-async function transcribe(blob,mt){
- if(cfg.elKey){
-  try{const f=new FormData();f.append('file',blob,'audio.webm');f.append('model_id','scribe_v1');
-   let r=await fetch('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':cfg.elKey},body:f});
-   if(r.ok){const d=await r.json();if(d.text)return d.text.trim()}}catch(e){}}
- const b64=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(blob)});
- return mk(PROVS[1],cfg.k.gemini,cfg.m.gemini||PROVS[1].m).ask([{role:'user',content:'Transcreva fielmente.',image:{t:mt,b:b64}}],'')}
-
-const res=(id,k,t)=>{const e=$(id);e.className='res '+k;e.textContent=t};
-function renderSettings(){$('appSet').innerHTML=appSettings();
- $('keyList').innerHTML=PROVS.map(p=>{const k=cfg.k[p.id]||'';return `<div class="card"><label>${p.name}${k?' ✅':''}</label>
- <input type="password" id="k_${p.id}" value="${ea(k)}" oninput="dirty('${p.id}')">
- <label>Modelo</label><input id="m_${p.id}" value="${ea(cfg.m[p.id]||p.m)}" oninput="dirty('${p.id}')">
- <div class="r"><button class="mini" onclick="testP('${p.id}',this)">Testar</button><button class="mini" onclick="clr('${p.id}')">Apagar</button></div>
- <div class="res" id="r_${p.id}"></div><button class="save sv" id="s_${p.id}" onclick="saveP('${p.id}')">Salvar</button></div>`}).join('')+elCard()+`<p class="hint" style="text-align:center">Nexus LP v${APP_VERSION}</p>`}
-const elCard=()=>`<div class="card"><label>ElevenLabs</label>
- <input type="password" id="el_key" value="${ea(cfg.elKey||'')}" oninput="elSave()">
- <label>Quem fala primeiro?</label>${sel('vp',cfg.vp||'sys',[['sys','Voz aparelho'],['el','ElevenLabs']])}
- <div class="r"><button class="mini" onclick="testEL(this)">Testar</button><button class="mini" onclick="clrEL()">Apagar</button></div>
- <div class="res" id="r_el"></div></div>`;
-const sel=(id,v,opts)=>`<select onchange="cfg.${id}=this.value;persist()">${opts.map(o=>`<option value="${o[0]}"${String(v)===String(o[0])?' selected':''}>${o[1]}</option>`).join('')}</select>`;
-const appSettings=()=>`<h3 style="margin-top:0">⚙️ Ajustes</h3>
-<div class="card"><label>🎙️ Idioma</label>${sel('lang',cfg.lang||'pt-BR',[['pt-BR','Português'],['en-US','English']])}
-<div class="r"><button class="mini" onclick="micPerm(this)">Testar microfone</button></div><div class="res" id="r_mic"></div></div>
-<div class="card"><label>🔊 Voz — velocidade</label>${sel('rate',cfg.rate||'1',[['0.8','Devagar'],['1','Normal'],['1.5','Rápida']])}
-<label>Ler respostas</label>${sel('auto',cfg.auto?'1':'',[['','Não'],['1','Sim']])}
-<div class="r"><button class="mini" onclick="testVoice()">Testar voz</button></div></div>
-<div class="card"><label>🤝 IAs em equipe</label>${sel('team',cfg.team||8,[[1,'1 (básico)'],[4,'4 IAs'],[8,'Todas (máximo)']])}
-<label>🎯 Modo inicial</label>${sel('mode0',cfg.mode0||'partner',MODES.map(m=>[m.k,m.i+' '+m.l]))}
-<div class="r"><button class="mini" onclick="editName()">Mudar nome</button><button class="mini" onclick="if(confirm('Apagar tudo?')){LS.s(KC,[]);newConvo();renderRecents()}">Apagar chats</button></div></div>`;
-function elSave(){cfg.elKey=cleanKey($('el_key').value)||'';persist()}
-function clrEL(){cfg.elKey='';persist();renderSettings()}
-async function testEL(btn){
- elSave();btn.disabled=true;res('r_el','wait','Testando…');
- try{await elTTS('Oi');res('r_el','ok','✅ Ok!')}catch(e){res('r_el','err','❌ Falha')}
- btn.disabled=false}
-async function micPerm(b){b.disabled=true;
- try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());res('r_mic','ok','✅ Ok.')}
- catch(e){res('r_mic','err','❌ Sem permissão.')}
- b.disabled=false}
-function testVoice(){const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance('Nexus LP online.');u.lang=cfg.lang||'pt-BR';u.rate=+cfg.rate||1;s.speak(u)}
-const dirty=id=>{cfg.k[id]=cleanKey($('k_'+id).value);cfg.m[id]=$('m_'+id).value.trim();persist();res('r_'+id,'wait','')};
-async function testP(id,btn){
- const p=PROVS.find(x=>x.id===id),k=cfg.k[id],mo=cfg.m[id]||p.m;
- if(btn)btn.disabled=true;res('r_'+id,'wait','Testando…');
- try{await mk(p,k,mo).ask([{role:'user',content:'ok'}],'');res('r_'+id,'ok','✅ Conectado!')}catch(e){res('r_'+id,'err','❌ Falha')}
- if(btn)btn.disabled=false}
-function saveP(id){dirty(id);persist();renderSettings();res('r_'+id,'ok','✅ Salva.')}
-function clr(id){delete cfg.k[id];persist();renderSettings();res('r_'+id,'wait','Apagado.')}
-async function micPerm(b){b.disabled=true;try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());res('r_mic','ok','✅')}catch(e){res('r_mic','err','❌')}b.disabled=false}
-function renderSearch(q){
- const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt).filter(c=>!q||ttl(c).toLowerCase().includes(q.toLowerCase()));
- $('sList').innerHTML=l.map(c=>`<div class="li" onclick="openConvo('${c.id}')">${esc(ttl(c))}</div>`).join('')||'<p class="hint">Nenhum chat.</p>'}
-const pn=()=>LS.g('nexuslp_name','Laiton Flugêncio');
-function applyName(){const n=pn(),h=new Date().getHours();$('pname').textContent=n;$('av').textContent=n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();$('greet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+n.split(' ')[0]}
-function editName(){const n=prompt('Nome',pn());if(n&&n.trim()){LS.s('nexuslp_name',n.trim());applyName()}}
-applyName();
-</script></body></html>
-```
+renderRecents();applyName();renderMedia();renderProjects();renderFiles();
+</script>
+</body>
+ </html>
