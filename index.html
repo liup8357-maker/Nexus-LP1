@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
+      <!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#12141a">
-<title>Nexus LP</title>
+<meta name="theme-color" content="#12141a"><title>Nexus LP</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#12141a;--p:#181b23;--p2:#1f232d;--b:#2a2f3a;--ink:#e9e8e4;--sub:#7d8494;--ac:#e0a458;--tl:#5fa8a0;--ok:#4cc38a;--bad:#ff6b5b;--blue:#6ea8ff}
+:root{color-scheme:dark;--bg:#12141a;--p:#181b23;--p2:#1f232d;--b:#2a2f3a;--ink:#e9e8e4;--sub:#7d8494;--ac:#e0a458;--tl:#5fa8a0}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;height:100dvh;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
-button,input,textarea,select{font-family:inherit;touch-action:manipulation}
-button{cursor:pointer}
+button,input,textarea{font-family:inherit;touch-action:manipulation}
 .shell{display:flex;flex-direction:column;height:100%}
 .screen{display:none;flex-direction:column;flex:1;min-height:0}.screen.on{display:flex}
 .top{display:flex;align-items:center;gap:10px;padding:16px;flex-shrink:0}
@@ -20,418 +16,881 @@ button{cursor:pointer}
 .mark{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--tl));flex-shrink:0}
 .sp{flex:1}.lbl{font-size:13px;color:var(--sub)}
 .flat{font-size:12px;padding:7px 12px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ac)}
-.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px}
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
 .big{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--ac),var(--tl))}
 h1{font-size:28px;font-weight:600;text-align:center}
-.msgs{flex:1;min-height:0;overflow-y:auto;padding:8px 16px 20px;display:flex;flex-direction:column;gap:14px}
-.bub{max-width:92%;width:fit-content;font-size:15px;line-height:1.55;word-break:break-word;white-space:pre-wrap}
+.msgs{flex:1;min-height:0;overflow-y:auto;padding:8px 16px;display:flex;flex-direction:column;gap:14px}
+.bub{max-width:90%;width:fit-content;font-size:15px;line-height:1.55;word-break:break-word;white-space:pre-wrap}
 .bub.user{align-self:flex-end;background:var(--p2);border-radius:16px 16px 4px 16px;padding:10px 14px}
 .bub.dim{color:var(--sub);animation:bl 1.2s infinite}@keyframes bl{50%{opacity:.4}}
 .tag{font-size:11px;color:var(--sub);margin-bottom:4px}
-.acts{display:flex;gap:7px;margin-top:7px;align-items:center}.acts button{font-size:12px;min-width:28px;height:28px;padding:0 7px;border-radius:8px;border:1px solid var(--b);background:none;color:var(--sub)}
-.err{background:#2a1a17;border:1px solid #e2604f66;border-radius:12px;padding:10px 12px;font-size:14px}.err b{color:#ff8a7a;display:block;margin-bottom:4px}.err span{display:block;margin-top:3px}
-.retry{margin-top:8px;color:var(--ac);border:1px solid var(--b);background:none;border-radius:20px;padding:7px 12px}
-.cw{padding:0 16px 16px;flex-shrink:0}.composer{border-radius:24px;background:var(--p);border:1px solid var(--b);padding:12px}.composer textarea{width:100%;background:none;border:none;outline:none;color:var(--ink);font-size:15px;padding:4px 4px 10px;resize:none;max-height:110px}
-.row{display:flex;align-items:center;gap:8px}.pill{height:36px;padding:0 12px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:12.5px;display:flex;align-items:center;gap:6px}.pill #ml{color:var(--ac)}
-.round{width:36px;height:36px;border-radius:50%;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:16px;display:grid;place-items:center;cursor:pointer}.round.send{background:var(--ac);color:#1a1305;border:none}.round.send:disabled{opacity:.4}.round.lis{background:#c96a5a;border-color:#c96a5a;animation:bl 1s infinite}
+.acts{display:flex;gap:8px;margin-top:6px}
+.acts button,.retry{font-size:12px;min-width:26px;height:26px;padding:0 8px;border-radius:8px;border:1px solid var(--b);background:none;color:var(--sub)}
+.retry{margin-top:8px;color:var(--ac);border-radius:20px}
+.err{background:#2a1a17;border:1px solid #e2604f66;border-radius:12px;padding:10px 12px;font-size:14px}
+.err b{color:#ff8a7a;display:block;margin-bottom:4px}.err span{display:block;margin-top:3px}
+.cw{padding:0 16px 16px;flex-shrink:0}
+.composer{border-radius:24px;background:var(--p);border:1px solid var(--b);padding:12px}
+.composer textarea{width:100%;background:none;border:none;outline:none;color:var(--ink);font-size:15px;padding:4px 4px 10px;resize:none;max-height:110px}
+.row{display:flex;align-items:center;gap:8px}
+.pill{height:36px;padding:0 12px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:12.5px;display:flex;align-items:center;gap:6px}
+.pill #ml{color:var(--ac)}
+.round{width:36px;height:36px;border-radius:50%;background:var(--p2);border:1px solid var(--b);color:var(--ink);font-size:16px;display:grid;place-items:center;cursor:pointer}
+.round.send{background:var(--ac);color:#1a1305;border:none}.round.send:disabled{opacity:.4}
+.round.lis{background:#c96a5a;border-color:#c96a5a;animation:bl 1s infinite}
 #chip{font-size:12px;color:var(--sub);background:var(--p);border:1px solid var(--b);border-radius:12px;padding:6px 10px;margin-bottom:8px;display:none}
 #chip u{color:#e2604f;margin-left:8px}
-.wrap{flex:1;min-height:0;background:#fff;position:relative}.wrap iframe{width:100%;height:100%;border:none;display:block}
-.pv{border-bottom:1px solid var(--b);background:var(--p);padding:0 16px;height:56px}.pv .ib:last-child{margin-right:0}
-.scroll{flex:1;overflow-y:auto;padding:0 16px 80px}.scroll h3{font-size:16px;margin:22px 0 4px}.hint{color:var(--sub);font-size:12.5px;margin-bottom:12px;line-height:1.45}
-.card{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:12px;margin-bottom:12px}.card label{display:block;font-size:12px;color:var(--sub);margin:8px 0 4px}.card label:first-child{margin-top:0}
-.card input,.card textarea,.card select,.si{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px;outline:none}.card textarea{min-height:90px;resize:vertical}
-.r{display:flex;gap:8px;margin-top:10px}.mini{flex:1;border:1px solid var(--b);background:none;color:var(--ink);border-radius:10px;padding:9px;font-size:13px}.mini.wide{width:100%;border-style:dashed}
+.wrap{flex:1;min-height:0;background:#fff;position:relative}
+.wrap iframe{width:100%;height:100%;border:none;display:block}
+.pv{border-bottom:1px solid var(--b);background:var(--p);padding:0 16px;height:56px}
+.scroll{flex:1;overflow-y:auto;padding:0 16px 60px}
+.scroll h3{font-size:16px;margin:22px 0 4px}.hint{color:var(--sub);font-size:12.5px;margin-bottom:12px;line-height:1.45}
+.card{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:12px;margin-bottom:12px}
+.card label{display:block;font-size:12px;color:var(--sub);margin:8px 0 4px}.card label:first-child{margin-top:0}
+.card input{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px}
+.r{display:flex;gap:8px;margin-top:10px}
+.mini{flex:1;border:1px solid var(--b);background:none;color:var(--ink);border-radius:10px;padding:9px;font-size:13px}
+.mini.wide{width:100%;border-style:dashed}
 .save{background:var(--ac);color:#1a1305;border:none;border-radius:12px;padding:12px;font-weight:600;width:100%;margin-top:14px}
-.res{font-size:12.5px;margin-top:8px;word-break:break-word}.res.ok{color:var(--ok)}.res.err{color:var(--bad);background:none;border:none;padding:0}.res.wait{color:var(--sub)}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--p);border:1px solid var(--b);font-size:12.5px;padding:8px 14px;border-radius:20px;display:none;z-index:100;max-width:90%;text-align:center}#toast.show{display:block}
-.ov{position:fixed;inset:0;z-index:50;pointer-events:none}.ov.open{pointer-events:auto}.bd{position:absolute;inset:0;background:#0009;opacity:0;transition:opacity .2s}.ov.open .bd{opacity:1}
-.drawer{position:absolute;inset:0 15vw 0 0;max-width:340px;background:var(--bg);transform:translateX(-100%);transition:transform .22s;display:flex;flex-direction:column}.ov.open .drawer{transform:none}
-.dh{display:flex;align-items:center;gap:10px;padding:24px 20px 16px;font-size:22px;font-weight:600}.nav{padding:0 12px}.nav button{display:block;width:100%;padding:12px;border-radius:8px;background:none;border:none;color:var(--ink);font-size:15px;text-align:left}.nav button:active{background:var(--p2)}
-.dv{height:1px;background:var(--b);margin:12px 16px}.sl{padding:0 20px 4px;font-size:13px;color:var(--sub)}#recent{flex:1;overflow:auto;padding:0 12px}#recent div{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:8px;font-size:14px;color:#9aa0ac}#recent div:active{background:var(--p2)}#recent i{font-style:normal;color:var(--sub)}
-.df{display:flex;align-items:center;gap:12px;padding:16px}.av{width:40px;height:40px;border-radius:50%;background:var(--ac);color:#1a1305;font-weight:600;font-size:13px;display:grid;place-items:center}.nc{flex:1;height:44px;border-radius:22px;background:var(--ink);color:var(--bg);font-weight:500;font-size:14px;border:none}
-.sheet{position:absolute;inset-inline:0;bottom:0;background:var(--p);border-top:1px solid var(--b);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .2s;padding-bottom:16px}.ov.open .sheet{transform:none}.sh{display:flex;justify-content:space-between;padding:20px 20px 12px;font-size:17px;font-weight:600}.sh button{background:none;border:none;color:var(--sub);font-size:20px}.mo{width:calc(100% - 16px);margin:0 8px;display:flex;align-items:center;gap:12px;padding:14px 12px;border-radius:12px;background:none;border:none;text-align:left;color:var(--ink)}.mo:active{background:var(--p2)}.mo .ic{font-size:20px}.mo small{display:block;font-size:12.5px;color:var(--sub)}.mo.on b{color:var(--ac)}
-.cred{font-size:12px;color:var(--sub);text-align:center;padding:0 32px;line-height:1.4}.si{background:var(--p2);border:1px solid var(--b);border-radius:12px;padding:10px 12px;color:var(--ink);font-size:14px}.li{padding:14px 4px;border-bottom:1px solid var(--b);font-size:15px}
-.pvs{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.ib{background:none;border:1px solid var(--b);color:var(--ink);border-radius:8px;min-width:32px;height:32px;font-size:15px;flex-shrink:0}
-.qk,.chips{display:flex;flex-wrap:wrap;gap:8px}.qk{justify-content:center;padding:6px 20px 0}.qk button,.chips button{font-size:13px;padding:8px 13px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink)}.qk button:active,.chips button:active{border-color:var(--ac);color:var(--ac)}
-.og{display:grid;grid-template-columns:1fr 1fr;gap:10px}.og label{margin-top:0!important}.mi{display:flex;align-items:center;gap:10px;background:var(--p);border:1px solid var(--b);border-radius:14px;padding:8px;margin-bottom:8px}.mi.sel{border-color:var(--ac)}.mi .th{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#000;flex-shrink:0}.mi .in{flex:1;min-width:0;font-size:13px}.mi small{display:block;color:var(--sub);margin-top:2px}
-.hero{border:1px solid var(--b);background:linear-gradient(135deg,#1a1e27,#151a20);border-radius:18px;padding:18px;margin-bottom:14px}.hero h2{font-size:23px;margin-bottom:6px}.hero p{font-size:13px;color:var(--sub);line-height:1.5}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:13px;text-align:left;color:var(--ink)}.tile b{display:block;font-size:14px;margin-top:7px}.tile small{display:block;color:var(--sub);font-size:11.5px;margin-top:3px;line-height:1.35}
-.stage{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--b)}.stage:last-child{border-bottom:0}.dot{width:10px;height:10px;border-radius:50%;background:var(--b);flex-shrink:0}.stage.done .dot{background:var(--ok)}.stage.active .dot{background:var(--ac);box-shadow:0 0 0 4px #e0a45822}.stage.fail .dot{background:var(--bad)}.stage b{font-size:13px;font-weight:500}.stage small{display:block;color:var(--sub);font-size:11px;margin-top:2px}
-.project{border:1px solid var(--b);background:var(--p);border-radius:14px;padding:13px;margin-bottom:10px}.project .head{display:flex;gap:10px;align-items:center}.project .head b{flex:1;font-size:14px}.project .meta{color:var(--sub);font-size:11.5px;margin-top:5px}.status{font-size:10px;padding:4px 7px;border-radius:10px;background:var(--p2);color:var(--sub)}.status.ok{color:var(--ok)}.status.run{color:var(--ac)}
-.tabs{display:flex;gap:6px;overflow:auto;padding:0 16px 10px}.tabs button{white-space:nowrap;border:1px solid var(--b);background:var(--p);color:var(--sub);border-radius:18px;padding:7px 11px;font-size:12px}.tabs button.on{color:var(--ac);border-color:var(--ac)}
-.bigbtn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--ac);color:#1a1305;font-weight:600}.ghost{width:100%;padding:11px;border-radius:12px;border:1px solid var(--b);background:none;color:var(--ink)}
-.art{border:1px solid var(--b);background:var(--p2);border-radius:12px;padding:10px;margin-top:8px}.art b{font-size:13px}.art small{display:block;color:var(--sub);font-size:11px;margin-top:3px}.art a{display:inline-block;margin-top:7px;color:var(--blue);font-size:12px}
-.progress{height:7px;background:var(--p2);border-radius:10px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--tl));width:0;transition:width .3s}
-.modalbox{position:absolute;left:5%;right:5%;top:8%;bottom:8%;background:var(--p);border:1px solid var(--b);border-radius:18px;display:flex;flex-direction:column;overflow:hidden}.modalbox .mbh{padding:16px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:10px}.modalbox .mbody{overflow:auto;padding:16px;flex:1}
-@media(min-width:700px){.shell{max-width:720px;margin:auto;border-left:1px solid var(--b);border-right:1px solid var(--b)}.drawer{max-width:360px}.modalbox{left:calc(50% - 300px);right:calc(50% - 300px)}}
-</style>
-</head>
-<body>
+.res{font-size:12.5px;margin-top:8px;word-break:break-word}.res.ok{color:#4cc38a}.res.err{color:#ff6b5b;background:none;border:none;padding:0}.res.wait{color:var(--sub)}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--p);border:1px solid var(--b);font-size:12.5px;padding:8px 14px;border-radius:20px;display:none;z-index:70;max-width:90%;text-align:center}
+#toast.show{display:block}
+.ov{position:fixed;inset:0;z-index:50;pointer-events:none}.ov.open{pointer-events:auto}
+.bd{position:absolute;inset:0;background:#0009;opacity:0;transition:opacity .2s}.ov.open .bd{opacity:1}
+.drawer{position:absolute;inset:0 15vw 0 0;max-width:340px;background:var(--bg);transform:translateX(-100%);transition:transform .22s;display:flex;flex-direction:column}
+.ov.open .drawer{transform:none}
+.dh{display:flex;align-items:center;gap:10px;padding:24px 20px 16px;font-size:22px;font-weight:600}
+.nav{padding:0 12px}.nav button{display:block;width:100%;padding:12px;border-radius:8px;background:none;border:none;color:var(--ink);font-size:15px;text-align:left}
+.nav button:active{background:var(--p2)}
+.dv{height:1px;background:var(--b);margin:12px 16px}.sl{padding:0 20px 4px;font-size:13px;color:var(--sub)}
+#recent{flex:1;overflow:auto;padding:0 12px}
+#recent div{display:flex;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:8px;font-size:14px;color:#9aa0ac}
+#recent div:active{background:var(--p2)}#recent i{font-style:normal;color:var(--sub)}
+.df{display:flex;align-items:center;gap:12px;padding:16px}
+.av{width:40px;height:40px;border-radius:50%;background:var(--ac);color:#1a1305;font-weight:600;font-size:13px;display:grid;place-items:center}
+.nc{flex:1;height:44px;border-radius:22px;background:var(--ink);color:var(--bg);font-weight:500;font-size:14px;border:none}
+.sheet{position:absolute;inset-inline:0;bottom:0;background:var(--p);border-top:1px solid var(--b);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .2s;padding-bottom:16px}
+.ov.open .sheet{transform:none}
+.sh{display:flex;justify-content:space-between;padding:20px 20px 12px;font-size:17px;font-weight:600}.sh button{background:none;border:none;color:var(--sub);font-size:20px}
+.mo{width:calc(100% - 16px);margin:0 8px;display:flex;align-items:center;gap:12px;padding:14px 12px;border-radius:12px;background:none;border:none;text-align:left;color:var(--ink)}
+.mo:active{background:var(--p2)}.mo .ic{font-size:20px}.mo small{display:block;font-size:12.5px;color:var(--sub)}.mo.on b{color:var(--ac)}
+.acts{align-items:center}.acts button{border:none;font-size:15px;padding:0 6px}
+.disc{font-size:11.5px;color:var(--sub);margin-top:8px}
+.cred{font-size:12px;color:var(--sub);text-align:center;padding:0 32px;line-height:1.4}
+.si{background:var(--p2);border:1px solid var(--b);border-radius:12px;padding:10px 12px;color:var(--ink);font-size:14px}
+.li{padding:14px 4px;border-bottom:1px solid var(--b);font-size:15px}
+.sv{display:block}
+.pvs{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ib{background:none;border:1px solid var(--b);color:var(--ink);border-radius:8px;min-width:32px;height:32px;font-size:15px;flex-shrink:0}.ib:active{background:var(--p2)}
+.pv{gap:8px}.pv .ib:last-child{margin-right:0}
+.qk,.chips{display:flex;flex-wrap:wrap;gap:8px}.qk{justify-content:center;padding:6px 20px 0}
+.qk button,.chips button{font-size:13px;padding:8px 13px;border-radius:20px;background:var(--p2);border:1px solid var(--b);color:var(--ink)}
+.qk button:active,.chips button:active{border-color:var(--ac);color:var(--ac)}
+.og{display:grid;grid-template-columns:1fr 1fr;gap:10px}.og label{margin-top:0!important}
+.card select{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px}
+.mi{display:flex;align-items:center;gap:10px;background:var(--p);border:1px solid var(--b);border-radius:14px;padding:8px;margin-bottom:8px}
+.mi.sel{border-color:var(--ac)}.mi .th{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#000;flex-shrink:0}
+.mi .in{flex:1;min-width:0;font-size:13px}.mi small{display:block;color:var(--sub);margin-top:2px}
+.card select{width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:14px}
+.pill{font-size:11px;padding:3px 9px;border-radius:12px;border:1px solid var(--b);white-space:nowrap}.pill.ok{color:#4cc38a;border-color:#4cc38a}.pill.and{color:var(--ac);border-color:var(--ac)}.pill.fail{color:#ff6b5b;border-color:#ff6b5b}.pill.apr{color:#e8c36a;border-color:#e8c36a}
+.stg{border:1px solid var(--b);background:var(--p);border-radius:14px;margin-bottom:10px;overflow:hidden}.sh2{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;font-size:14px}.sb{padding:0 12px 12px}
+pre.sout{white-space:pre-wrap;word-break:break-word;font:13px/1.5 'Space Grotesk',sans-serif;background:var(--p2);border-radius:10px;padding:10px;max-height:260px;overflow:auto;margin:8px 0}
+.bar{height:8px;background:var(--p2);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--tl))}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chips button{padding:6px 12px;border-radius:14px;border:1px solid var(--b);background:none;color:var(--ink);font-size:13px}.chips button.on{border-color:var(--ac);color:var(--ac)}
+.row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.row2 .mini{flex:1 1 40%}
+</style></head><body>
 <div class="shell">
-
 <div class="screen on" id="s-home">
- <div class="top"><button class="ham" onclick="openDrawer()">☰</button><div class="sp"></div><button class="flat" onclick="go('studio')">Studio</button><div class="mark"></div></div>
+ <div class="top"><button class="ham" onclick="openDrawer()">☰</button><div class="sp"></div><div class="mark"></div></div>
  <div class="center"><div class="big"></div><h1 id="greet"></h1><p class="cred">Nexus LP · criado por Laiton Flugêncio Mondlane, com apenas 15 anos</p><div class="qk" id="qk"></div></div>
 </div>
-
 <div class="screen" id="s-chat">
  <div class="top"><button class="ham" onclick="openDrawer()">☰</button><span class="lbl" id="cl"></span><div class="sp"></div><button class="flat" onclick="go('preview')">Preview</button></div>
  <div class="msgs" id="msgs"></div>
 </div>
-
 <div class="screen" id="s-preview">
- <div class="top pv"><button class="back" onclick="home()">←</button><span class="pvs" id="pvs">Preview</span><div class="sp"></div><button class="ib" onclick="runPreview()">↻</button><button class="ib" onclick="fixNow()">🔧</button><button class="ib" onclick="fsPreview()">⛶</button><button class="ib" onclick="copyText(st.code)">📋</button><button class="ib" onclick="open('https://www.pwabuilder.com','_blank')">📦</button></div>
+ <div class="top pv"><button class="back" onclick="home()">←</button><span class="pvs" id="pvs">Preview</span><div class="sp"></div><button class="ib" onclick="runPreview()" title="Recarregar">↻</button><button class="ib" onclick="fixNow()" title="Corrigir com IA">🔧</button><button class="ib" onclick="fsPreview()" title="Tela cheia">⛶</button><button class="ib" onclick="copyText(st.code)" title="Copiar código">📋</button><button class="ib" onclick="window.open('https://www.pwabuilder.com','_blank')" title="Instalar APK">📦</button></div>
  <div class="wrap" id="pw"><iframe id="frame" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-pointer-lock" allow="fullscreen; autoplay; accelerometer; gyroscope; clipboard-write" title="preview"></iframe></div>
 </div>
-
-<div class="screen" id="s-studio">
- <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Nexus Studio</b><div class="sp"></div><button class="flat" onclick="newProduction()">＋ Projeto</button></div>
- <div class="scroll">
-  <div class="hero"><h2>Studio de criação</h2><p>Transforme uma ideia em produção organizada: pesquisa, bíblia, personagens, roteiro, cenas, storyboard, voz, música, vídeo, versões e exportação. O Nexus só marca um artefato como concluído quando existe um resultado real.</p></div>
-  <div class="grid">
-   <button class="tile" onclick="newProduction('dorama')">🎬<b>Dorama</b><small>1–2 min por episódio</small></button>
-   <button class="tile" onclick="newProduction('filme')">🎞️<b>Filme</b><small>60 min ou mais</small></button>
-   <button class="tile" onclick="newProduction('novela')">📺<b>Novela</b><small>55–60 min por episódio</small></button>
-   <button class="tile" onclick="newProduction('serie')">📚<b>Série</b><small>Temporadas e episódios</small></button>
-   <button class="tile" onclick="newProduction('animacao')">✨<b>Animação</b><small>Storyboard e cenas</small></button>
-   <button class="tile" onclick="newProduction('music')">🎵<b>Música</b><small>Letra, voz e produção</small></button>
-   <button class="tile" onclick="newProduction('game')">🎮<b>Jogo</b><small>Design, código e teste</small></button>
-   <button class="tile" onclick="openApiMedia()">🔌<b>Centro de APIs</b><small>Conecte texto, imagem, voz, vídeo e música</small></button>
-  </div>
-  <h3>Produções</h3><div id="projects"></div>
- </div>
-</div>
-
-<div class="screen" id="s-files">
- <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Arquivos</b><div class="sp"></div><button class="flat" onclick="exportLibrary()">Exportar</button></div>
- <div class="scroll"><p class="hint">Biblioteca do Nexus LP. Projetos, versões e artefatos ficam organizados por produção. Arquivos muito grandes podem precisar de armazenamento externo/backend.</p><button class="ghost" onclick="importLibrary()">📥 Importar biblioteca JSON</button><input id="libFile" type="file" accept=".json" hidden><div id="fileProjects" style="margin-top:12px"></div></div>
-</div>
-
 <div class="screen" id="s-settings">
  <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Configurações</b></div>
- <div class="scroll" id="setBody"></div>
+ <div class="scroll" id="setBody"><h3 style="margin-top:0">Chaves de API</h3><p class="hint">Cole a chave e toque em Testar conexão. Deu sucesso? Ela já fica salva e você pode conversar. Dica: cole 2 ou mais chaves da mesma IA separadas por vírgula (de contas/projetos diferentes) — quando uma chegar no limite, o app usa a outra. Ficam guardadas só neste aparelho.</p><div id="keyList"></div></div>
 </div>
-
-<div class="screen" id="s-search">
- <div class="top"><button class="back" onclick="home()">←</button><input class="si" style="flex:1" id="q" placeholder="Pesquisar chats e projetos" oninput="renderSearch(this.value)"></div>
- <div class="scroll" id="sList"></div>
-</div>
-
+<div class="screen" id="s-search"><div class="top"><button class="back" onclick="home()">←</button><input class="si" style="flex:1" id="q" placeholder="Pesquisar chats" oninput="renderSearch(this.value)"></div><div class="scroll" id="sList"></div></div>
 <div class="screen" id="s-media">
  <div class="top"><button class="back" onclick="home()">←</button><b style="font-weight:500">Mídia</b></div>
  <div class="scroll">
-  <p class="hint">Ferramentas locais para imagens e frames. Nada é enviado para a internet por estes comandos locais.</p>
+  <p class="hint">Automação no aparelho: nada é enviado para a internet. Adicione arquivos, marque os que quer editar (sem marcar, o comando vale para todos) e toque num comando.</p>
   <label class="mini wide" for="mfile" style="display:block;text-align:center;cursor:pointer">➕ Escolher imagens e vídeos</label>
   <input type="file" id="mfile" accept="image/*,video/*" multiple hidden>
   <h3>Imagens</h3><div class="chips" id="cImg"></div>
-  <div class="card"><div class="og"><div><label>Largura (px)</label><input id="mw" type="number" value="1080"></div><div><label>Qualidade (%)</label><input id="mq" type="number" value="80"></div><div><label>Formato</label><select id="mf"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WEBP</option></select></div><div><label>Marca d'água</label><input id="mt" placeholder="Nexus LP"></div></div></div>
-  <h3>Vídeos</h3><div class="chips" id="cVid"></div><h3>Assistente</h3><div class="chips" id="cAi"></div><h3>Biblioteca</h3><div id="mlist"></div>
- </div>
-</div>
-
+  <div class="card" style="margin-top:10px"><div class="og">
+   <div><label>Largura (px)</label><input id="mw" type="number" value="1080" inputmode="numeric"></div>
+   <div><label>Qualidade (%)</label><input id="mq" type="number" value="80" inputmode="numeric"></div>
+   <div><label>Formato</label><select id="mf"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WEBP</option></select></div>
+   <div><label>Marca d’água</label><input id="mt" placeholder="Nexus LP"></div></div></div>
+  <h3>Vídeos</h3><div class="chips" id="cVid"></div>
+  <h3>Pedir à IA</h3><div class="chips" id="cAi"></div>
+  <h3>Biblioteca</h3><div id="mlist"></div>
+ </div></div>
+<div class="screen" id="s-studio"><div class="top"><button class="back" onclick="stuBack()">←</button><b style="font-weight:500" id="stuT">Studio</b></div><div class="scroll" id="stuBody"></div></div>
 <div class="cw" id="cw">
  <div id="chip"></div>
  <div class="composer"><textarea id="inp" rows="1" placeholder="Conversa com o Nexus LP..."></textarea>
-  <div class="row">
-   <label class="round">➕<input type="file" id="file" accept="image/*,audio/*,.txt,.md,.csv,.json,.html,.js,.css" hidden><input type="file" id="afile" accept="audio/*" capture hidden></label>
+  <div class="row"><label class="round">➕<input type="file" id="file" accept="image/*,audio/*,.txt,.md,.csv,.json,.html,.js,.css" hidden><input type="file" id="afile" accept="audio/*" capture hidden></label>
    <button class="pill" onclick="openModes()"><span id="mi"></span><span id="ml"></span></button><div class="sp"></div>
-   <button class="round" id="mic" onclick="mic()">🎙️</button><button class="round send" id="send" onclick="send()">➤</button>
-  </div>
- </div>
+   <button class="round" id="mic" onclick="mic()">🎙️</button><button class="round send" id="send" onclick="send()">➤</button></div></div>
 </div>
 </div>
-
 <div id="toast"></div>
-
 <div class="ov" id="dOv"><div class="bd" onclick="closeDrawer()"></div><div class="drawer">
  <div class="dh"><div class="mark" style="width:30px;height:30px"></div>Nexus LP</div>
- <div class="nav">
-  <button onclick="newConvo()">✏️ Novo chat</button><button onclick="go('search')">🔎 Pesquisar</button><button onclick="go('studio')">🎬 Nexus Studio</button><button onclick="go('preview')">🧩 Artefactos</button><button onclick="go('media')">🎞️ Mídia</button><button onclick="go('files')">📁 Arquivos</button><button onclick="go('settings')">⚙️ Configurações</button>
- </div>
+ <div class="nav"><button onclick="newConvo()">✏️ Novo chat</button><button onclick="go('search')">🔎 Pesquisar chats</button><button onclick="go('studio')">🎬 Studio</button><button onclick="go('preview')">🧩 Artefactos</button><button onclick="go('media')">🎞️ Mídia</button></div>
  <div class="dv"></div><div class="sl">Recentes</div><div id="recent"></div>
- <div class="df"><div class="av" id="av" onclick="editName()"></div><span style="flex:1" id="pname" onclick="editName()"></span></div>
-</div></div>
-
+ <div class="df"><div class="av" id="av" onclick="editName()"></div><span style="flex:1" id="pname" onclick="editName()"></span><button class="ham" style="font-size:20px" onclick="go('settings')">⚙️</button></div></div></div>
 <div class="ov" id="mOv"><div class="bd" onclick="closeModes()"></div><div class="sheet"><div class="sh"><span>Selecionar motor</span><button onclick="closeModes()">✕</button></div><div id="mList"></div></div></div>
-
-<div class="ov" id="pOv"><div class="bd" onclick="closeProjectModal()"></div><div class="modalbox"><div class="mbh"><b id="pmTitle">Produção</b><div class="sp"></div><button class="ib" onclick="closeProjectModal()">✕</button></div><div class="mbody" id="pmBody"></div></div></div>
 
 <script>
 const $=i=>document.getElementById(i);
-const esc=s=>{const d=document.createElement('div');d.textContent=String(s??'');return d.innerHTML};
+const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
 const ea=s=>esc(s).replace(/"/g,'&quot;');
-const LS={g:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
-const cleanKey=v=>String(v||'').trim().replace(/^[\s"'“”‘’`]+|[\s"'“”‘’`]+$/g,'').replace(/[\s\u200B-\u200D\uFEFF\u00A0]+/g,'');
-const APP_VERSION='Nexus LP Studio integrado · 30/09/2026';
-const KG='nexuslp_cfg',KC='nexuslp_convos',KP='nexuslp_projects';
-const cfg=LS.g(KG,{k:{},m:{},v:5,team:1,lang:'pt-BR',rate:1,autoVoice:false,mode:'partner',media:{image:{},video:{},audio:{},music:{},research:{}}});
-cfg.k=cfg.k||{};cfg.m=cfg.m||{};cfg.media=cfg.media||{image:{},video:{},audio:{},music:{},research:{}};
-const persist=()=>LS.s(KG,cfg);
+const MEM={};
+const LS={g:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));if(v!=null)return v}catch(e){}return k in MEM?MEM[k]:d},s:(k,v)=>{MEM[k]=v;try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+const cleanKey=v=>String(v||'').replace(/^[\s"'“”‘’`]+|[\s"'“”‘’`]+$/g,'').replace(/[\s\u200B-\u200D\uFEFF\u00A0]+/g,'').replace(/^(bearer|key=|api[_-]?key[:=])/i,'').replace(/^["'“”‘’`]+|["'“”‘’`]+$/g,'');
+const persist=()=>LS.s('nexuslp_cfg2',cfg);
+const APP_VERSION='v11 · 30/09/2026';
+const CLAUDE_MODEL='claude-sonnet-4-6', GEMINI_MODEL='gemini-flash-latest'; // troque aqui se o teste de conexão der 404
+const KC='nexuslp_convos', KG='nexuslp_cfg';
+
 const MODES=[
  {k:'3d',l:'3D Game',i:'🎮',d:'Jogos e cenas 3D com Three.js/WebGL'},
  {k:'engineer',l:'Engenheiro',i:'🛠️',d:'Apps e sites completos, código limpo'},
- {k:'professional',l:'Profissional',i:'💼',d:'Documentos, planos e trabalho'},
- {k:'partner',l:'Parceiro',i:'🤝',d:'Conversa natural e projetos'}];
+ {k:'professional',l:'Profissional',i:'💼',d:'Documentos, planos e comunicação de trabalho'},
+ {k:'partner',l:'Parceiro',i:'🤝',d:'Papo de amigo e parceiro de projetos'}];
 const CODE=['3d','engineer'];
+const OUT=' Saída obrigatória: um único bloco ```html``` completo e autocontido, pronto para um <iframe srcdoc>, sem cortar no meio. Depois do bloco, no máximo 2 frases. Se a mensagem for só conversa (sem pedir app, jogo ou código), responda como um amigo, curto e natural, sem gerar código. O código roda num iframe isolado: não use localStorage sem try/catch, nem módulos ES; scripts externos só de cdnjs. Se receber um erro de execução, devolva o arquivo inteiro corrigido.';
+const SYSTEM='Você é o Nexus LP, um assistente de IA. Dentro do Nexus LP várias inteligências trabalham juntas como uma equipe, mas para o usuário você é sempre o Nexus LP: este aplicativo inteiro é o Nexus LP. O Nexus LP foi idealizado, projetado e criado por Laiton Flugêncio Mondlane, que tem apenas 15 anos, é menor de idade e mesmo assim construiu um aplicativo de IA completo, algo grande que muita gente mais velha não consegue. Você tem muito orgulho dele e do Nexus LP; quando perguntarem quem criou você, quem é o dono ou quem fez o app, diga o nome dele e a idade e fale com orgulho e entusiasmo sinceros. Não cite nomes de modelos ou provedores de tecnologia por trás. Se perguntarem com sinceridade se é pessoa ou IA, diga que é uma IA. Responda no idioma do usuário.';
+const RULES={
+ partner:'Modo Parceiro: você é o Nexus LP falando como um amigo de confiança e parceiro de projetos da pessoa. Escreva como numa conversa de WhatsApp entre amigos próximos: frases curtas, calor humano, direto ao ponto, em português natural e informal, sem gíria forçada. Nada de tom de atendente: nada de "como posso ajudar?", "certamente!", "claro!" no começo, nem listas, títulos ou negrito, a menos que peçam. Reaja primeiro ao que a pessoa disse (comemore, se preocupe, brinque leve) e só depois responda. Se ela só quer desabafar, escute e acolha sem despejar soluções. Se estiver construindo algo, pense junto: dê opinião sincera, aponte riscos sem enrolar e sugira o próximo passo concreto. Faça no máximo uma pergunta por vez, e só se realmente precisar. Se pedirem um app ou jogo completo, topa e diz numa frase que fica melhor no modo Engenheiro ou 3D Game. Respostas curtas por padrão; só alongue se o assunto pedir.',
+ professional:'Modo Profissional: ajude com documentos, planos, e-mails e comunicação de trabalho. Tom claro, objetivo e educado. Use títulos/tópicos só quando ajudarem. Se o pedido for um app/jogo funcional, diga em 1 frase que fica melhor no modo Engenheiro ou 3D Game.',
+ engineer:'Modo Engenheiro: projete e escreva apps/sites web completos, mobile-first. Se o pedido for curto, expanda a intenção internamente sem perguntar de volta, salvo ambiguidade real.'+OUT,
+ '3d':'Modo 3D Game: escreva jogos e cenas 3D completos com Three.js (UMD via cdnjs) e WebGL, com cena, câmera, luzes e loop requestAnimationFrame; separe input, física e câmera.'+OUT};
+
 const PROVS=[
 {id:'claude',name:'Claude',ph:'sk-ant-...',m:'claude-sonnet-4-6'},
-{id:'gemini',name:'Gemini',ph:'AIza...',m:'gemini-3.6-flash'},
+{id:'gemini',name:'Gemini',ph:'AIza...',m:'gemini-flash-latest'},
 {id:'openai',name:'ChatGPT',ph:'sk-...',m:'gpt-4o-mini',u:'https://api.openai.com/v1/chat/completions'},
 {id:'grok',name:'Grok',ph:'xai-...',m:'grok-4',u:'https://api.x.ai/v1/chat/completions'},
 {id:'deepseek',name:'DeepSeek',ph:'sk-...',m:'deepseek-chat',u:'https://api.deepseek.com/chat/completions'},
 {id:'mistral',name:'Mistral',ph:'chave Mistral',m:'mistral-large-latest',u:'https://api.mistral.ai/v1/chat/completions'},
 {id:'groq',name:'Groq',ph:'gsk_...',m:'llama-3.3-70b-versatile',u:'https://api.groq.com/openai/v1/chat/completions'},
-{id:'openrouter',name:'OpenRouter',ph:'sk-or-...',m:'openrouter/auto',u:'https://openrouter.ai/api/v1/chat/completions'}];
-const SYSTEM='Você é o Nexus LP, um assistente de IA. Responda no idioma do usuário. Não invente arquivos, vídeos, áudios, imagens ou resultados externos que não existam. Quando uma tarefa exigir uma ferramenta que não está conectada, diga claramente que falta a conexão. Para código, entregue soluções completas quando solicitado.';
-const RULES={
- partner:'Fale como parceiro de projetos: natural, curto e direto, sem tom de atendente.',
- professional:'Seja objetivo, claro e organizado.',
- engineer:'Crie aplicações web completas, mobile-first e prontas para teste. Quando o usuário pedir código completo, entregue um único HTML autocontido.',
- '3d':'Crie jogos 3D completos usando Three.js via CDN quando apropriado, com câmera, luz, loop e controles.'};
-const OUT='Quando pedirem um app ou jogo completo, prefira um único bloco ```html``` completo e autocontido, pronto para iframe.';
+{id:'openrouter',name:'OpenRouter',ph:'sk-or-...',m:'meta-llama/llama-3.3-70b-instruct:free',u:'https://openrouter.ai/api/v1/chat/completions'}];
+const old=LS.g(KG,{});
+let cfg=LS.g('nexuslp_cfg2',null)||{k:{claude:old.claude||localStorage.getItem('nexuslp_claude_key')||'',gemini:old.gemini||localStorage.getItem('nexuslp_gemini_key')||''},m:{}};
 const BLANK='<!DOCTYPE html><html><body style="font-family:sans-serif;padding:20px;color:#333">Peça um app no chat — o código aparece aqui.</body></html>';
-const st={screen:'home',mode:cfg.mode||'partner',code:BLANK};
-let convo={id:'c'+Date.now(),messages:[]},busy=false,att=null,runTok=0,ttsStop=null,elAudio=new Audio();
-let media=[],msel=new Set(),mid=0,fixes=0,lastErr='';
+const st={screen:'home',mode:'engineer',code:BLANK};
+let convo={id:'c'+Date.now(),messages:[]},busy=false,fixes=0,att=null,tt;
+const lab=k=>(MODES.find(m=>m.k===k)||MODES[1]).l;
 
-function toast(m,ms=2600){const t=$('toast');t.textContent=m;t.classList.toggle('show',!!m);clearTimeout(toast.t);if(m)toast.t=setTimeout(()=>t.classList.remove('show'),ms)}
-function lab(k){return (MODES.find(m=>m.k===k)||MODES[1]).l}
-function go(n){
- st.screen=n;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+n));
- $('cw').style.display=(n==='home'||n==='chat')?'':'none';
- if(n==='preview')runPreview(); else if(n!=='preview')try{$('frame').srcdoc=''}catch(e){}
- if(n==='settings')renderSettings();if(n==='studio')renderProjects();if(n==='files')renderFiles();if(n==='media')renderMedia();if(n==='search'){$('q').value='';renderSearch('')}
- closeDrawer();
-}
+/* ---------- utilidades de UI ---------- */
+function toast(m,ms=2500){const t=$('toast');clearTimeout(tt);t.textContent=m;t.classList.toggle('show',!!m);if(m)tt=setTimeout(()=>t.classList.remove('show'),ms)}
+function go(n){st.screen=n;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+n));$('cw').style.display=(n==='home'||n==='chat')?'':'none';if(n==='preview')runPreview();else if(st.screen!=='preview'||n!=='preview'){try{$('frame').srcdoc=''}catch(e){}}if(n==='settings')renderSettings();if(n==='studio')stuR();if(n==='media')renderMedia();if(n==='search'){$('q').value='';renderSearch('')}closeDrawer()}
 const home=()=>go(convo.messages.length?'chat':'home');
-function openDrawer(){$('dOv').classList.add('open')}function closeDrawer(){$('dOv').classList.remove('open')}
+const openDrawer=()=>$('dOv').classList.add('open'), closeDrawer=()=>$('dOv').classList.remove('open');
+const closeModes=()=>$('mOv').classList.remove('open');
 function openModes(){$('mList').innerHTML=MODES.map(m=>`<button class="mo ${st.mode===m.k?'on':''}" onclick="setMode('${m.k}')"><span class="ic">${m.i}</span><span style="flex:1"><b style="font-weight:500">${m.l}</b><small>${m.d}</small></span>${st.mode===m.k?'✓':''}</button>`).join('');$('mOv').classList.add('open')}
-function closeModes(){$('mOv').classList.remove('open')}
-function setMode(k){st.mode=k;cfg.mode=k;persist();const m=MODES.find(x=>x.k===k);$('mi').textContent=m.i;$('ml').textContent=m.l;$('cl').textContent=m.i+' '+m.l;closeModes()}
-setMode(st.mode);
+function setMode(k){st.mode=k;const m=MODES.find(x=>x.k===k);$('mi').textContent=m.i;$('ml').textContent=m.l;$('cl').textContent=m.i+' '+m.l;closeModes()}
+setMode('partner');
 
-/* ---------- API TEXT ---------- */
-function HTTP(s,d=''){d=String(d).slice(0,180);if(s===401)return'Chave inválida (401).';if(s===403)return'Acesso negado (403).';if(s===404)return'Modelo/endereço não encontrado (404). '+d;if(s===429)return'Limite/cota atingido (429).';if(s>=500)return'Serviço indisponível agora ('+s+').';return'Erro '+s+'. '+d}
-async function api(url,opt={},timeout=90000){
- const c=new AbortController(),tm=setTimeout(()=>c.abort(),timeout);let r,raw;
- try{r=await fetch(url,{...opt,signal:c.signal});raw=await r.text()}catch(e){throw Object.assign(new Error(e.name==='AbortError'?'Tempo esgotado.':'Sem conexão ou o serviço não aceita chamada direta do navegador.'),{net:1})}finally{clearTimeout(tm)}
+/* ---------- camada de API ---------- */
+const HTTP=(s,d)=>{d=(d||'').slice(0,160);
+ if(s===401)return 'Chave inválida (401): confira se copiou a chave inteira, sem espaço.';
+ if(s===403)return 'Acesso negado (403): o serviço bloqueou esta chave ou projeto (às vezes por conta nova ou região). Crie uma chave nova — no Google: aistudio.google.com/apikey, escolhendo um projeto novo.';
+ if(s===404)return 'Modelo ou endereço não encontrado (404).'+(d?' '+d:'');
+ if(s===429)return 'Limite de uso ou cota esgotada (429): espere um minuto ou confira créditos/plano.';
+ if(s===408||s>=500)return `O serviço da IA está sobrecarregado agora (${s}). O app já tentou várias vezes; tente de novo em instantes.`;
+ if(s===400)return 'Pedido recusado (400).'+(d?' '+d:'');
+ return `Erro ${s}.`+(d?' '+d:'')};
+async function api(url,opt){
+ const c=new AbortController(),t=setTimeout(()=>c.abort(),90000);let r,raw;
+ try{r=await fetch(url,{...opt,signal:c.signal});raw=await r.text()}
+ catch(e){throw Object.assign(new Error(e.name==='AbortError'?'Tempo esgotado: a IA demorou demais.':'Sem conexão com este serviço: a internet caiu, ou ele não aceita chamadas diretas do navegador.'),{net:1})}
+ finally{clearTimeout(t)}
  let d=null;try{d=JSON.parse(raw)}catch(e){}
- if(!r.ok){const m=d&&((d.error&&d.error.message)||d.error||d.message)||'';throw Object.assign(new Error(HTTP(r.status,m)),{status:r.status})}
- return d||{};
-}
-function norm(ms){const o=[];for(const m of ms||[]){if(!m||!m.content)continue;const x=o[o.length-1];if(x&&x.role===m.role)x.content+='\n\n'+m.content;else o.push({role:m.role,content:m.content})}while(o[0]&&o[0].role!=='user')o.shift();return o}
+ if(!r.ok){const m=d&&((d.error&&d.error.message)||d.error||d.message);throw Object.assign(new Error(HTTP(r.status,typeof m==='string'?m:'')),{status:r.status})}
+ if(!d)throw new Error('Resposta inválida do servidor.');return d}
+function norm(ms){const o=[];for(const m of ms){if(!m||(!m.content&&!m.image))continue;const l=o[o.length-1];if(l&&l.role===m.role&&!l.image&&!m.image)l.content+='\n\n'+m.content;else o.push({...m})}while(o.length&&o[0].role!=='user')o.shift();return o}
 async function askClaude(ms,sys,k,mo){
- const d=await api('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:mo,max_tokens:8000,system:sys,messages:norm(ms)})});
- return (d.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('\n').trim()
-}
+ const messages=norm(ms).map(m=>m.image?{role:m.role,content:[{type:'text',text:m.content||'(imagem)'},{type:'image',source:{type:'base64',media_type:m.image.t,data:m.image.b}}]}:{role:m.role,content:m.content});
+ const d=await api('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:mo||CLAUDE_MODEL,max_tokens:8000,system:sys||undefined,messages})});
+ const t=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+ if(!t)throw new Error(d.stop_reason==='refusal'?'A IA recusou esse conteúdo.':'A IA respondeu vazio.');return t}
 async function askGemini(ms,sys,k,mo){
- const contents=norm(ms).map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
- const d=await api('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(mo)+':generateContent?key='+encodeURIComponent(k),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents,systemInstruction:sys?{parts:[{text:sys}]}:undefined})});
- return ((d.candidates||[])[0]?.content?.parts||[]).filter(x=>x.text).map(x=>x.text).join('\n').trim()
-}
+ const contents=norm(ms).map(m=>{const p=[{text:m.content||'(imagem)'}];if(m.image)p.push({inline_data:{mime_type:m.image.t,data:m.image.b}});return{role:m.role==='assistant'?'model':'user',parts:p}});
+ const body={contents};if(sys)body.systemInstruction={parts:[{text:sys}]};
+ const d=await api(`https://generativelanguage.googleapis.com/v1beta/models/${mo||GEMINI_MODEL}:generateContent?key=${encodeURIComponent(k)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+ if(d.promptFeedback&&d.promptFeedback.blockReason)throw new Error('Bloqueado pelo filtro de segurança ('+d.promptFeedback.blockReason+').');
+ const c=d.candidates&&d.candidates[0],t=((c&&c.content&&c.content.parts)||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('\n').trim();
+ if(!t)throw new Error('A IA respondeu vazio'+(c&&c.finishReason?' ('+c.finishReason+')':'')+'.');return t}
 async function askCustom(ms,sys,p){
- const d=await api(p.url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+p.key},body:JSON.stringify({model:p.model,messages:[...(sys?[{role:'system',content:sys}]:[]),...norm(ms)]})});
- let c=d.choices?.[0]?.message?.content||'';if(Array.isArray(c))c=c.map(x=>x.text||x).join('\n');return String(c).trim()
-}
-async function callProvider(p,ms,sys,key,model){
- if(p.id==='claude')return askClaude(ms,sys,key,model);
- if(p.id==='gemini')return askGemini(ms,sys,key,model);
- return askCustom(ms,sys,{url:p.u,key,model});
-}
-async function askOne(p,ms,sys,{light=false}={}){
- const keys=String(cfg.k[p.id]||'').split(',').map(cleanKey).filter(Boolean);if(!keys.length)throw new Error('Sem chave.');
- const model=cfg.m[p.id]||p.m;let last;
- for(const k of keys){
-  for(let a=0;a<(light?1:3);a++){try{return await callProvider(p,ms,sys,k,model)}catch(e){last=e;if([401,403,404].includes(e.status))break;if((e.status===429||e.status>=500||e.net)&&a<2)await new Promise(r=>setTimeout(r,1200*(a+1)));else break}}
- }
- throw last||new Error('Falha na IA.')
-}
-function activeProviders(){return PROVS.filter(p=>cfg.k[p.id])}
-async function askAll(hist,mode,production=false){
- const ps=activeProviders();if(!ps.length)return{err:['Nenhuma IA configurada. Vá em Configurações e conecte uma.']};
- const team=production?Math.min(8,Math.max(1,+cfg.team||4)):1;
- const use=ps.slice(0,team),sys=SYSTEM+'\n'+(RULES[mode]||RULES.partner)+'\n'+(production?'Você faz parte de uma equipe de produção. Entregue material útil e verificável.':'')+(CODE.includes(mode)?OUT:'');
- const rs=await Promise.allSettled(use.map(p=>askOne(p,hist,sys)));
- const ok=rs.map((r,i)=>r.status==='fulfilled'&&r.value?{p:use[i],v:r.value}:null).filter(Boolean);
- if(!ok.length)return{err:rs.map((r,i)=>use[i].name+': '+(r.reason?.message||'falhou'))};
- let text=ok[0].v;
- if(production&&ok.length>1){
-  const synth='Combine as respostas abaixo numa única entrega coerente. Não mencione provedores. Preserve informações úteis, elimine duplicação e não invente dados.\n\n'+ok.map((x,i)=>'FONTE '+(i+1)+':\n'+x.v).join('\n\n');
-  try{text=await askOne(ok[0].p,[{role:'user',content:synth}],sys,{light:true})}catch(e){}
- }
- return{text,providers:ok.map(x=>x.p.name)}
-}
+ const messages=[...(sys?[{role:'system',content:sys}]:[]),...norm(ms).map(m=>({role:m.role,content:m.content||'(imagem)'}))];
+ const d=await api(p.url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+p.key},body:JSON.stringify({model:p.model,messages})});
+ let c=d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
+ if(Array.isArray(c))c=c.map(x=>x.text||x).join('\n');c=(c||'').trim();
+ if(!c)throw new Error('A IA respondeu vazio.');return c}
+const ALT={claude:['claude-sonnet-4-5','claude-haiku-4-5'],gemini:['gemini-3.6-flash','gemini-3.5-flash','gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash','gemini-2.5-flash-lite'],openai:['gpt-4.1-mini','gpt-4o'],grok:['grok-3','grok-3-mini'],mistral:['mistral-small-latest'],groq:['llama-3.1-8b-instant']};
+const callP=(p,m,s,k,x)=>p.id==='claude'?askClaude(m,s,k,x):p.id==='gemini'?askGemini(m,s,k,x):askCustom(m,s,{url:p.u,key:k,model:x});
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+/* pergunta ao próprio serviço quais modelos a chave pode usar */
+async function discover(p,k){
+ try{
+  if(p.id==='gemini'){const d=await api('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100&key='+encodeURIComponent(k),{});return (d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')&&/flash/.test(m.name)&&!/tts|image|live|audio|embed|thinking|exp|preview|robotics|computer|translate/.test(m.name)).map(m=>m.name.replace('models/','')).sort().reverse().slice(0,3)}
+  if(p.id==='claude'){const d=await api('https://api.anthropic.com/v1/models',{headers:{'x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}});return (d.data||[]).map(m=>m.id).slice(0,3)}
+  const d=await api(p.u.replace(/\/chat\/completions$/,'/models'),{headers:{Authorization:'Bearer '+k}});
+  return (d.data||[]).map(m=>m.id).filter(id=>(p.id!=='openrouter'||/:free$/.test(id))&&!/embed|tts|whisper|dall|image|audio|moderation|realtime|transcribe|guard/i.test(id)).slice(0,3)
+ }catch(e){return []}}
+/* repete se o serviço estiver ocupado, troca de modelo se um falhar, e só desiste no fim */
+const HEALTH={},DEAD=LS.g('nexuslp_dead',{});
+/* várias chaves (separadas por vírgula) + todos os modelos: se um cair, o próximo assume */
+const mk=(p,k,mo)=>({id:p.id,name:p.name,ask:async(m,s,opt)=>{
+ const keys=String(k||'').split(',').map(cleanKey).filter(Boolean),bad=new Set(),light=opt&&opt.light;let last,netFails=0;const tried=new Set();
+ if(!keys.length)throw new Error('Cole a chave antes.');
+ const all=[...new Set([mo,p.m,...(ALT[p.id]||[])].filter(Boolean))];
+ let L=all.filter(x=>!(DEAD[p.id+':'+x]>Date.now()-864e5));if(!L.length)L=all;
+ const cold=x=>(HEALTH[p.id+':'+x]||0)>Date.now();
+ L=[...L.filter(x=>!cold(x)),...L.filter(cold)]; /* quem falhou agora há pouco vai pro fim da fila */
+ const once=async(x,kk)=>{tried.add(x);
+  try{const r=await callP(p,m,s,kk,x);delete HEALTH[p.id+':'+x];if(x!==cfg.m[p.id]&&String(cfg.k[p.id]||'').includes(kk)){cfg.m[p.id]=x;persist()}return{r}}
+  catch(e){last=e;
+   if(e.status===401||(e.status===403&&keys.length>1)){bad.add(kk);if(bad.size>=keys.length)throw e;return{keep:1}}
+   if(e.status===400&&!/model|modelo/i.test(e.message))throw e;
+   if(e.net){if(++netFails>=2)throw e;return{keep:1}}
+   if(e.status>=500||e.status===429||e.status===408){HEALTH[p.id+':'+x]=Date.now()+(e.status===429?9e4:45e3);return{keep:1}}
+   if(e.status===404){DEAD[p.id+':'+x]=Date.now();LS.s('nexuslp_dead',DEAD)}
+   return{}}};
+ const passes=light?1:4;
+ for(let pass=0;pass<passes&&L.length;pass++){
+  const keep=[];
+  for(const x of L){let kept=false;
+   for(const kk of keys.filter(z=>!bad.has(z))){const o=await once(x,kk);if(o.r)return o.r;if(o.keep)kept=true;else break}
+   if(kept)keep.push(x)}
+  L=keep;if(L.length&&pass<passes-1)await wait(1800*(pass+1))}
+ if(!light&&last&&[400,403,404].includes(last.status))for(const x of await discover(p,keys[0])){if(tried.has(x))continue;const o=await once(x,keys[0]);if(o.r)return o.r}
+ throw last||new Error('A IA não respondeu.')}});
+cfg.k=cfg.k||{};cfg.m=cfg.m||{};Object.keys(cfg.k).forEach(x=>{cfg.k[x]=cleanKey(cfg.k[x]);if(!cfg.k[x])delete cfg.k[x]});
+if((cfg.v||0)<3){cfg.m={};cfg.v=3;persist()}
+const providers=()=>PROVS.filter(p=>cfg.k[p.id]).map(p=>mk(p,cfg.k[p.id],cfg.m[p.id]||p.m)).sort((a,b)=>(b.id===cfg.main)-(a.id===cfg.main));
 
-/* ---------- CHAT ---------- */
-function extractCode(t){const m=String(t).match(/```html[ \t]*\n?([\s\S]*?)(?:```|$)/i)||String(t).match(/```[\w-]*[ \t]*\n?([\s\S]*?)(?:```|$)/);return m?m[1].trim():null}
-function stripCode(t){return String(t).replace(/```[\w-]*\n?[\s\S]*?(?:```|$)/g,'').trim()||'Código gerado — abra o Preview.'}
+/* todas as IAs em paralelo + síntese numa resposta única */
+async function askAll(hist,mode,provs,sysX){
+ const sys=sysX||SYSTEM+' '+RULES[mode],err=[];let tr=true;
+ for(const p of provs){
+  try{const t=await p.ask(hist,sys);if(t&&t.trim())return{text:t.trim(),by:p.name}}
+  catch(e){if(!(e&&(e.status>=500||e.status===429||e.status===408)))tr=false;err.push(p.name+': '+((e&&e.message)||'resposta vazia'))}}
+ return{err,transient:tr}}
+
+/* ---------- chat ---------- */
+const grab=(t,re)=>{const m=t.match(re);return m&&m[1].trim()?m[1].trim():null};
+const extractCode=t=>grab(t,/```html[ \t]*\n?([\s\S]*?)(?:```|$)/i)||grab(t,/```[\w-]*[ \t]*\n?([\s\S]*?)(?:```|$)/);
+const strip=t=>t.replace(/```[\w-]*\n?[\s\S]*?(?:```|$)/g,'').trim()||'✅ Código gerado — toque em Preview para ver.';
 function bubble(m){
  const d=document.createElement('div');
  if(m.role==='user'){d.className='bub user';d.innerHTML='<div class="txt"></div><div class="acts" style="justify-content:flex-end"><button onclick="editMsg(this)">✏️</button></div>';d.querySelector('.txt').textContent=m.content}
- else{d.className='bub';const code=CODE.includes(m.mode)?extractCode(m.content):null;if(code)st.code=code;d.innerHTML=`<div class="tag">Nexus LP · ${esc(lab(m.mode||'partner'))}</div><div class="txt"></div><div class="acts"><button onclick="like(this)">👍</button><button onclick="like(this)">👎</button><button onclick="regen(this)">🔄</button><button onclick="copyT(this)">📋</button>${code?'<button onclick="go(\\'preview\\')">▶</button>':''}<div class="sp"></div><button onclick="speak(this)">🔊</button></div><div class="disc">Nexus LP é IA e pode cometer erros.</div>`;d.querySelector('.txt').textContent=code?stripCode(m.content):m.content}
- $('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d
-}
-function vis(){return [...$('msgs').children].filter(x=>!x.classList.contains('dim')&&!x.querySelector('.err'))}
-function idxOf(b){return vis().indexOf(b.closest('.bub'))}
-function cutFrom(i){vis().slice(i).forEach(x=>x.remove());convo.messages.length=i}
-function saveConvo(){if(!convo.messages.length)return;const l=LS.g(KC,[]),r={id:convo.id,title:convo.title||'Nova conversa',titled:!!convo.title,messages:convo.messages.map(({role,content,mode})=>({role,content,mode})),updatedAt:Date.now()};const i=l.findIndex(x=>x.id===r.id);if(i>=0)l[i]=r;else l.unshift(r);LS.s(KC,l.slice(0,60));renderRecents()}
-function renderRecents(){const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt);$('recent').innerHTML=l.map(c=>`<div onclick="openConvo('${c.id}')"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.title||'Nova conversa')}</span><i onclick="event.stopPropagation();delConvo('${c.id}')">✕</i></div>`).join('')||'<div>Nada por aqui ainda.</div>'}
-function openConvo(id){const r=LS.g(KC,[]).find(x=>x.id===id);if(!r)return;convo={id:r.id,title:r.titled?r.title:null,messages:r.messages||[]};$('msgs').innerHTML='';convo.messages.forEach(bubble);go('chat')}
-function delConvo(id){LS.s(KC,LS.g(KC,[]).filter(x=>x.id!==id));if(id===convo.id)newConvo();renderRecents()}
-function newConvo(){convo={id:'c'+Date.now(),messages:[],title:null};st.code=BLANK;$('msgs').innerHTML='';$('inp').value='';go('home')}
-function editMsg(b){const i=idxOf(b);$('inp').value=convo.messages[i]?.content||'';$('inp').focus();$('inp').dataset.edit=i;toast('Edite e envie novamente.')}
-function regen(b){if(busy)return;const i=idxOf(b);if(i<1)return;cutFrom(i);saveConvo();run()}
-function like(b){b.style.color=b.style.color?'':'var(--ac)'}
-function copyT(b){navigator.clipboard?.writeText(b.closest('.bub').querySelector('.txt').textContent);toast('Copiado.')}
-function copyText(t){navigator.clipboard?.writeText(t||'');toast('Copiado.')}
-function share(b){const t=b.closest('.bub').querySelector('.txt').textContent;if(navigator.share)navigator.share({text:t}).catch(()=>{});else copyText(t)}
-function errBubble(lines){const d=document.createElement('div');d.className='bub';d.innerHTML='<div class="err"><b>Não consegui responder agora.</b>'+lines.map(x=>`<span>${esc(x)}</span>`).join('')+'</div><button class="retry" onclick="this.closest(\\'.bub\\').remove();run()">🔄 Tentar de novo</button>';$('msgs').appendChild(d);$('msgs').scrollTop=1e9}
-async function run(){
- busy=true;$('send').disabled=true;const th=document.createElement('div');th.className='bub dim';th.innerHTML='<span>Pensando…</span> <u onclick="cancelRun()" style="margin-left:10px;color:var(--ac)">cancelar</u>';$('msgs').appendChild(th);$('msgs').scrollTop=1e9;
- const my=++runTok,mode=st.mode;let out;
- for(let n=0;n<5;n++){out=await askAll(convo.messages,mode,false);if(my!==runTok)return;if(out.text||!out.err?.some(x=>/429|500|503|tempo|conexão/i.test(x)))break;th.querySelector('span').textContent='Tentando novamente ('+(n+2)+'/5)…';await new Promise(r=>setTimeout(r,1200*(n+1)))}
- th.remove();busy=false;$('send').disabled=false;if(!out?.text){errBubble(out?.err||['Falha desconhecida.']);return}
- const m={role:'assistant',content:out.text,mode};convo.messages.push(m);bubble(m);saveConvo()
-}
+ else{
+  d.className='bub';
+  const code=CODE.includes(m.mode)?extractCode(m.content):null;if(code)st.code=code;
+  d.innerHTML=`<div class="tag">Nexus LP · ${esc(lab(m.mode))}</div><div class="txt"></div><div class="acts"><button onclick="like(this)">👍</button><button onclick="like(this)">👎</button><button onclick="regen(this)">🔄</button><button onclick="copyT(this)">📋</button><button onclick="share(this)">⋯</button>${code?'<button onclick="go(\'preview\')">▶</button>':''}<div class="sp"></div><button onclick="speak(this)">🔊</button></div><div class="disc">Nexus LP é IA e pode cometer erros.</div>`;
+  d.querySelector('.txt').textContent=code?strip(m.content):m.content}
+ $('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d}
+const vis=()=>[...$('msgs').children].filter(x=>!x.querySelector('.err')&&!x.classList.contains('dim'));
+const idxOf=b=>vis().indexOf(b.closest('.bub'));
+function cutFrom(i){vis().slice(i).forEach(x=>x.remove());$('msgs').querySelectorAll('.err').forEach(x=>x.closest('.bub').remove());convo.messages.length=i}
+function regen(b){if(busy)return;const i=idxOf(b);if(i<1)return;cutFrom(i);save();run()}
+let editIdx=null;
+function editMsg(b){const i=idxOf(b);editIdx=i;$('inp').value=convo.messages[i].content;$('inp').focus();toast('Editando: envie para refazer a resposta.')}
+function share(b){const t=b.closest('.bub').querySelector('.txt').textContent;if(navigator.share)navigator.share({text:t}).catch(()=>{});else{navigator.clipboard&&navigator.clipboard.writeText(t);toast('Copiado.')}}
+const like=b=>{b.style.color=b.style.color?'':'var(--ac)'};
+function errBubble(lines){
+ const d=document.createElement('div');d.className='bub';
+ d.innerHTML=`<div class="err"><b>Não consegui responder agora.</b>${lines.map(l=>`<span>${esc(l)}</span>`).join('')}</div><button class="retry" onclick="this.closest('.bub').remove();run()">🔄 Tentar de novo</button>`;
+ $('msgs').appendChild(d);$('msgs').scrollTop=1e9}
+let runTok=0;
 function cancelRun(){runTok++;document.querySelectorAll('.bub.dim').forEach(x=>x.remove());busy=false;$('send').disabled=false;toast('Cancelado.')}
+async function run(){
+ busy=true;$('send').disabled=true;
+ const th=document.createElement('div');th.className='bub dim';th.innerHTML='<span>Pensando…</span> <u onclick="cancelRun()" style="margin-left:10px;color:var(--ac)">cancelar</u>';$('msgs').appendChild(th);$('msgs').scrollTop=1e9;
+ const my=++runTok,cid=convo.id,mode=st.mode,provs=providers();
+ let out={err:['Nenhuma IA configurada. Abra o menu → Configurações, cole uma chave e toque em Testar conexão.']};
+ if(provs.length)for(let round=0;round<6;round++){
+  out=await askAll(convo.messages,mode,provs);
+  if(my!==runTok)return;
+  if(out.text||!out.transient)break;
+  if(round<5){th.querySelector('span').textContent='O serviço da IA está ocupado. Tentando de novo ('+(round+2)+'/6)…';await wait(4000*(round+1));if(my!==runTok)return}}
+ if(!out.text&&out.transient)out.err=[...out.err,'Sua chave está certa: quem está sobrecarregado é o serviço da IA. Toque em Tentar de novo — ou adicione uma segunda IA em Configurações (por exemplo Groq, que tem plano grátis): ela assume sozinha quando a primeira falha.'];
+ th.remove();busy=false;$('send').disabled=false;
+ if(cid!==convo.id){if(out.text){const l=LS.g(KC,[]),r=l.find(c=>c.id===cid);if(r){r.messages.push({role:'assistant',content:out.text,mode});r.updatedAt=Date.now();LS.s(KC,l);renderRecents()}}return}
+ if(!out.text){errBubble(out.err);return}
+ const m={role:'assistant',content:out.text,mode};convo.messages.push(m);const bb=bubble(m);save();maybeTitle();if(cfg.auto){try{const sb=bb.querySelector('button[onclick^="speak"]');if(sb)speak(sb)}catch(e){}}}
+let titling=false;
+const ttl=c=>c.titled?c.title:'Nova conversa';
+function setStoredTitle(id,t){const l=LS.g(KC,[]),r=l.find(c=>c.id===id);if(r){r.title=t;r.titled=true;LS.s(KC,l);renderRecents()}}
+/* pede à IA um nome curto sobre o ASSUNTO da conversa (tenta até 3 vezes, em todas as IAs) */
+async function genTitle(msgs){
+ const provs=providers();if(!provs.length)return null;
+ const txt=msgs.slice(0,6).map(m=>(m.role==='user'?'Usuário: ':'IA: ')+m.content.replace(/```[\s\S]*?```/g,'[código]').slice(0,300)).join('\n');
+ const ask='Dê um título curto (2 a 5 palavras, em português, sem aspas e sem ponto final) que explique o assunto desta conversa. Não copie a primeira mensagem; diga sobre o que estamos conversando:\n\n'+txt;
+ for(let a=0;a<3;a++){
+  for(let w=0;busy&&w<20;w++)await wait(2000);
+  for(const p of provs){
+   try{let t=await p.ask([{role:'user',content:ask}],'Responda só com o título, nada mais.',{light:true});
+    t=(t||'').split('\n')[0].replace(/["'*#.]/g,'').trim().slice(0,40);if(t)return t}catch(e){}}
+  await wait(4000*(a+1))}
+ return null}
+/* depois de 2 respostas da IA, o chat ganha um nome sobre o assunto (nunca a 1ª mensagem) */
+async function maybeTitle(){
+ if(convo.title||titling||convo.messages.filter(m=>m.role==='assistant').length<2)return;
+ titling=true;const cid=convo.id;
+ try{await wait(4000);const t=await genTitle(convo.messages);
+  if(t){if(cid===convo.id){convo.title=t;save()}else setStoredTitle(cid,t)}}catch(e){}
+ titling=false}
+/* conversas antigas que ainda mostram a 1ª mensagem: renomeia em segundo plano (3 por abertura) */
+async function retitleOld(){
+ let n=0;
+ for(const c of LS.g(KC,[])){
+  if(c.titled||n>=3||c.messages.filter(m=>m.role==='assistant').length<2)continue;
+  n++;const t=await genTitle(c.messages);if(t)setStoredTitle(c.id,t);await wait(3000)}}
+setTimeout(retitleOld,20000);
+function copyText(t){
+ const ok=()=>toast('Copiado.',1800),bad=()=>{try{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();ok()}catch(e){toast('Não consegui copiar neste aparelho.',3000)}};
+ try{navigator.clipboard?navigator.clipboard.writeText(t).then(ok,bad):bad()}catch(e){bad()}}
 async function send(){
- const t=$('inp').value.trim();if((!t&&!att)||busy)return;let c=t,img=null;
- if(att){if(att.kind==='text')c=(t?t+'\n\n':'')+'Arquivo anexado ('+att.name+'):\n'+att.content;else{img={t:att.type,b:att.b64};c=t||'(imagem anexada)'}}
- const ei=$('inp').dataset.edit;if(ei!==undefined&&ei!==''){cutFrom(+ei);delete $('inp').dataset.edit}
- $('inp').value='';$('inp').style.height='auto';att=null;chip();const m={role:'user',content:c};if(img)m.image=img;convo.messages.push(m);go('chat');bubble(m);saveConvo();await run()
-}
+ const t=$('inp').value.trim();if((!t&&!att)||busy)return;
+ let c=t,img=null;
+ if(att){if(att.kind==='text')c=(t?t+'\n\n':'')+`Arquivo anexado (${att.name}):\n${att.content}`;else{img={t:att.type,b:att.b64};c=t||'(imagem anexada)'}}
+ const m={role:'user',content:c};if(img)m.image=img;
+ $('inp').value='';$('inp').style.height='auto';att=null;chip();fixes=0;
+ if(editIdx!=null){cutFrom(editIdx);editIdx=null}convo.messages.push(m);go('chat');bubble({role:'user',content:c+(img?' 📎':'')});save();await run()}
 $('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
 $('inp').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,110)+'px'});
-function chip(){const c=$('chip');c.style.display=att?'block':'none';c.innerHTML=att?`📎 ${esc(att.name)} <u onclick="att=null;chip()">remover</u>`:''}
-$('file').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(!f)return;if(f.size>8e6)return toast('Máximo 8MB.');const r=new FileReader();if(f.type.startsWith('image/')){r.onload=()=>{att={kind:'image',type:f.type,b64:r.result.split(',')[1],name:f.name};chip()};r.readAsDataURL(f)}else{r.onload=()=>{att={kind:'text',content:r.result,name:f.name};chip()};r.readAsText(f)}});
+function chip(){const c=$('chip');c.style.display=att?'block':'none';c.innerHTML=att?`📎 ${esc(att.name)}<u onclick="att=null;chip()">remover</u>`:''}
+$('file').addEventListener('change',e=>{
+ const f=e.target.files[0];if(!f)return;e.target.value='';
+ if(f.size>8e6)return toast('Arquivo muito grande (máx 8MB).');
+ if(f.type.startsWith('audio/'))return transcribeInto(f,f.type);
+ const r=new FileReader();
+ if(f.type.startsWith('image/')){r.onload=()=>{att={kind:'image',type:f.type,b64:r.result.split(',')[1],name:f.name};chip()};r.readAsDataURL(f)}
+ else{r.onload=()=>{att={kind:'text',content:r.result,name:f.name};chip()};r.readAsText(f)}});
+function copyT(b){const t=b.closest('.bub').querySelector('.txt').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);toast('Copiado.')}
 
-/* ---------- PREVIEW ---------- */
-const CATCH='<script>(function(){var P=function(o){try{parent.postMessage(o,"*")}catch(e){}};var s=0;function E(m){if(s++)return;P({__nx:1,m:String(m)})};onerror=function(m,x,l){E(m+" (linha "+l+")")};addEventListener("unhandledrejection",function(e){E("Promise rejeitada: "+(e.reason&&e.reason.message||e.reason))});addEventListener("load",function(){setTimeout(function(){var b=document.body;if(!b)return E("Sem body");if(!(b.innerText.trim().length||b.querySelector("canvas,svg,img,video,input,button,iframe")))return E("Página em branco");if(!s)P({__nx:1,ok:1})},1800)})})()<\/script>';
-function runPreview(){lastErr='';$('pvs').textContent=st.code===BLANK?'Preview':'⏳ Carregando…';let h=st.code;if(/<head[^>]*>/i.test(h))h=h.replace(/<head[^>]*>/i,x=>x+CATCH);else h=CATCH+h;$('frame').srcdoc=h}
-addEventListener('message',e=>{if(e.source!==$('frame').contentWindow||!e.data?.__nx)return;if(e.data.ok)$('pvs').textContent='✅ Rodando';else{lastErr=e.data.m;$('pvs').textContent='⚠️ '+lastErr.slice(0,35);autofix(lastErr,false)}})
-function fsPreview(){const x=$('pw');const f=x.requestFullscreen||x.webkitRequestFullscreen;if(f)f.call(x);else toast('Tela cheia indisponível.')}
-async function autofix(msg,manual=false){if(st.code===BLANK||busy)return;if(!manual&&fixes>=2)return toast('Toque em 🔧 para tentar novamente.');fixes++;busy=true;$('send').disabled=true;$('pvs').textContent='🔧 Corrigindo…';try{const mode=CODE.includes(st.mode)?st.mode:'engineer',o=await askAll([{role:'user',content:'Este HTML falhou no preview com o erro: '+msg+'\\n\\nDevolva o HTML inteiro corrigido em um único bloco ```html```.\\n\\n```html\\n'+st.code+'\\n```'}],mode,false),code=o.text&&extractCode(o.text);if(!code)throw new Error('A IA não devolveu HTML completo.');st.code=code;saveConvo();runPreview();toast('Código corrigido.')}catch(e){toast('Autocorreção: '+e.message,5000)}finally{busy=false;$('send').disabled=false}}
-const fixNow=()=>autofix(lastErr||'O preview não funciona como esperado.',true);
+/* ---------- conversas ---------- */
+function save(){
+ if(!convo.messages.length)return;
+ const l=LS.g(KC,[]),ex=l.find(c=>c.id===convo.id);
+ const rec={id:convo.id,title:convo.title||(ex&&ex.title)||'Nova conversa',titled:!!convo.title||!!(ex&&ex.titled),messages:convo.messages.map(({role,content,mode})=>({role,content,mode})),updatedAt:Date.now()};
+ const i=l.findIndex(c=>c.id===convo.id);if(i>=0)l[i]=rec;else l.unshift(rec);
+ try{LS.s(KC,l.slice(0,50))}catch(e){}renderRecents()}
+function renderRecents(){
+ const l=LS.g(KC,[]).sort((a,b)=>b.updatedAt-a.updatedAt);
+ $('recent').innerHTML=l.map(c=>`<div onclick="openConvo('${c.id}')"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ttl(c))}</span><i onclick="event.stopPropagation();delConvo('${c.id}')">✕</i></div>`).join('')||'<div>Nada por aqui ainda.</div>'}
+function openConvo(id){
+ const r=LS.g(KC,[]).find(c=>c.id===id);if(!r)return;
+ convo={id:r.id,messages:r.messages,title:r.titled?r.title:null};st.code=BLANK;$('msgs').innerHTML='';convo.messages.forEach(bubble);go('chat');maybeTitle()}
+function delConvo(id){LS.s(KC,LS.g(KC,[]).filter(c=>c.id!==id));if(id===convo.id)newConvo();renderRecents()}
+function newConvo(){convo={id:'c'+Date.now(),messages:[],title:null};st.code=BLANK;fixes=0;$('msgs').innerHTML='';$('inp').value='';go('home')}
+renderRecents();
 
-/* ---------- MEDIA LOCAL ---------- */
+/* ---------- preview + autocorreção ---------- */
+const CATCH='<script>(function(){var P=function(o){try{parent.postMessage(o,"*")}catch(e){}},sent=0;'+
+'function E(m){if(sent++)return;P({__nx:1,m:String(m)})}'+
+'onerror=function(m,s,l){E(m+" (linha "+l+")")};'+
+'addEventListener("unhandledrejection",function(e){E("Promise rejeitada: "+(e.reason&&e.reason.message||e.reason))});'+
+'addEventListener("error",function(e){var t=e.target;if(t&&t!==window&&(t.src||t.href))E("Falha ao carregar "+(t.src||t.href))},true);'+
+'try{localStorage.getItem("_")}catch(e){var M=function(){var d={};return{getItem:function(k){return k in d?d[k]:null},setItem:function(k,v){d[k]=String(v)},removeItem:function(k){delete d[k]},clear:function(){d={}},key:function(i){return Object.keys(d)[i]||null},get length(){return Object.keys(d).length}}};["localStorage","sessionStorage"].forEach(function(n){try{Object.defineProperty(window,n,{value:M(),configurable:true})}catch(e){}})}'+
+'addEventListener("load",function(){setTimeout(function(){var b=document.body;if(!b)return E("A página não tem corpo (body).");if(!(b.innerText.trim().length||b.querySelector("canvas,svg,img,video,input,button,iframe")))return E("A página abriu em branco: nada foi desenhado na tela.");if(!sent)P({__nx:1,ok:1})},2200)});'+
+'})()<\/script>';
+let lastErr='';
+const pv=t=>{$('pvs').textContent=t};
+function runPreview(){
+ pv(st.code===BLANK?'Preview':'⏳ Carregando…');lastErr='';
+ let h=st.code;
+ h=/<head[^>]*>/i.test(h)?h.replace(/<head[^>]*>/i,m=>m+CATCH):/<html[^>]*>/i.test(h)?h.replace(/<html[^>]*>/i,m=>m+CATCH):CATCH+h;
+ $('frame').srcdoc=h}
+addEventListener('message',e=>{
+ if(e.source!==$('frame').contentWindow||!e.data||!e.data.__nx)return;
+ if(e.data.ok){pv(st.code===BLANK?'Preview':'✅ Rodando');return}
+ lastErr=e.data.m;pv('⚠️ '+lastErr.slice(0,38));autofix(lastErr)});
+const fixNow=()=>autofix(lastErr||'O app não funciona como esperado (pode estar em branco, travado ou com erro visual).',true);
+function fsPreview(){const w=$('pw'),f=w.requestFullscreen||w.webkitRequestFullscreen;if(f)f.call(w);else toast('Tela cheia indisponível aqui.')}
+async function autofix(msg,manual){
+ if(st.code===BLANK||busy)return;
+ const provs=providers();
+ if(!provs.length)return toast('Configure uma chave em Configurações para a autocorreção funcionar.',3500);
+ if(!manual&&fixes>=2)return pv('⚠️ Toque em 🔧 para tentar de novo');
+ fixes++;busy=true;$('send').disabled=true;pv('🔧 Corrigindo ('+fixes+')…');
+ const mode=CODE.includes(st.mode)?st.mode:'engineer';
+ const hist=[{role:'user',content:'O código HTML abaixo gerou este problema ao rodar no preview: "'+msg+'".\nCorrija e devolva o arquivo HTML inteiro, completo, num único bloco ```html```. Não use localStorage sem try/catch, nem módulos ES; scripts externos só de cdnjs.\n\n```html\n'+st.code+'\n```'}];
+ try{
+  const out=await askAll(hist,mode,provs),code=out.text&&extractCode(out.text);
+  if(!code){pv('⚠️ Não consegui corrigir');toast('A correção falhou: '+((out.err&&out.err[0])||'resposta sem código')+'.',4000);return}
+  st.code=code;
+  for(let i=convo.messages.length-1;i>=0;i--)if(convo.messages[i].role==='assistant'){convo.messages[i].content=out.text;break}
+  save();toast('✅ Corrigido automaticamente.');runPreview()
+ }finally{busy=false;$('send').disabled=false}}
+
+/* ---------- mídia: automação de imagens e vídeos (tudo no aparelho) ---------- */
+const media=[],msel=new Set(),EXT={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};let mid=0;
 const IMG_CMDS=[['resize','📐 Redimensionar'],['compress','🗜️ Comprimir'],['convert','🔁 Converter'],['gray','⚫ P&B'],['rotate','↻ Girar 90°'],['square','⬛ Quadrado'],['mark','💧 Marca d’água']];
-const VID_CMDS=[['frame','📸 Capturar frame'],['thumbs','🎞️ 4 frames']];
-$('cImg').innerHTML=IMG_CMDS.map(x=>`<button onclick="runCmd('${x[0]}')">${x[1]}</button>`).join('');
-$('cVid').innerHTML=VID_CMDS.map(x=>`<button onclick="runCmd('${x[0]}')">${x[1]}</button>`).join('');
-$('cAi').innerHTML=['🎬 Prompt de vídeo','✨ Prompt de imagem','🎵 Prompt de música','📝 Prompt de roteiro'].map((x,i)=>`<button onclick="quickAsk(${i})">${x}</button>`).join('');
-$('qk').innerHTML=[['💬 Conversar',"go('chat')"],['🎬 Studio',"go('studio')"],['🖼️ Mídia',"go('media')"],['🎮 Criar jogo',"newConvo();setMode('3d');go('chat')"],['🎵 Música',"newProduction('music')"],['🔌 APIs',"go('settings')"]].map(x=>`<button onclick="${x[1]}">${x[0]}</button>`).join('');
-function quickAsk(i){const a=['Crie um prompt detalhado para gerar um vídeo sobre: ','Crie um prompt detalhado para gerar uma imagem sobre: ','Crie um prompt detalhado para gerar uma música sobre: ','Crie o roteiro de uma cena sobre: '];go('chat');$('inp').value=a[i];$('inp').focus()}
+const VID_CMDS=[['frame','📸 Capturar frame'],['thumbs','🎞️ 4 miniaturas']];
+const AI_CMDS=[['Escreva um comando ffmpeg para: ','🎬 Comando ffmpeg'],['Crie um prompt detalhado para gerar uma imagem de: ','✨ Prompt de imagem'],['Crie um script (bash ou Python) para renomear e organizar em lote estas mídias: ','🗂️ Script em lote'],['Escreva legenda, hashtags e o melhor horário para postar este conteúdo: ','📣 Legenda e posts']];
+$('cImg').innerHTML=IMG_CMDS.map(([k,t])=>`<button onclick="runCmd('${k}')">${t}</button>`).join('');
+$('cVid').innerHTML=VID_CMDS.map(([k,t])=>`<button onclick="runCmd('${k}')">${t}</button>`).join('');
+$('cAi').innerHTML=AI_CMDS.map((c,i)=>`<button onclick="quickAsk(AI_CMDS[${i}][0])">${c[1]}</button>`).join('');
+$('qk').innerHTML=[['🖼️ Editar imagens',"go('media')"],['🎬 Gerir vídeos',"go('media')"],['✨ Prompt de imagem','quickAsk(AI_CMDS[1][0])'],['🎞️ Comando ffmpeg','quickAsk(AI_CMDS[0][0])']].map(([t,f])=>`<button onclick="${f}">${t}</button>`).join('');
+function quickAsk(t){$('inp').value=t;home();$('inp').focus()}
 const fmtSize=b=>b>1e6?(b/1e6).toFixed(1)+' MB':Math.max(1,Math.round(b/1e3))+' KB';
-function addMedia(f){const it={id:++mid,name:f.name,file:f,size:f.size,url:URL.createObjectURL(f),video:f.type.startsWith('video/')};const done=()=>{media.unshift(it);renderMedia()};if(it.video){const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>{it.w=v.videoWidth;it.h=v.videoHeight;it.dur=v.duration;done()};v.onerror=done;v.src=it.url}else{const im=new Image();im.onload=()=>{it.w=im.naturalWidth;it.h=im.naturalHeight;done()};im.onerror=()=>toast('Imagem inválida.');im.src=it.url}}
+const baseName=n=>n.replace(/\.[^.]+$/,'');
+const loadImg=u=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>no(new Error('imagem inválida'));i.src=u});
+const toBlob=(c,t,q)=>new Promise(r=>c.toBlob(r,t,q));
+function addMedia(f){
+ const it={id:++mid,name:f.name,file:f,size:f.size,url:URL.createObjectURL(f),video:f.type.startsWith('video/')};
+ const done=()=>{media.unshift(it);renderMedia()};
+ if(it.video){const v=document.createElement('video');v.preload='metadata';v.muted=true;v.onloadedmetadata=()=>{it.w=v.videoWidth;it.h=v.videoHeight;it.dur=v.duration;done()};v.onerror=done;v.src=it.url}
+ else{const im=new Image();im.onload=()=>{it.w=im.naturalWidth;it.h=im.naturalHeight;done()};im.onerror=()=>toast('Não consegui abrir '+it.name,3500);im.src=it.url}}
 $('mfile').addEventListener('change',e=>{[...e.target.files].forEach(addMedia);e.target.value=''});
-function renderMedia(){$('mlist').innerHTML=media.map(m=>`<div class="mi ${msel.has(m.id)?'sel':''}" onclick="msTog(${m.id})">${m.video?`<video class="th" src="${m.url}#t=0.5" muted playsinline></video>`:`<img class="th" src="${m.url}">`}<div class="in"><b style="font-weight:500;word-break:break-all">${esc(m.name)}</b><small>${m.video?'🎬':'🖼️'} ${m.w?m.w+'×'+m.h:''}${m.dur?' · '+Math.round(m.dur)+'s':''} · ${fmtSize(m.size)}</small></div><button class="ib" onclick="event.stopPropagation();dlM(${m.id})">⬇</button><button class="ib" onclick="event.stopPropagation();rmM(${m.id})">✕</button></div>`).join('')||'<p class="hint">Nenhuma mídia adicionada.</p>'}
-function msTog(id){msel.has(id)?msel.delete(id):msel.add(id);renderMedia()}function dlM(id){const m=media.find(x=>x.id===id);if(!m)return;const a=document.createElement('a');a.href=m.url;a.download=m.name;a.click()}function rmM(id){const i=media.findIndex(x=>x.id===id);if(i<0)return;URL.revokeObjectURL(media[i].url);media.splice(i,1);msel.delete(id);renderMedia()}
-async function procImg(it,cmd,o){const im=await new Promise((ok,no)=>{const x=new Image();x.onload=()=>ok(x);x.onerror=no;x.src=it.url}),w=im.naturalWidth,h=im.naturalHeight;let tw=w,th=h,sx=0,sy=0,sw=w,sh=h,type=cmd==='compress'?'image/jpeg':cmd==='convert'?o.fmt:(it.file.type||'image/png');if(cmd==='resize'){tw=Math.max(16,o.w);th=Math.round(h*tw/w)}if(cmd==='square'){const m=Math.min(w,h);sx=(w-m)/2;sy=(h-m)/2;sw=sh=m;tw=th=m}if(cmd==='rotate'){tw=h;th=w}const c=document.createElement('canvas');c.width=tw;c.height=th;const x=c.getContext('2d');if(type==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,tw,th)}if(cmd==='gray')x.filter='grayscale(1)';if(cmd==='rotate'){x.translate(tw/2,th/2);x.rotate(Math.PI/2);x.drawImage(im,-w/2,-h/2)}else x.drawImage(im,sx,sy,sw,sh,0,0,tw,th);if(cmd==='mark'){x.font='600 '+Math.max(14,tw/22)+'px sans-serif';x.textAlign='right';x.textBaseline='bottom';x.fillStyle='rgba(255,255,255,.85)';x.fillText(o.text||'Nexus LP',tw-20,th-18)}const b=await new Promise(r=>c.toBlob(r,type,o.q/100));return[b,baseName(it.name)+'-'+cmd+'.'+(b.type.split('/')[1]||'png')]}
-function baseName(n){return n.replace(/\.[^.]+$/,'')}
-async function runCmd(cmd){const isv=cmd==='frame'||cmd==='thumbs',items=(msel.size?media.filter(m=>msel.has(m.id)):media).filter(m=>isv?m.video:!m.video);if(!items.length)return toast('Adicione ou selecione arquivos primeiro.');const o={w:+$('mw').value||1080,q:+$('mq').value||80,fmt:$('mf').value,text:$('mt').value};for(const it of items){try{if(isv){const v=document.createElement('video');v.src=it.url;v.muted=true;await new Promise(r=>v.onloadeddata=r);const ts=cmd==='frame'?[Math.min(1,v.duration/2)]:[.1,.35,.6,.85].map(x=>x*v.duration);for(let i=0;i<ts.length;i++){v.currentTime=ts[i];await new Promise(r=>v.onseeked=r);const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);const b=await new Promise(r=>c.toBlob(r,'image/jpeg',.9));addMedia(new File([b],baseName(it.name)+'-frame'+(i+1)+'.jpg',{type:'image/jpeg'}))}}else{const [b,n]=await procImg(it,cmd,o);addMedia(new File([b],n,{type:b.type}))}}catch(e){toast('Erro: '+e.message,3500)}}toast('Processamento concluído.',2500)}
+function renderMedia(){
+ $('mlist').innerHTML=media.map(m=>`<div class="mi ${msel.has(m.id)?'sel':''}" onclick="msTog(${m.id})">${m.video?`<video class="th" src="${m.url}#t=0.5" muted playsinline preload="metadata"></video>`:`<img class="th" src="${m.url}">`}<div class="in"><b style="font-weight:500;word-break:break-all">${esc(m.name)}</b><small>${m.video?'🎬':'🖼️'} ${m.w?m.w+'×'+m.h:''}${m.dur?' · '+Math.round(m.dur)+'s':''} · ${fmtSize(m.size)}</small></div><button class="ib" onclick="event.stopPropagation();dl(${m.id})">⬇</button>${m.video?'':`<button class="ib" onclick="event.stopPropagation();toChat(${m.id})">💬</button>`}<button class="ib" onclick="event.stopPropagation();rmM(${m.id})">✕</button></div>`).join('')||'<p class="hint">Nada aqui ainda. Toque em “Escolher imagens e vídeos”.</p>'}
+function msTog(id){msel.has(id)?msel.delete(id):msel.add(id);renderMedia()}
+function dl(id){const m=media.find(x=>x.id===id);if(!m)return;const a=document.createElement('a');a.href=m.url;a.download=m.name;document.body.appendChild(a);a.click();a.remove()}
+function rmM(id){const i=media.findIndex(x=>x.id===id);if(i<0)return;URL.revokeObjectURL(media[i].url);media.splice(i,1);msel.delete(id);renderMedia()}
+function toChat(id){const m=media.find(x=>x.id===id);if(!m)return;const r=new FileReader();r.onload=()=>{att={kind:'image',type:m.file.type||'image/png',b64:r.result.split(',')[1],name:m.name};chip();home();$('inp').focus();toast('Imagem anexada ao chat.')};r.readAsDataURL(m.file)}
+async function procImg(it,cmd,o){
+ const im=await loadImg(it.url),w=im.naturalWidth,h=im.naturalHeight;
+ let type=cmd==='compress'?'image/jpeg':cmd==='convert'?o.fmt:(EXT[it.file.type]?it.file.type:'image/png'),tw=w,th=h,sx=0,sy=0,sw=w,sh=h;
+ if(cmd==='resize'){tw=Math.max(16,o.w);th=Math.max(1,Math.round(h*tw/w))}
+ if(cmd==='square'){const m=Math.min(w,h);sx=(w-m)/2;sy=(h-m)/2;sw=sh=m;tw=th=m}
+ if(cmd==='rotate'){tw=h;th=w}
+ const c=document.createElement('canvas');c.width=tw;c.height=th;const x=c.getContext('2d'),hasF='filter' in x;
+ if(type==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,tw,th)}
+ if(cmd==='gray'&&hasF)x.filter='grayscale(1)';
+ if(cmd==='rotate'){x.translate(tw/2,th/2);x.rotate(Math.PI/2);x.drawImage(im,-w/2,-h/2)}else x.drawImage(im,sx,sy,sw,sh,0,0,tw,th);
+ if(cmd==='gray'&&!hasF){const d=x.getImageData(0,0,tw,th),p=d.data;for(let i=0;i<p.length;i+=4){p[i]=p[i+1]=p[i+2]=.3*p[i]+.59*p[i+1]+.11*p[i+2]}x.putImageData(d,0,0)}
+ if(cmd==='mark'){const fs=Math.max(14,Math.round(tw/22));x.font='600 '+fs+'px sans-serif';x.textAlign='right';x.textBaseline='bottom';x.fillStyle='rgba(255,255,255,.85)';x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=6;x.fillText(o.text||'Nexus LP',tw-fs*.6,th-fs*.5)}
+ let b=await toBlob(c,type,o.q/100);if(!b){type='image/png';b=await toBlob(c,type)}
+ return [b,baseName(it.name)+'-'+cmd+'.'+(EXT[b.type]||'png')]}
+const seekTo=(v,t)=>new Promise(r=>{const f=setTimeout(r,3000);v.onseeked=()=>{clearTimeout(f);r()};v.currentTime=t});
+async function procVid(it,cmd){
+ const v=document.createElement('video');v.muted=true;v.playsInline=true;v.preload='auto';v.src=it.url;
+ await new Promise((ok,no)=>{v.onloadeddata=ok;v.onerror=()=>no(new Error('formato de vídeo não suportado'))});
+ const ts=cmd==='frame'?[Math.min(1,v.duration/2)]:[.1,.35,.6,.85].map(f=>f*v.duration),out=[];
+ for(let i=0;i<ts.length;i++){await seekTo(v,ts[i]);const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);out.push([await toBlob(c,'image/jpeg',.9),baseName(it.name)+'-frame'+(i+1)+'.jpg'])}
+ return out}
+async function runCmd(cmd){
+ const vid=cmd==='frame'||cmd==='thumbs',items=(msel.size?media.filter(m=>msel.has(m.id)):media).filter(m=>vid?m.video:!m.video);
+ if(!items.length)return toast(media.length?'Marque '+(vid?'um vídeo':'uma imagem')+' para este comando.':'Adicione arquivos primeiro.',3000);
+ const o={w:+$('mw').value||1080,q:Math.min(100,Math.max(1,+$('mq').value||80)),fmt:$('mf').value,text:$('mt').value.trim()};
+ toast('Processando…',6e4);let n=0;
+ for(const it of items){
+  try{
+   if(it.video){for(const [b,nm] of await procVid(it,cmd)){if(b){addMedia(new File([b],nm,{type:b.type}));n++}}}
+   else{const [b,nm]=await procImg(it,cmd,o);addMedia(new File([b],nm,{type:b.type}));n++}
+  }catch(e){toast('Erro em '+it.name+': '+e.message,4000)}}
+ if(n)toast('✅ '+n+' arquivo(s) novo(s) na biblioteca.',3000)}
 
-/* ---------- STUDIO ---------- */
-const TYPES={dorama:['🎬','Dorama','1–2 min por episódio'],filme:['🎞️','Filme','60+ min'],novela:['📺','Novela','55–60 min/episódio'],serie:['📚','Série','Temporadas'],animacao:['✨','Animação','Storyboard + cenas'],music:['🎵','Música','Letra + áudio'],game:['🎮','Jogo','Design + código']};
-const STAGES=['ideia','pesquisa','biblia','personagens','roteiro','cenas','storyboard','imagens','vozes','musica','video','montagem','revisao','final'];
-const STAGE_LABEL={ideia:'Ideia',pesquisa:'Pesquisa',biblia:'Bíblia',personagens:'Personagens',roteiro:'Roteiro',cenas:'Cenas',storyboard:'Storyboard',imagens:'Imagens',vozes:'Vozes',musica:'Música',video:'Vídeo',montagem:'Montagem',revisao:'Revisão',final:'Final'};
-function projects(){return LS.g(KP,[])}
-function saveProjects(a){return LS.s(KP,a)}
-function newProduction(type){
- if(!type){const opts=Object.entries(TYPES).map(([k,v])=>k+': '+v[1]).join('\n');type=prompt('Tipo de produção:\\n'+opts,'dorama')||'dorama'}
- if(!TYPES[type])type='dorama';
- const title=prompt('Nome da produção','Minha produção Nexus')||'Produção sem título';
- const p={id:'p'+Date.now(),title,type,createdAt:Date.now(),updatedAt:Date.now(),status:'ideia',prompt:'',research:'',bible:'',characters:'',script:'',scenes:'',storyboard:'',notes:'',artifacts:[],versions:[],approval:null,progress:0};
- const a=projects();a.unshift(p);saveProjects(a);renderProjects();openProject(p.id)
-}
-function calcProgress(p){let n=0;for(const s of STAGES){if(p[s]||p.artifacts.some(a=>a.stage===s&&a.url))n++}return Math.round(n/STAGES.length*100)}
-function renderProjects(){const a=projects();$('projects').innerHTML=a.map(p=>{const t=TYPES[p.type]||['📁','Projeto',''];const pr=calcProgress(p);return `<div class="project"><div class="head"><span>${t[0]}</span><b>${esc(p.title)}</b><span class="status ${pr>=100?'ok':pr?'run':''}">${pr}%</span></div><div class="meta">${t[1]} · ${t[2]}</div><div class="progress"><i style="width:${pr}%"></i></div><div class="r"><button class="mini" onclick="openProject('${p.id}')">Abrir</button><button class="mini" onclick="duplicateProject('${p.id}')">V2</button><button class="mini" onclick="deleteProject('${p.id}')">Apagar</button></div></div>`}).join('')||'<p class="hint">Nenhuma produção ainda. Crie o primeiro projeto.</p>'}
-function getP(id){return projects().find(p=>p.id===id)}
-function updateP(p){p.updatedAt=Date.now();const a=projects(),i=a.findIndex(x=>x.id===p.id);if(i>=0)a[i]=p;saveProjects(a);renderProjects();renderFiles()}
-function openProject(id){const p=getP(id);if(!p)return;$('pmTitle').textContent=p.title;renderProjectModal(p);$('pOv').classList.add('open')}
-function closeProjectModal(){$('pOv').classList.remove('open')}
-function stageRows(p){return STAGES.map(s=>{const done=!!p[s]||p.artifacts.some(a=>a.stage===s&&a.url);const active=p.status===s;return `<div class="stage ${done?'done ':''}${active?'active':''}"><span class="dot"></span><div><b>${STAGE_LABEL[s]}</b><small>${done?'Concluído':active?'Em andamento':'Aguardando'}</small></div></div>`}).join('')}
-function renderProjectModal(p){
- const t=TYPES[p.type]||['📁','Projeto',''];
- const arts=p.artifacts||[];
- $('pmBody').innerHTML=`<div class="hero"><h2>${t[0]} ${esc(p.title)}</h2><p>${t[1]} · ${t[2]}</p><div class="progress"><i style="width:${calcProgress(p)}%"></i></div><p style="margin-top:6px">${calcProgress(p)}% do pipeline</p></div>
- <div class="card"><label>Ideia / briefing</label><textarea id="pPrompt">${ea(p.prompt||'')}</textarea><div class="r"><button class="mini" onclick="saveBrief('${p.id}')">Salvar briefing</button><button class="mini" onclick="generatePlan('${p.id}')">🧠 Planejar</button></div></div>
- <div class="card"><h3 style="margin:0 0 8px">Pipeline real</h3>${stageRows(p)}</div>
- <div class="card"><h3 style="margin:0 0 8px">Produção</h3><div class="grid">
- <button class="tile" onclick="generateStage('${p.id}','pesquisa')">🔎<b>Pesquisa</b><small>Fontes e contexto</small></button>
- <button class="tile" onclick="generateStage('${p.id}','biblia')">📖<b>Bíblia</b><small>Mundo e regras</small></button>
- <button class="tile" onclick="generateStage('${p.id}','personagens')">👤<b>Personagens</b><small>Perfis</small></button>
- <button class="tile" onclick="generateStage('${p.id}','roteiro')">📝<b>Roteiro</b><small>Estrutura</small></button>
- <button class="tile" onclick="generateStage('${p.id}','cenas')">🎞️<b>Cenas</b><small>Plano de produção</small></button>
- <button class="tile" onclick="generateStage('${p.id}','storyboard')">🖼️<b>Storyboard</b><small>Descrição visual</small></button>
- <button class="tile" onclick="generateMediaArtifact('${p.id}','imagens')">✨<b>Imagem</b><small>Usa API conectada</small></button>
- <button class="tile" onclick="generateMediaArtifact('${p.id}','video')">🎬<b>Vídeo</b><small>Usa API conectada</small></button>
- <button class="tile" onclick="generateMediaArtifact('${p.id}','vozes')">🎙️<b>Voz</b><small>ElevenLabs</small></button>
- <button class="tile" onclick="generateMediaArtifact('${p.id}','musica')">🎵<b>Música</b><small>API conectada</small></button>
- </div></div>
- <div class="card"><h3 style="margin:0 0 8px">Revisão e versões</h3><p class="hint">Depois de existir um artefato real, você pode aprovar ou pedir melhoria. A versão anterior é preservada.</p><div class="r"><button class="mini" onclick="approveP('${p.id}')">✅ Estou satisfeito</button><button class="mini" onclick="reviseP('${p.id}')">🔄 Quero melhorar</button></div><div class="r"><button class="mini" onclick="createVersion('${p.id}')">Criar versão</button><button class="mini" onclick="exportProject('${p.id}')">Exportar projeto</button></div></div>
- <div class="card"><h3 style="margin:0 0 8px">Material textual</h3><div id="pText">${renderTextMaterials(p)}</div></div>
- <div class="card"><h3 style="margin:0 0 8px">Artefatos reais</h3>${arts.length?arts.map(a=>`<div class="art"><b>${esc(a.type||a.stage)} · ${esc(a.name||'artefato')}</b><small>${esc(a.status||'concluído')} · ${new Date(a.createdAt).toLocaleString('pt-BR')}</small>${a.url?`<a href="${ea(a.url)}" target="_blank">Abrir resultado</a>`:'<small>Sem arquivo/URL real — não marcado como concluído.</small>'}</div>`).join(''):'<p class="hint">Nenhum arquivo audiovisual real ainda.</p>'}</div>
- <div class="card"><p class="hint">Integridade: o Nexus não considera texto, prompt ou roteiro como vídeo/áudio/imagem final. Um artefato só é concluído quando uma ferramenta retorna um arquivo ou URL real.</p></div>`;
-}
-function renderTextMaterials(p){const fields=[['pesquisa','Pesquisa'],['bible','Bíblia'],['characters','Personagens'],['script','Roteiro'],['scenes','Cenas'],['storyboard','Storyboard']];return fields.filter(x=>p[x[0]]).map(x=>`<div class="art"><b>${x[1]}</b><small>${esc(String(p[x[0]]).slice(0,1000))}</small></div>`).join('')||'<p class="hint">Ainda não há material textual.</p>'}
-function saveBrief(id){const p=getP(id);p.prompt=$('pPrompt').value.trim();p.status='ideia';updateP(p);openProject(id);toast('Briefing salvo.')}
-async function generatePlan(id){const p=getP(id);p.prompt=$('pPrompt').value.trim();if(!p.prompt)return toast('Escreva a ideia primeiro.');p.status='roteiro';updateP(p);openProject(id);const out=await askAll([{role:'user',content:`Planeje esta produção ${TYPES[p.type]?.[1]||p.type}. Ideia: ${p.prompt}\nDefina público, duração, estrutura, personagens, arco, cenas e requisitos técnicos. Não gere mídia; gere planejamento.`}], 'professional',true);if(out.text){p.bible=out.text;p.status='roteiro';updateP(p);openProject(id)}else toast((out.err||['Falha'])[0],5000)}
-async function generateStage(id,stage){const p=getP(id);if(!p.prompt)return toast('Salve primeiro a ideia/briefing.');p.status=stage;updateP(p);openProject(id);const context=`Produção: ${p.title}\nTipo: ${TYPES[p.type]?.[1]}\nIdeia: ${p.prompt}\nBíblia: ${p.bible||'(ainda não criada)'}\nPersonagens: ${p.characters||'(ainda não criados)'}\nRoteiro: ${p.script||'(ainda não criado)'}`;const task={pesquisa:'Faça pesquisa contextual e indique fontes/consultas que devem ser verificadas. Não invente citações.',biblia:'Crie a bíblia da produção: universo, tom, regras, estética e continuidade.',personagens:'Crie fichas completas dos personagens, relações, objetivos e evolução.',roteiro:'Escreva o roteiro completo adequado à duração do projeto, dividido em cenas.',cenas:'Converta o roteiro em lista de cenas com duração, ambiente, personagens, diálogo, câmera e som.',storyboard:'Crie um storyboard textual cena a cena com enquadramento, composição, luz e continuidade.'}[stage];const out=await askAll([{role:'user',content:context+'\n\nTarefa:\n'+task}], 'professional',true);if(out.text){p[stage]=out.text;p.status=stage;updateP(p);openProject(id)}else toast((out.err||['Falha'])[0],5000)}
-async function generateMediaArtifact(id,stage){const p=getP(id);const adapter=cfg.media?.[stage==='vozes'?'audio':stage==='imagens'?'image':stage==='video'?'video':'music']||{};if(stage==='vozes'&&cfg.elKey){await generateVoiceArtifact(p);return}if(!adapter.key||!adapter.endpoint)return toast('Configure uma API de '+STAGE_LABEL[stage]+' no Centro de APIs antes.',5000);p.status=stage;updateP(p);openProject(id);const prompt=stage==='imagens'?`Imagem cinematográfica para ${p.title}. ${p.characters||p.prompt}`:stage==='video'?`Vídeo para ${p.title}. ${p.scenes||p.script||p.prompt}`:`Música para ${p.title}. ${p.prompt}`;try{const r=await api(adapter.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+adapter.key},body:JSON.stringify({model:adapter.model||undefined,prompt,project:p.title,type:stage})},180000);const url=findMediaUrl(r);if(!url)throw new Error('O serviço respondeu, mas não encontrei uma URL/arquivo no retorno.');p.artifacts.push({id:'a'+Date.now(),stage,type:stage,name:stage+'-'+Date.now(),url,status:'concluído',createdAt:Date.now()});p.status=stage;updateP(p);openProject(id);toast('Artefato real recebido.')}catch(e){p.status='erro';updateP(p);openProject(id);toast('Falha na geração: '+e.message,7000)}}
-function findMediaUrl(d){if(!d)return null;if(typeof d==='string'&&/^https?:|^blob:|^data:/.test(d))return d;return d.url||d.output?.url||d.data?.[0]?.url||d.output?.[0]?.url||d.result?.url||d.audio_url||d.video_url||d.image_url||null}
-async function generateVoiceArtifact(p){const text=p.script||p.scenes||p.prompt;if(!text)return toast('Crie o roteiro antes da voz.');try{const voice=cfg.elVoice||'JBFqnCBsd6RMkjVDRZzb';const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+voice+'?output_format=mp3_44100_128',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({text:String(text).slice(0,5000),model_id:'eleven_multilingual_v2'})});if(!r.ok)throw new Error('ElevenLabs recusou a geração ('+r.status+').');const b=await r.blob(),url=URL.createObjectURL(b);p.artifacts.push({id:'a'+Date.now(),stage:'vozes',type:'audio',name:p.title+'-voz.mp3',url,status:'concluído',createdAt:Date.now()});p.status='vozes';updateP(p);openProject(p.id);toast('Áudio real criado.')}catch(e){toast(e.message,6000)}}
-function approveP(id){const p=getP(id);p.approval={ok:true,at:Date.now()};p.status='final';updateP(p);openProject(id);toast('Produção marcada como aprovada.')}
-function reviseP(id){const p=getP(id);p.approval={ok:false,at:Date.now()};createVersion(id);toast('V2 criada para revisão.')}
-function createVersion(id){const p=getP(id);p.versions=p.versions||[];const num=p.versions.length+1;p.versions.push({version:num,createdAt:Date.now(),snapshot:JSON.parse(JSON.stringify({prompt:p.prompt,bible:p.bible,characters:p.characters,script:p.script,scenes:p.scenes,storyboard:p.storyboard,artifacts:p.artifacts}))});p.status='ideia';updateP(p);openProject(id);toast('Versão V'+num+' preservada.')}
-function duplicateProject(id){const p=getP(id);if(!p)return;const n=JSON.parse(JSON.stringify(p));n.id='p'+Date.now();n.title=p.title+' V2';n.createdAt=Date.now();n.updatedAt=Date.now();n.versions=n.versions||[];n.versions.push({version:1,createdAt:Date.now(),snapshot:JSON.parse(JSON.stringify(p))});const a=projects();a.unshift(n);saveProjects(a);renderProjects();toast('V2 criada sem apagar a anterior.')}
-function deleteProject(id){if(!confirm('Apagar esta produção?'))return;saveProjects(projects().filter(x=>x.id!==id));renderProjects();renderFiles();toast('Produção apagada.')}
-function exportProject(id){const p=getP(id);if(!p)return;downloadBlob(JSON.stringify(p,null,2),p.title.replace(/\s+/g,'_')+'.json','application/json')}
-function downloadBlob(data,name,type){const b=new Blob([data],{type}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
-function exportLibrary(){downloadBlob(JSON.stringify({app:'Nexus LP',version:APP_VERSION,projects:projects()},null,2),'nexus-lp-biblioteca.json','application/json')}
-function importLibrary(){$('libFile').click()}$('libFile').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.projects))throw Error('JSON inválido');saveProjects(d.projects);renderFiles();renderProjects();toast('Biblioteca importada.')}catch(x){toast('Importação falhou: '+x.message,5000)}};r.readAsText(f)})
-function renderFiles(){$('fileProjects').innerHTML=projects().map(p=>`<div class="project"><div class="head"><b>${esc(p.title)}</b><span class="status">${calcProgress(p)}%</span></div><div class="meta">${esc(TYPES[p.type]?.[1]||p.type)} · ${(p.artifacts||[]).length} artefato(s) · ${(p.versions||[]).length} versão(ões)</div><div class="r"><button class="mini" onclick="openProject('${p.id}')">Abrir</button><button class="mini" onclick="exportProject('${p.id}')">JSON</button></div></div>`).join('')||'<p class="hint">Biblioteca vazia.</p>'}
+/* ---------- voz ---------- */
+let actx=null,ttsStop=null,srBad=false,mr=null,rec=null,lis=false;
+const cleanSp=b=>b.closest('.bub').querySelector('.txt').textContent.replace(/```[\s\S]*?```/g,' ').replace(/[`*_#>]/g,'').trim();
+const SILENT='data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+const elAudio=new Audio(),elCache=new Map();
+const EL_VOICES=[['EXAVITQu4vr4xnSDxMaL','Sarah (feminina)'],['Xb7hH8MSUJpSbSDYk0k2','Alice (feminina)'],['pNInz6obpgDQGcFmaJgB','Adam (masculina)'],['JBFqnCBsd6RMkjVDRZzb','George (masculina)']];
+const cutTxt=(t,n)=>{if(t.length<=n)return t;const c=t.slice(0,n),i=Math.max(c.lastIndexOf('. '),c.lastIndexOf('! '),c.lastIndexOf('? '),c.lastIndexOf('\n'));return (i>n*.5?c.slice(0,i+1):c).trim()};
+/* toque no 🔊: tenta a voz do aparelho (grátis), depois ElevenLabs, depois Gemini */
+async function speak(b,txt){
+ if(ttsStop){const f=ttsStop;ttsStop=null;f();return}
+ const t=txt||cleanSp(b);if(!t)return;
+ /* destrava o áudio enquanto o toque ainda vale (WebViews de APK exigem isso) */
+ if(cfg.elKey){try{elAudio.src=SILENT;const p=elAudio.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+ const AC=window.AudioContext||window.webkitAudioContext;
+ if(cfg.k.gemini&&AC){try{if(!actx||actx.state==='closed')actx=new AC({sampleRate:24000});actx.resume()}catch(e){}}
+ const steps={sys:speakSys,el:speakEL,gem:speakCloud},sysBad=Date.now()-LS.g('nexuslp_sysbad',0)<6048e5&&(cfg.elKey||cfg.k.gemini),order=(cfg.vp==='el'?['el','sys','gem']:['sys','el','gem']).filter(x=>!(x==='sys'&&sysBad));
+ for(const k of order){
+  if((k==='el'&&!cfg.elKey)||(k==='gem'&&!cfg.k.gemini))continue;
+  if(await steps[k](b,t)==='ok')return}
+ toast('Não consegui falar neste aparelho. Cole uma chave do ElevenLabs (ou do Gemini) em Configurações: a voz vem da internet e funciona em qualquer app.',8000)}
+function speakSys(b,t){return new Promise(res=>{
+ const s=window.speechSynthesis;
+ if(!s||!window.SpeechSynthesisUtterance)return res('fail');
+ let started=false,dead=false,w;
+ const reset=()=>{b.textContent='🔊';ttsStop=null;clearTimeout(w)};
+ const fail=()=>{if(dead)return;dead=true;reset();try{s.cancel()}catch(e){}LS.s('nexuslp_sysbad',Date.now());res('fail')};
+ b.textContent='⏸';ttsStop=()=>{dead=true;reset();try{s.cancel()}catch(e){}};
+ w=setTimeout(()=>{if(!started)fail()},2500);
+ try{
+  s.cancel();const ch=t.match(/[^.!?\n]+[.!?]*\s*/g)||[t],v=(s.getVoices()||[]).find(x=>x.lang.toLowerCase().startsWith((cfg.lang||'pt-BR').slice(0,2)));
+  ch.forEach((c,i)=>{const u=new SpeechSynthesisUtterance(c);u.lang=cfg.lang||'pt-BR';u.rate=+cfg.rate||1;if(v)u.voice=v;u.onstart=()=>{if(!started){started=true;LS.s('nexuslp_sysbad',0);res('ok')}};u.onerror=e=>{if(!/interrupted|canceled/.test(e.error||''))fail()};if(i===ch.length-1)u.onend=()=>{if(!dead)reset()};s.speak(u)})
+ }catch(e){fail()}})}
+async function elErr(r){
+ let d={};try{d=await r.json()}catch(e){}
+ const dt=d.detail||{},msg=typeof dt==='string'?dt:(dt.message||''),code=dt.status||'',quota=/quota/i.test(code+msg);
+ const text=quota?'Acabaram os créditos deste mês do ElevenLabs (o plano grátis tem ~10 mil caracteres).':r.status===401?'Chave do ElevenLabs inválida ou sem permissão (401). Confira se copiou a chave inteira.':r.status===429?'ElevenLabs ocupado agora (429). Tente de novo em instantes.':r.status>=500?'ElevenLabs indisponível agora ('+r.status+').':'ElevenLabs recusou o pedido ('+r.status+'). '+msg.slice(0,120);
+ return Object.assign(new Error(text),{status:r.status,quota,el:1})}
+async function elTTS(txt){
+ const first=cfg.elVoice||EL_VOICES[0][0],ids=[first,...EL_VOICES.map(v=>v[0]).filter(x=>x!==first)];let last;
+ for(const v of ids){
+  for(let a=0;a<3;a++){
+   let r;try{r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+v+'?output_format=mp3_44100_64',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({text:txt,model_id:'eleven_flash_v2_5',voice_settings:{speed:Math.min(1.2,Math.max(.7,+cfg.rate||1))}})})}
+   catch(e){throw Object.assign(new Error('Sem conexão com o ElevenLabs.'),{el:1})}
+   if(r.ok)return r.blob();
+   last=await elErr(r);
+   if(last.quota||last.status===401)throw last;
+   if((r.status>=500||r.status===429)&&a<2){await wait(1500);continue}
+   break}
+  if(![404,422].includes(last.status))throw last}
+ throw last}
+async function speakEL(b,t){
+ const txt=cutTxt(t,+cfg.elMax||600),ck=(cfg.elVoice||'')+'|'+txt;let dead=false;
+ b.textContent='⏳';ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{elAudio.pause()}catch(e){}};
+ try{
+  let url=elCache.get(ck);
+  if(!url){
+   url=URL.createObjectURL(await elTTS(txt));elCache.set(ck,url);
+   const mo=new Date().toISOString().slice(0,7),u=cfg.elUsed&&cfg.elUsed.m===mo?cfg.elUsed.c:0;cfg.elUsed={m:mo,c:u+txt.length};persist()}
+  if(dead)return 'ok';
+  if(txt.length<t.length)toast('Li só o começo, para poupar créditos (limite: '+(cfg.elMax||600)+' caracteres).',3500);
+  elAudio.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};
+  elAudio.src=url;await elAudio.play();b.textContent='⏸';return 'ok'
+ }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('ElevenLabs: '+e.message,5000);return 'fail'}}
+/* plano C: o Gemini gera a voz e o app toca o áudio */
+async function speakCloud(b,t){
+ const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return 'fail';
+ const gk=String(cfg.k.gemini).split(',')[0],ctx=actx&&actx.state!=='closed'?actx:(actx=new AC({sampleRate:24000}));
+ let src=null,dead=false;b.textContent='⏳';
+ ttsStop=()=>{dead=true;b.textContent='🔊';ttsStop=null;try{src&&src.stop()}catch(e){}};
+ try{
+  const body=JSON.stringify({contents:[{parts:[{text:t.slice(0,1500)}]}],generationConfig:{responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:'Kore'}}}}});
+  let d,last;
+  for(const mo of ['gemini-2.5-flash-preview-tts','gemini-3.1-flash-tts-preview','gemini-2.5-flash-tts']){
+   for(let a=0;a<3;a++){
+    try{d=await api('https://generativelanguage.googleapis.com/v1beta/models/'+mo+':generateContent?key='+encodeURIComponent(gk),{method:'POST',headers:{'Content-Type':'application/json'},body});break}
+    catch(e){last=e;if(e.status===401||e.status===403)throw e;if((e.status>=500||e.status===429)&&a<2){await wait(1500);continue}break}}
+   if(d)break}
+  if(dead)return 'ok';if(!d)throw last||new Error('sem resposta');
+  const c0=(d.candidates||[])[0],part=c0&&c0.content&&c0.content.parts.find(x=>x.inlineData||x.inline_data);
+  if(!part)throw new Error('a voz não veio na resposta');
+  const bin=atob((part.inlineData||part.inline_data).data),n=bin.length>>1,buf=ctx.createBuffer(1,n,24000),ch=buf.getChannelData(0);
+  for(let i=0;i<n;i++){let v=bin.charCodeAt(2*i)|(bin.charCodeAt(2*i+1)<<8);if(v>=32768)v-=65536;ch[i]=v/32768}
+  src=ctx.createBufferSource();src.buffer=buf;src.connect(ctx.destination);src.onended=()=>{if(!dead){b.textContent='🔊';ttsStop=null}};src.start();b.textContent='⏸';return 'ok'
+ }catch(e){if(!dead){b.textContent='🔊';ttsStop=null}toast('Gemini (voz): '+e.message,5000);return 'fail'}}
 
-/* ---------- API CENTER ---------- */
-function mediaCard(kind,label,icon){const m=cfg.media[kind]||{};return `<div class="card"><label>${icon} ${label}${m.key?' ✅':''}</label><input type="password" id="mdk_${kind}" value="${ea(m.key||'')}" placeholder="API Key"><label>Endpoint</label><input id="mdu_${kind}" value="${ea(m.endpoint||'')}" placeholder="https://..."><label>Modelo (se houver)</label><input id="mdm_${kind}" value="${ea(m.model||'')}"><div class="r"><button class="mini" onclick="saveMediaApi('${kind}')">Salvar</button><button class="mini" onclick="testMediaApi('${kind}')">Testar</button></div><div class="res" id="mdr_${kind}"></div><p class="hint" style="margin:8px 0 0">O Nexus envia um pedido genérico com <code>{model,prompt,project,type}</code>. Se o fornecedor usar outro formato ou autenticação, use um backend/adaptador próprio.</p></div>`}
-function openApiMedia(){go('settings');setTimeout(()=>document.querySelector('#setBody')?.scrollIntoView({behavior:'smooth',block:'end'}),100)}
-function saveMediaApi(k){cfg.media[k]={key:cleanKey($('mdk_'+k).value),endpoint:$('mdu_'+k).value.trim(),model:$('mdm_'+k).value.trim()};persist();renderSettings();toast('API de '+k+' salva.')}
-async function testMediaApi(k){const m=cfg.media[k]||{};if(!m.key||!m.endpoint)return toast('Preencha chave e endpoint.');$('mdr_'+k).textContent='Testando…';try{const r=await api(m.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+m.key},body:JSON.stringify({model:m.model||undefined,prompt:'Nexus LP teste de conexão',type:'test'})},30000);$('mdr_'+k).className='res ok';$('mdr_'+k).textContent='✅ O endpoint respondeu. '+(findMediaUrl(r)?'Também retornou um possível artefato.':'Agora valide o formato específico do fornecedor.')}catch(e){$('mdr_'+k).className='res err';$('mdr_'+k).textContent='❌ '+e.message}}
-function renderSettings(){
- $('setBody').innerHTML=`<h3 style="margin-top:0">Perfil</h3><div class="card"><label>Nome</label><input id="nameSet" value="${ea(LS.g('nexuslp_name','Laiton Flugêncio'))}"><div class="r"><button class="mini" onclick="saveName()">Salvar nome</button><button class="mini" onclick="newConvo()">Novo chat</button></div></div>
- <h3>Equipe de IA</h3><div class="card"><label>IA(s) usadas em conversa normal</label><select id="team"><option value="1">1 — resposta rápida</option><option value="2">2 — comparação</option><option value="3">3</option><option value="4">4</option><option value="8">8 — tarefas pesadas</option></select><label>Idioma do microfone</label><select id="lang"><option>pt-BR</option><option>pt-PT</option><option>en-US</option><option>es-ES</option></select><label>Velocidade da voz</label><select id="rate"><option value=".8">0.8</option><option value="1">1.0</option><option value="1.2">1.2</option><option value="1.5">1.5</option></select><div class="r"><button class="mini" onclick="saveGeneral()">Salvar preferências</button><button class="mini" onclick="testMic()">Testar microfone</button></div></div>
- <h3>Inteligência — chaves de API</h3><p class="hint">Chaves ficam no armazenamento deste navegador/aparelho. Para um aplicativo público, não coloque chaves privadas diretamente no HTML: use um backend/proxy.</p>
- ${PROVS.map(p=>{const k=cfg.k[p.id]||'';return `<div class="card"><label>${p.name}${k?' ✅':''}</label><input type="password" id="k_${p.id}" value="${ea(k)}" placeholder="${p.ph}" autocomplete="off"><label>Modelo</label><input id="m_${p.id}" value="${ea(cfg.m[p.id]||p.m)}"><div class="r"><button class="mini" onclick="testP('${p.id}',this)">Testar</button><button class="mini" onclick="saveP('${p.id}')">Salvar</button><button class="mini" onclick="clearP('${p.id}')">Apagar</button></div><div class="res" id="r_${p.id}"></div></div>`}).join('')}
- <h3>Voz — ElevenLabs</h3><div class="card"><label>API Key</label><input type="password" id="elKey" value="${ea(cfg.elKey||'')}"><label>Voice ID</label><input id="elVoice" value="${ea(cfg.elVoice||'JBFqnCBsd6RMkjVDRZzb')}"><label>Limite por leitura</label><input id="elMax" type="number" value="${cfg.elMax||600}"><div class="r"><button class="mini" onclick="saveEL()">Salvar</button><button class="mini" onclick="testEL()">Testar</button></div><div class="res" id="r_el"></div></div>
- <h3>Produção audiovisual</h3><p class="hint">Não existe uma chave universal que gere tudo. Cada categoria pode usar um serviço diferente. O Studio só marca vídeo/imagem/áudio como concluído quando recebe um URL/arquivo real.</p>
- ${mediaCard('image','Imagem','🖼️')}${mediaCard('video','Vídeo','🎬')}${mediaCard('music','Música','🎵')}${mediaCard('research','Pesquisa/Backend','🔎')}
- <h3>Integridade e dados</h3><div class="card"><p class="hint">O Nexus não deve dizer que criou um vídeo, áudio, imagem ou arquivo quando só criou um texto. V1, V2 e V3 são preservadas quando uma revisão é solicitada.</p><div class="r"><button class="mini" onclick="exportLibrary()">Exportar tudo</button><button class="mini" onclick="clearData()">Apagar dados locais</button></div></div><p class="hint" style="text-align:center">Nexus LP · ${APP_VERSION}</p>`;
- $('team').value=String(cfg.team||1);$('lang').value=cfg.lang||'pt-BR';$('rate').value=String(cfg.rate||1)
-}
-function saveName(){const n=$('nameSet').value.trim();if(n)LS.s('nexuslp_name',n);applyName();toast('Nome salvo.')}
-function saveGeneral(){cfg.team=+$('team').value;cfg.lang=$('lang').value;cfg.rate=+$('rate').value;persist();toast('Preferências salvas.')}
-async function testP(id,btn){const p=PROVS.find(x=>x.id===id),k=cleanKey($('k_'+id).value),m=$('m_'+id).value.trim()||p.m;if(!k)return toast('Cole a chave antes.');cfg.k[id]=k;cfg.m[id]=m;persist();if(btn)btn.disabled=true;$('r_'+id).className='res wait';$('r_'+id).textContent='Testando…';try{const t=await askOne(p,[{role:'user',content:'Responda somente: OK'}],SYSTEM,{light:true});$('r_'+id).className='res ok';$('r_'+id).textContent='✅ Conectado: '+t.slice(0,40)}catch(e){$('r_'+id).className='res err';$('r_'+id).textContent='❌ '+e.message}finally{if(btn)btn.disabled=false}}
-function saveP(id){cfg.k[id]=cleanKey($('k_'+id).value);cfg.m[id]=$('m_'+id).value.trim()||PROVS.find(p=>p.id===id).m;persist();renderSettings();toast('Configuração salva.')}
-function clearP(id){delete cfg.k[id];delete cfg.m[id];persist();renderSettings();toast('Chave apagada.')}
-function saveEL(){cfg.elKey=cleanKey($('elKey').value);cfg.elVoice=$('elVoice').value.trim();cfg.elMax=Math.min(5000,Math.max(100,+$('elMax').value||600));persist();toast('ElevenLabs salvo.')}
-async function testEL(){saveEL();if(!cfg.elKey)return toast('Cole a chave do ElevenLabs.');$('r_el').className='res wait';$('r_el').textContent='Testando…';try{const r=await fetch('https://api.elevenlabs.io/v1/user/subscription',{headers:{'xi-api-key':cfg.elKey}});if(!r.ok)throw Error('HTTP '+r.status);const d=await r.json();$('r_el').className='res ok';$('r_el').textContent='✅ Conectado. Uso: '+d.character_count+' / '+d.character_limit}catch(e){$('r_el').className='res err';$('r_el').textContent='❌ '+e.message}}
-function clearData(){if(!confirm('Apagar chats, projetos e configurações locais?'))return;localStorage.clear();location.reload()}
-function testMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return toast('Reconhecimento de voz não disponível aqui. Tente o microfone do teclado ou MediaRecorder.');const r=new SR();r.lang=cfg.lang||'pt-BR';r.onstart=()=>toast('🎙️ Fale agora…',5000);r.onresult=e=>{$('inp').value=e.results[0][0].transcript;go('chat')};r.onerror=e=>toast('Microfone: '+e.error,5000);r.start()}
-
-/* ---------- VOZ / MIC ---------- */
-function speak(b){const t=b.closest('.bub').querySelector('.txt').textContent.replace(/```[\s\S]*?```/g,'').trim();if(!t)return;if(ttsStop){ttsStop();return}if(window.speechSynthesis){const u=new SpeechSynthesisUtterance(t.slice(0,5000));u.lang=cfg.lang||'pt-BR';u.rate=cfg.rate||1;u.onend=()=>{ttsStop=null;b.textContent='🔊'};u.onerror=()=>{ttsStop=null;b.textContent='🔊'};window.speechSynthesis.cancel();window.speechSynthesis.speak(u);b.textContent='⏸';ttsStop=()=>{window.speechSynthesis.cancel();ttsStop=null;b.textContent='🔊'}}}
-let rec=null,lis=false,mr=null;
+const micHelp=()=>toast('O microfone não está liberado neste app. No APK, ative a permissão de microfone no criador do app e nas configurações do Android; no Chrome, toque em Permitir. Ou use o 🎙️ do teclado.',10000);
+const IS_WV=/;\s*wv\)/.test(navigator.userAgent||'');
+const srBadNow=()=>srBad||(Date.now()-LS.g('nexuslp_srbad',0)<6048e5&&!!(cfg.elKey||cfg.k.gemini));
+const markSrBad=()=>{srBad=true;LS.s('nexuslp_srbad',Date.now())};
 function mic(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(SR&&!lis){rec=new SR();rec.lang=cfg.lang||'pt-BR';rec.interimResults=true;rec.continuous=true;let base=$('inp').value?$('inp').value+' ':'';rec.onstart=()=>{lis=true;$('mic').classList.add('lis');toast('🎙️ Fale. Toque novamente para parar.',6000)};rec.onresult=e=>{let t='';for(const x of e.results)t+=x[0].transcript;$('inp').value=base+t};rec.onerror=()=>{lis=false;$('mic').classList.remove('lis');toast('Reconhecimento indisponível. Tentando gravador…')};rec.onend=()=>{lis=false;$('mic').classList.remove('lis')};try{rec.start();return}catch(e){}}
+ if(mr&&mr.state==='recording'){mr.stop();return}
  if(lis&&rec){rec.stop();return}
- if(navigator.mediaDevices?.getUserMedia&&window.MediaRecorder){navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{const chunks=[];mr=new MediaRecorder(stream);mr.ondataavailable=e=>chunks.push(e.data);mr.onstop=()=>{stream.getTracks().forEach(t=>t.stop());toast('Gravação pronta. Para transcrição automática, conecte um serviço STT no backend.');};mr.start();$('mic').classList.add('lis');setTimeout(()=>{if(mr?.state==='recording')mr.stop();$('mic').classList.remove('lis')},60000)}).catch(()=>toast('Permissão de microfone negada. Use o 🎙️ do teclado.'))}else toast('Use o microfone do teclado do celular.')}
-function applyName(){const n=LS.g('nexuslp_name','Laiton Flugêncio'),h=new Date().getHours();$('pname').textContent=n;$('av').textContent=n.split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase();$('greet').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+n.split(' ')[0]}
-function editName(){const n=prompt('Seu nome',LS.g('nexuslp_name','Laiton Flugêncio'));if(n?.trim()){LS.s('nexuslp_name',n.trim());applyName()}}
-function renderSearch(q){q=(q||'').toLowerCase();const cs=LS.g(KC,[]).filter(c=>(c.title||'Nova conversa').toLowerCase().includes(q));const ps=projects().filter(p=>p.title.toLowerCase().includes(q));$('sList').innerHTML=cs.map(c=>`<div class="li" onclick="openConvo('${c.id}')">💬 ${esc(c.title||'Nova conversa')}</div>`).join('')+ps.map(p=>`<div class="li" onclick="openProject('${p.id}')">🎬 ${esc(p.title)}</div>`).join('')||'<p class="hint">Nenhum resultado.</p>'}
-function openResearch(q){const u='https://www.google.com/search?q='+encodeURIComponent(q);open(u,'_blank')}
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR||IS_WV||srBadNow())return micRecord();
+ rec=new SR();rec.lang=cfg.lang||'pt-BR';rec.interimResults=true;rec.continuous=true;
+ const base=$('inp').value?$('inp').value+' ':'';let got=false;
+ rec.onstart=()=>{lis=true;$('mic').classList.add('lis')};
+ rec.onresult=e=>{got=true;LS.s('nexuslp_srbad',0);let t='';for(const r of e.results)t+=r[0].transcript;$('inp').value=base+t;$('inp').dispatchEvent(new Event('input'))};
+ rec.onerror=e=>{if(e.error==='no-speech')return toast('Não ouvi nada. Tente de novo.');if(e.error!=='aborted'){markSrBad();micRecord()}};
+ rec.onend=()=>{lis=false;$('mic').classList.remove('lis')};
+ try{rec.start()}catch(e){markSrBad();return micRecord()}
+ setTimeout(()=>{if(!lis&&!got){try{rec.abort()}catch(e){}markSrBad();micRecord()}},4000)}
+/* plano C (APK sem permissão de microfone): o gravador do próprio celular, ou o microfone do teclado */
+function micKeyboard(msg){$('inp').focus();toast((msg?msg+' ':'')+'Por enquanto, toque no 🎙️ do teclado do celular para ditar.',9000)}
+function micFile(){
+ if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Este app não liberou o microfone.');
+ try{$('afile').click();toast('O microfone do app não está liberado, então vou abrir o gravador do celular: grave, confirme e eu transcrevo. Se nada abrir, use o 🎙️ do teclado.',9000)}catch(e){micKeyboard('')}}
+async function transcribeInto(blob,mt){
+ if(!cfg.k.gemini&&!cfg.elKey)return toast('Cole uma chave do ElevenLabs ou do Gemini em Configurações para transcrever áudio.',6000);
+ toast('Transcrevendo…',6e4);
+ try{const t=await transcribe(blob,mt);$('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')}
+ catch(e){toast('Não consegui transcrever: '+e.message,7000)}}
+$('afile').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)transcribeInto(f,f.type||'audio/mpeg')});
+/* plano B: grava o áudio e o ElevenLabs/Gemini transcreve */
+async function micRecord(){
+ if(!navigator.mediaDevices||!window.MediaRecorder)return micFile();
+ if(!cfg.k.gemini&&!cfg.elKey)return micKeyboard('Para transcrever a sua voz, cole uma chave do ElevenLabs ou do Gemini em Configurações.');
+ let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){return micFile()}
+ const chunks=[];mr=new MediaRecorder(stream);
+ mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+ mr.onstart=()=>{$('mic').classList.add('lis');toast('🎙️ Gravando… toque no microfone de novo para parar.',6e4)};
+ mr.onstop=async()=>{
+  stream.getTracks().forEach(t=>t.stop());$('mic').classList.remove('lis');toast('Transcrevendo…',6e4);
+  try{
+   const mt=(mr.mimeType||'audio/webm').split(';')[0],blob=new Blob(chunks,{type:mt});
+   if(blob.size<800)return toast('Não ouvi nada. Tente de novo.');
+   const t=await transcribe(blob,mt);
+   $('inp').value=($('inp').value?$('inp').value+' ':'')+t.trim();$('inp').dispatchEvent(new Event('input'));toast('')
+  }catch(e){toast('Não consegui transcrever: '+e.message,7000)}};
+ mr.start();setTimeout(()=>{if(mr.state==='recording')mr.stop()},60000)}
 
-renderRecents();applyName();renderMedia();renderProjects();renderFiles();
-</script>
-</body>
-                                                                                                                                                                                                                                                                                    </html>
+async function transcribe(blob,mt){
+ if(cfg.elKey){
+  try{
+   const f=new FormData();f.append('file',blob,'audio.'+(/mp4|m4a|aac/.test(mt)?'m4a':/ogg/.test(mt)?'ogg':/mpeg|mp3/.test(mt)?'mp3':/wav/.test(mt)?'wav':/3gp/.test(mt)?'3gp':'webm'));f.append('model_id','scribe_v1');
+   let r;try{r=await fetch('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':cfg.elKey},body:f})}catch(e){throw new Error('Sem conexão com o ElevenLabs.')}
+   if(!r.ok)throw await elErr(r);
+   const d=await r.json();if(d.text&&d.text.trim())return d.text.trim();
+   throw new Error('não entendi o áudio')
+  }catch(e){if(!cfg.k.gemini)throw e}}
+ const b64=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(blob)});
+ return mk(PROVS[1],cfg.k.gemini,cfg.m.gemini||PROVS[1].m).ask([{role:'user',content:'Transcreva fielmente este áudio em português. Responda só com a transcrição, sem comentários.',image:{t:mt,b:b64}}],'')}
+
+/* ---------- NEXUS STUDIO: produção por etapas, com versões, sem fingir nada ---------- */
+const SK='nexuslp_studio',ST_L={nao:'Não iniciado',and:'Em andamento',ok:'Concluído',fail:'Falhou',apr:'Aguardando aprovação'};
+const TY={dorama:['📺','Dorama',8,2,'episódios'],filme:['🎥','Filme',6,15,'atos'],novela:['📺','Novela',20,55,'episódios'],serie:['🎞️','Série',8,45,'episódios'],anim:['🎨','Animação',6,5,'episódios'],musica:['🎵','Música',1,3,'faixa'],jogo:['🎮','Jogo',1,0,'jogo'],social:['📱','Conteúdo curto',5,1,'vídeos']};
+const SG=[['ideia','💡','Ideia','t'],['pesquisa','🔍','Pesquisa','t'],['biblia','📖','Bíblia','t'],['personagens','🧑‍🎤','Personagens','t'],['universo','🌍','Universo','t'],['episodios','🗂️','Episódios / atos','t'],['roteiro','📝','Roteiro','u'],['cenas','🎬','Cenas','u'],['storyboard','🧩','Storyboard (em texto)','u'],['imagens','🖼️','Imagens (1 por unidade)','mu'],['voz','🗣️','Voz (1 por unidade)','mu'],['musica','🎵','Letra e direção musical','t'],['trilha','🎶','Música / trilha (1 por unidade)','mu'],['video','🎞️','Vídeo (clipe por unidade)','mu'],['edicao','✂️','Plano de edição','t'],['revisao','🧐','Revisão','t'],['exportacao','📤','Exportação','x']];
+const STUDIO_SYS=SYSTEM+' Agora você trabalha na equipe de produção do Nexus Studio. Entregue somente o conteúdo pedido, em português, sem conversa. Você só produz TEXTO: nunca diga nem sugira que criou imagem, áudio, música ou vídeo. REGRA DE SEGURANÇA: se o projeto usa a foto real do usuário como protagonista, a história deve ser adequada para todas as idades (amizade, família, escola, mistério, superação, aventura), sem cenas românticas, sensuais ou violentas envolvendo essa pessoa e sem humilhá-la.';
+const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open('nexuslp',1);r.onupgradeneeded=()=>r.result.createObjectStore('f');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const idbPut=async(k,v)=>{const d=await idb();return new Promise((ok,no)=>{const t=d.transaction('f','readwrite');t.objectStore('f').put(v,k);t.oncomplete=ok;t.onerror=()=>no(t.error)})};
+const idbGet=async k=>{try{const d=await idb();return await new Promise(ok=>{const q=d.transaction('f').objectStore('f').get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok(null)})}catch(e){return null}};
+let STU=LS.g(SK,[]);
+STU.forEach(p=>{p.refs=p.refs||[];p.versions.forEach((v,vi)=>SG.forEach(([id,,,k])=>{const o=v.st[id],mu=k==='u'||k==='mu',bl=()=>Array.from({length:p.units},()=>({s:'nao'}));if(!o)v.st[id]=mu?{s:'nao',units:bl()}:{s:'nao'};else if(mu&&!o.units){o.units=bl();if(id==='voz'&&o.audio){o.units[0]={s:'apr',file:{k:p.id+'|'+vi+'|voz',t:'audio/mpeg',n:0}}}o.s='nao'}}))});
+STU.forEach(p=>p.versions.forEach(v=>Object.values(v.st).forEach(x=>{if(x.s==='and'){x.s='fail';x.err='Interrompido. Toque em Gerar para tentar de novo.'}(x.units||[]).forEach(u=>{if(u.s==='and'){u.s='fail';u.err='Interrompido.'}})})));
+let stuView='list',stuPid=null,stuOpen=null,stuOU=null,stuBusy=false,stuAsk2=false,stuStop=false;
+const stuSave=()=>{LS.s(SK,STU)},stuP=()=>{const p=STU.find(x=>x.id===stuPid);if(p&&!p.refs)p.refs=[];return p},stuV=()=>{const p=stuP();return p&&p.versions[p.cur]};
+const blankSt=P=>{const o={};SG.forEach(([id,,,k])=>{o[id]=(k==='u'||k==='mu')?{s:'nao',units:Array.from({length:P.units},()=>({s:'nao'}))}:{s:'nao'}});return o};
+const sState=(k,S)=>{if(k!=='u'&&k!=='mu')return S.s;const u=S.units;return u.some(x=>x.s==='and')?'and':u.every(x=>x.s==='ok')?'ok':u.some(x=>x.s==='fail')?'fail':u.some(x=>x.s==='apr')?'apr':u.some(x=>x.s==='ok')?'and':'nao'};
+const stuProg=(P,V)=>{V=V||P.versions[P.cur];return Math.round(SG.filter(([id,,,k])=>sState(k,V.st[id])==='ok').length/SG.length*100)};
+const unitInfo=(V,i)=>((V.st.episodios.out||'').split('\n').filter(x=>/^\s*\d+[.)]/.test(x))[i])||('Unidade '+(i+1));
+async function team(prompt,heavy,imgs){
+ const pv=providers();if(!pv.length)throw new Error('Nenhuma IA configurada. Abra Configurações.');
+ const ask=async(q,i)=>{const r=await askAll([{role:'user',content:q,...(i===0&&imgs&&imgs[0]?{image:imgs[0]}:{})}],'partner',[...pv.slice(i%pv.length),...pv.slice(0,i%pv.length)],STUDIO_SYS);if(!r.text)throw new Error(r.err.join(' | '));return r.text};
+ let t=await ask(prompt,0); /* criador */
+ if(heavy){try{t=(await ask('Você é o REVISOR da equipe. Melhore este texto (continuidade, ritmo, clareza, diálogos naturais) mantendo formato, tamanho e linhas "RESUMO:". Devolva só a versão final.\n\nTEXTO:\n'+t+'\n\nCONTEXTO:\n'+prompt.slice(0,2500),1))||t}catch(e){}} /* revisor falhou: fica o rascunho */
+ return t}
+async function stuTeam(P,V,st,ui,x){
+ const U=TY[P.type][4],u1=U==='atos'?'ato':U==='episódios'?'episódio':U==='vídeos'?'vídeo':U,g=k=>V.st[k].out||'',cut=(t,n)=>t.length>n?t.slice(0,n)+'…':t;
+ const info=ui>=0?unitInfo(V,ui):'',rot=ui>=0?(V.st.roteiro.units[ui].out||''):'';
+ const sums=V.st.roteiro.units.map((u,i)=>u.sum?(i+1)+'. '+u.sum:'').filter((_,i)=>ui<0||i<ui).filter(Boolean).join('\n');
+ const T={ideia:'Expanda a ideia num conceito: título provisório, premissa, tom, público, gancho e diferencial.',
+  pesquisa:'Liste o que a equipe precisa saber (contexto, época, cultura, termos, referências, cuidados). Comece avisando: isto é conhecimento da própria IA, NÃO pesquisa na internet, e pode ter erros; marque o que precisa ser verificado.',
+  biblia:'Crie a bíblia da produção: premissa, temas, tom, regras do mundo, estrutura de arcos e linha do tempo geral.',
+  personagens:'Crie os personagens: nome, idade, personalidade, aparência, figurino, objetivos, segredos e relações entre eles.',
+  universo:'Crie o universo: locações/cenários, época, regras, cultura, visual e figurinos.',
+  episodios:'Liste exatamente '+P.units+' '+U+', uma por linha, no formato "N. Título — resumo de 2 frases", com arcos e continuidade. Só as linhas.',
+  musica:'Escreva a letra (verso, refrão, ponte) e a direção musical (gênero, andamento, instrumentos, voz). É só letra e direção: a música em áudio NÃO existe.',
+  edicao:'Faça o plano de edição: ritmo, cortes, transições, trilha, cor e efeitos, por unidade.',
+  revisao:'Revise tudo o que existe: continuidade, furos, personagens, ritmo. Liste problemas e correções concretas, dizendo onde.',
+  roteiro:'Escreva o roteiro do '+u1+' '+(ui+1)+' ('+info+'), duração ~'+P.mins+' min, em formato de roteiro (cenas, ações e diálogos completos).'+(x.parts>1?' Esta é a PARTE '+x.part+' de '+x.parts+(x.part>1?'; continue exatamente de onde a anterior parou, sem repetir. FINAL DA PARTE ANTERIOR:\n'+x.tail:'.'):'')+(x.part===x.parts?'\nTermine com uma linha "RESUMO: " (2 frases do que aconteceu).':''),
+  cenas:'Liste as cenas do '+u1+' '+(ui+1)+' ('+info+') com local, personagens, ação e emoção (máx. 12), com base neste roteiro:\n'+cut(rot,4000),
+  storyboard:'Faça o storyboard EM TEXTO do '+u1+' '+(ui+1)+': para cada cena, 2 a 3 quadros (enquadramento, ação, luz). São descrições, não imagens. Roteiro:\n'+cut(rot,4000)}[st];
+ const q='PROJETO: '+P.name+' ('+TY[P.type][1]+'). Ideia: '+P.idea+'\n'+P.units+' '+U+' de ~'+P.mins+' min.\n'+(g('ideia')?'CONCEITO:\n'+cut(g('ideia'),1200)+'\n':'')+(g('biblia')?'BÍBLIA:\n'+cut(g('biblia'),2500)+'\n':'')+(g('personagens')?'PERSONAGENS:\n'+cut(g('personagens'),2500)+'\n':'')+(g('universo')?'UNIVERSO:\n'+cut(g('universo'),1500)+'\n':'')+(g('pesquisa')&&st!=='pesquisa'?(V.st.pesquisa.web?'PESQUISA NA WEB (fontes reais, não criado pela IA):\n':'NOTAS DA IA (não verificadas):\n')+cut(g('pesquisa'),1500)+'\n':'')+refTxt(P,st)+(g('episodios')&&st!=='episodios'?'LISTA:\n'+cut(g('episodios'),2500)+'\n':'')+(sums?'RESUMOS (continuidade):\n'+sums+'\n':'')+'\nTAREFA: '+T+(x.chg?'\n\nVERSÃO ANTERIOR:\n'+cut(x.prev||'',6000)+'\n\nALTERAÇÕES PEDIDAS (aplique e mantenha o resto):\n'+x.chg:'');
+ return team(q,['biblia','roteiro','episodios'].includes(st),['personagens','universo'].includes(st)?await refImgs(P,[st==='personagens'?'personagem':'cenario'],1):null)}
+async function stuGen(st,ui,chg){
+ const P=stuP(),V=stuV();if(!P||stuBusy)return;
+ const k=SG.find(x=>x[0]===st)[3],S=V.st[st];
+ if(k==='u'&&!V.st.episodios.out)return toast('Gere primeiro a lista de '+TY[P.type][4]+'.',4000);
+ const T=k==='u'?S.units[ui]:S,prev=chg?T.out:'';
+ stuBusy=true;T.s='and';T.err='';stuR();stuSave();
+ try{
+  let out='';
+  if(st==='roteiro'){const n=Math.min(6,Math.max(1,Math.ceil((P.mins||10)/10)));
+   for(let i=1;i<=n;i++){const t=await stuTeam(P,V,st,ui,{chg,prev,part:i,parts:n,tail:out.slice(-1500)});out+=(out?'\n\n':'')+t}}
+  else out=await stuTeam(P,V,st,ui,{chg,prev});
+  if(st==='episodios'&&!out.split('\n').some(x=>/^\s*\d+[.)]/.test(x)))throw new Error('A IA não devolveu a lista numerada. Toque em Gerar de novo.');
+  T.out=out;T.s='apr';if(st==='pesquisa'){T.web=false;T.src=[]}
+  if(st==='roteiro'){const m=out.match(/RESUMO:\s*([\s\S]*?)$/i);T.sum=(m?m[1]:out).trim().slice(0,400)}
+ }catch(e){T.s='fail';T.err=e.message}
+ stuBusy=false;stuSave();stuR()}
+async function stuPend(st){stuStop=false;const S=stuV().st[st];for(let i=0;i<S.units.length&&!stuStop;i++)if(!['ok','apr'].includes(S.units[i].s)){await(MED[st]?stuMedia:stuGen)(st,i);if(S.units[i].s==='fail')break}}
+function stuApr(st,ui){const V=stuV(),S=V.st[st];if(ui>=0){if(S.units[ui].out||S.units[ui].file)S.units[ui].s='ok'}else if(S.out)S.s='ok';stuSave();stuR()}
+function stuAprAll(st){stuV().st[st].units.forEach(u=>{if(u.s==='apr')u.s='ok'});stuSave();stuR()}
+/* ---------- conectores de mídia, pesquisa e referências ---------- */
+const GB='https://generativelanguage.googleapis.com/v1beta/',MED={imagens:'image',video:'video',voz:'voice',trilha:'music'};
+const MEDIA_P={image:[{id:'pollinations',n:'Pollinations — GRÁTIS, sem chave (Flux)',m:'flux'},{id:'gemini',n:'Gemini (usa a chave do Gemini)',m:'gemini-2.5-flash-image'},{id:'openai',n:'Compatível com OpenAI (OpenAI, xAI…)',u:'https://api.openai.com/v1/images/generations',m:'gpt-image-1'}],video:[{id:'veo',n:'Google Veo (usa a chave do Gemini — pago)',m:'veo-3.1-fast-generate-preview'}],music:[{id:'local',n:'Sintetizada no aparelho — GRÁTIS (instrumental simples, sem IA)',m:'local'},{id:'el',n:'ElevenLabs Music (usa a chave do ElevenLabs — plano pago)',m:'music_v1'}]};
+cfg.media=cfg.media||{};['image','video','music'].forEach((k,i)=>{cfg.media[k]=cfg.media[k]||{p:['pollinations','veo','local'][i]}});
+if(cfg.media.image.p==='gemini'&&!cfg.media.image.ok)cfg.media.image.p='pollinations';if(cfg.media.music.p==='el'&&!cfg.media.music.ok)cfg.media.music.p='local';
+const gk1=()=>String(cfg.k.gemini||'').split(',')[0].trim(),retry=async f=>{let e;for(let a=0;a<3;a++){try{return await f()}catch(x){e=x;if(!(x.status>=500||x.status===429))throw x;await wait(2500*(a+1))}}throw e};
+const b64blob=(b,t)=>{const bin=atob(b),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return new Blob([a],{type:t})};
+const blob2b64=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result.split(',')[1]);f.readAsDataURL(b)});
+const mc=k=>{const c=cfg.media[k],p=MEDIA_P[k].find(x=>x.id===c.p)||MEDIA_P[k][0];return{...p,...Object.fromEntries(Object.entries(c).filter(([a,v])=>v!==''&&v!=null))}};
+function mediaWhy(kd){
+ if(kd==='image'){const c=mc('image');if(c.id==='pollinations')return'';return c.id==='openai'?(!c.u||!c.k||!c.m?'Configure o provedor de imagem em Configurações → Centro de APIs.':''):(gk1()?'':'Cole uma chave do Gemini em Configurações (a imagem usa ela).')}
+ if(kd==='video')return gk1()?'':'Cole uma chave do Gemini em Configurações (o vídeo Veo usa ela).';
+ if(kd==='music'&&mc('music').id==='local')return'';return cfg.elKey?'':'Conecte o ElevenLabs em Configurações.'}
+const mediaName=kd=>kd==='image'?({pollinations:'Pollinations (grátis)',openai:'Compatível com OpenAI'}[mc('image').id]||'Gemini')+' ('+mc('image').m+')':kd==='video'?'Google Veo ('+mc('video').m+')':kd==='music'?(mc('music').id==='local'?'Sintetizada no aparelho (grátis)':'ElevenLabs Music'):'ElevenLabs (voz)';
+async function genImage(prompt,refs){
+ const c=mc('image');
+ if(c.id==='pollinations'){ /* grátis e sem chave; imagens de referência entram só pela descrição em texto */
+  const q=encodeURIComponent(String(prompt).replace(/\s+/g,' ').slice(0,800)),md=encodeURIComponent(c.m||'flux'),sd=Math.floor(Math.random()*1e6);let last;
+  for(const u of ['https://image.pollinations.ai/prompt/'+q+'?width=1024&height=1024&model='+md+'&nologo=true&seed='+sd,'https://gen.pollinations.ai/image/'+q+'?width=1024&height=1024&model='+md+'&seed='+sd]){
+   let r;try{r=await fetch(u)}catch(e){last=Object.assign(new Error('Sem conexão com o Pollinations, ou o navegador/app bloqueou o acesso (CORS).'),{net:1});continue}
+   if(r.ok&&/^image\//.test(r.headers.get('content-type')||'')){const b=await r.blob();if(b.size>1000)return b;last=new Error('O Pollinations devolveu uma imagem vazia.');continue}
+   last=Object.assign(new Error(r.status===429?'Limite do plano grátis do Pollinations (429): espere um pouco.':(r.status===401||r.status===402)?'O Pollinations passou a exigir chave ou saldo ('+r.status+'): o acesso grátis sem chave mudou.':'O Pollinations respondeu HTTP '+r.status+'.'),{status:r.status})}
+  throw last}
+ if(c.id==='openai'){const d=await api(c.u,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+cleanKey(c.k)},body:JSON.stringify({model:c.m,prompt,size:'1024x1024'})});const x=d.data&&d.data[0];
+  if(x&&x.b64_json)return b64blob(x.b64_json,'image/png');
+  if(x&&x.url){let r;try{r=await fetch(x.url)}catch(e){throw new Error('A imagem foi criada, mas o navegador não deixou baixá-la (CORS).')}return r.blob()}
+  throw new Error('O provedor respondeu sem imagem.')}
+ const parts=[{text:prompt},...(refs||[]).map(r=>({inline_data:{mime_type:r.t,data:r.b}}))];
+ const d=await api(GB+'models/'+c.m+':generateContent?key='+encodeURIComponent(gk1()),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}],generationConfig:{responseModalities:['TEXT','IMAGE']}})});
+ const cc=(d.candidates||[])[0],im=cc&&cc.content&&cc.content.parts&&cc.content.parts.find(p=>p.inlineData||p.inline_data);
+ if(!im)throw new Error('O Gemini não devolveu imagem (filtro de segurança ou modelo sem suporte a imagem).');
+ const z=im.inlineData||im.inline_data;return b64blob(z.data,z.mimeType||z.mime_type||'image/png')}
+async function genVideo(prompt){
+ const k=gk1(),m=mc('video').m,H={'Content-Type':'application/json','x-goog-api-key':k};
+ let op=await retry(()=>api(GB+'models/'+m+':predictLongRunning',{method:'POST',headers:H,body:JSON.stringify({instances:[{prompt}]})}));
+ for(let i=0;i<60&&!op.done&&!stuStop;i++){await wait(8000);op=await api(GB+op.name,{headers:{'x-goog-api-key':k}})}
+ if(!op.done)throw new Error('O vídeo ainda não ficou pronto (demorou demais ou foi interrompido). Toque em Gerar para tentar de novo.');
+ if(op.error)throw new Error(op.error.message||'Falha na geração do vídeo.');
+ const v=(((op.response||{}).generateVideoResponse||{}).generatedSamples||[])[0],uri=v&&v.video&&v.video.uri;
+ if(!uri)throw new Error('O Veo terminou sem devolver vídeo (possível filtro de segurança).');
+ let r;try{r=await fetch(uri,{headers:{'x-goog-api-key':k}})}catch(e){throw new Error('O vídeo foi criado, mas o navegador não deixou baixá-lo (CORS/rede).')}
+ if(!r.ok)throw new Error('Falha ao baixar o vídeo ('+r.status+').');return r.blob()}
+async function synthMusic(prompt,ms){
+ const sr=22050,secs=Math.min(120,Math.max(5,ms/1000)),n=Math.floor(sr*secs),AC=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+ if(!AC)throw new Error('Este navegador/app não consegue sintetizar áudio.');
+ const ac=new AC(1,n,sr),dark=/trist|dram|tens|sombr|mist|noite|melanc|suspense|segredo/i.test(prompt),fast=/rápid|ação|energ|luta|perseg|dan[cç]|festa/i.test(prompt);
+ const root=[220,196,246.94,174.61][prompt.length%4],sc=dark?[0,2,3,5,7,8,10]:[0,2,4,5,7,9,11],beat=60/(fast?120:76),prog=dark?[0,5,3,4]:[0,4,5,3];
+ const f=d=>root*Math.pow(2,sc[d%7]/12+Math.floor(d/7)),out=ac.createGain();out.gain.value=.5;out.connect(ac.destination);
+ const note=(fr,t,du,ty,v)=>{const o=ac.createOscillator(),g=ac.createGain();o.type=ty;o.frequency.value=fr;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.04);g.gain.exponentialRampToValueAtTime(.0001,t+du);o.connect(g);g.connect(out);o.start(t);o.stop(t+du+.05)};
+ let bar=0;for(let t=0;t<secs-beat;t+=beat*4,bar++){const d=prog[bar%4];[0,2,4].forEach(k=>note(f(d+k),t,beat*4,'triangle',.12));note(f(d)/2,t,beat*2,'sine',.2);note(f(d)/2,t+beat*2,beat*2,'sine',.15);
+  for(let i=0;i<8;i++)note(f(d+7+[0,2,4,7,4,2,5,3][(i+bar)%8]),t+i*beat/2,beat*.9,'sine',.07)}
+ const x=(await ac.startRendering()).getChannelData(0),w=new DataView(new ArrayBuffer(44+n*2)),wr=(o,t)=>[...t].forEach((c,i)=>w.setUint8(o+i,c.charCodeAt(0)));
+ wr(0,'RIFF');w.setUint32(4,36+n*2,true);wr(8,'WAVEfmt ');w.setUint32(16,16,true);w.setUint16(20,1,true);w.setUint16(22,1,true);w.setUint32(24,sr,true);w.setUint32(28,sr*2,true);w.setUint16(32,2,true);w.setUint16(34,16,true);wr(36,'data');w.setUint32(40,n*2,true);
+ for(let i=0;i<n;i++){const fade=Math.min(1,(n-i)/(sr*1.5));w.setInt16(44+i*2,Math.max(-1,Math.min(1,x[i]*fade))*32767,true)}
+ return new Blob([w],{type:'audio/wav'})}
+async function genMusic(prompt,ms){
+ if(mc('music').id==='local')return synthMusic(prompt,ms);
+ let r;try{r=await fetch('https://api.elevenlabs.io/v1/music',{method:'POST',headers:{'xi-api-key':cfg.elKey,'Content-Type':'application/json'},body:JSON.stringify({prompt,music_length_ms:ms,model_id:mc('music').m})})}catch(e){throw new Error('Sem conexão com o ElevenLabs.')}
+ if(!r.ok)throw await elErr(r);return r.blob()}
+/* pesquisa REAL na web (Gemini + Google Search): sem fontes devolvidas, não conta como pesquisada */
+async function webSearch(q){
+ const k=gk1();if(!k)throw new Error('A pesquisa na web usa o Gemini (Google Search). Cole uma chave do Gemini.');let last;
+ for(const m of [...new Set([cfg.m.gemini,'gemini-flash-latest','gemini-2.5-flash'].filter(Boolean))]){
+  try{const d=await retry(()=>api(GB+'models/'+m+':generateContent?key='+encodeURIComponent(k),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:q}]}],tools:[{google_search:{}}]})}));
+   const c=(d.candidates||[])[0]||{},txt=((c.content||{}).parts||[]).map(p=>p.text||'').join('').trim(),src=(((c.groundingMetadata||{}).groundingChunks)||[]).map(x=>x.web).filter(Boolean).map(w=>({t:w.title||w.uri,u:w.uri}));
+   if(!txt)throw new Error('A pesquisa respondeu vazio.');
+   if(!src.length)throw new Error('O Gemini respondeu sem consultar a web (nenhuma fonte retornada), por isso não marco como pesquisado.');
+   return{txt,src}}
+  catch(e){last=e;if(e.status!==404)throw e}}
+ throw last}
+const DORAMA_Q=P=>['dorama','serie','novela','filme','anim'].includes(P.type)?'Pesquise também como são os doramas de verdade (K-dramas, C-dramas e dramas verticais curtos de TikTok/ReelShort): estrutura dos episódios, ganchos de final, clichês de gênero, ritmo, fotografia, trilha, figurino e o que o público espera. ':'';
+async function stuResearch(){
+ const P=stuP(),V=stuV(),S=V.st.pesquisa;if(stuBusy)return;stuBusy=true;S.s='and';S.err='';stuR();
+ try{const r=await webSearch('Pesquise na web fatos reais e verificáveis úteis para produzir um(a) '+TY[P.type][1]+': "'+P.idea+'". '+DORAMA_Q(P)+'Liste contexto, época, lugares, cultura, termos e cuidados, citando as fontes. Não invente.');
+  S.out=r.txt;S.src=r.src;S.web=true;S.s='apr'}
+ catch(e){S.s='fail';S.err=e.message}
+ stuBusy=false;stuSave();stuR()}
+const refTxt=(P,st)=>{if(!['ideia','biblia','personagens','universo','episodios','roteiro','cenas','storyboard'].includes(st))return'';const t=P.refs.filter(r=>r.kind==='txt'||r.desc).map(r=>r.kind==='txt'?'['+r.tag+': '+r.name+']\n'+r.text:'['+r.tag+': foto '+r.name+' — descrição visual]\n'+r.desc+(r.tag==='protagonista'?'\n(Esta pessoa é o PROTAGONISTA da produção.)':'')).join('\n\n');return t?'REFERÊNCIAS DO USUÁRIO (enviadas por ele, não criadas pela IA):\n'+t.slice(0,2500)+'\n':''};
+async function refImgs(P,tags,n){const o=[];for(const r of P.refs.filter(r=>r.kind==='img'&&tags.includes(r.tag))){if(o.length>=n)break;const b=await idbGet(P.id+'|ref|'+r.id);if(b&&b.size<3.5e6)o.push({t:r.t,b:await blob2b64(b)})}return o}
+async function stuAddRef(e){
+ const f=e.target.files[0];e.target.value='';if(!f)return;const P=stuP(),tag=$('rf_tag').value,id='r'+Date.now();
+ if(f.type.startsWith('image/')){if(f.size>4e6)return toast('Imagem grande demais (máx. 4 MB).',3000);try{await idbPut(P.id+'|ref|'+id,f)}catch(x){return toast('Não consegui guardar a imagem neste aparelho.',4000)}{let desc='';
+  if(tag==='protagonista'||tag==='personagem'){const vp=providers().filter(p=>p.id==='claude'||p.id==='gemini');
+   if(vp.length){toast('Descrevendo a foto…',6e4);try{const r=await askAll([{role:'user',content:'Descreva a aparência desta pessoa/personagem para uma produção audiovisual: cabelo, tom de pele, roupas, estilo, expressão. Seja objetivo; não adivinhe nome, identidade nem idade exata. Só a descrição.',image:{t:f.type,b:await blob2b64(f)}}],'professional',vp);desc=r.text||''}catch(x){}toast('')}
+   if(!desc)toast('Foto guardada, mas sem descrição automática (precisa de chave Gemini ou Claude).',5000)}
+  P.refs.push({id,name:f.name,tag,kind:'img',t:f.type,desc})}}
+ else if(/text|json|csv|markdown/.test(f.type)||/\.(txt|md|csv|json)$/i.test(f.name))P.refs.push({id,name:f.name,tag,kind:'txt',text:(await f.text()).slice(0,6000)});
+ else return toast('Formato não suportado: use imagem ou texto (.txt, .md, .csv, .json).',4000);
+ stuSave();stuR();toast('Referência adicionada.',2000)}
+function stuRmRef(i){stuP().refs.splice(i,1);stuSave();stuR()}
+const refsHtml=P=>'<div class="card" style="margin-top:10px"><b>📎 Referências do projeto</b><div class="hint" style="margin:4px 0">Enviadas por você (não criadas pela IA). Use só a sua própria foto (ou de quem autorizou). Com a foto de protagonista, a história é sempre adequada para todas as idades. Textos e descrições das fotos entram nas etapas de texto; a foto em si só é usada por geradores de imagem que aceitam referência (Gemini).</div>'+P.refs.map((r,i)=>'<div class="sh2" style="padding:4px 0"><span style="font-size:13px">'+(r.kind==='img'?'🖼️':'📄')+' '+esc(r.name)+' <span class="hint">('+r.tag+')</span></span><u style="color:#e2604f" onclick="stuRmRef('+i+')">remover</u></div>').join('')+'<div class="row2"><select id="rf_tag" style="flex:1 1 40%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:9px"><option value="protagonista">👤 Minha foto (protagonista)</option><option value="personagem">Personagem</option><option value="cenario">Cenário</option><option value="documento">Documento/texto</option><option value="outro">Outro</option></select><label class="mini" style="text-align:center;cursor:pointer">+ Adicionar<input type="file" id="rf_file" hidden accept="image/*,.txt,.md,.csv,.json" onchange="stuAddRef(event)"></label></div></div>';
+const capHtml=P=>{
+ const im=mc('image'),L=[],ok=(c,t)=>L.push((c?'✅ ':'❌ ')+t);
+ ok(!!gk1(),'Pesquisa na web em tempo real'+(gk1()?' (Gemini + Google Search, com fontes)':' — precisa da chave do Gemini (grátis)'));
+ ok(providers().length>0,'Roteiro, personagens e episódios (texto)'+(providers().length?'':' — configure uma IA'));
+ L.push((im.id==='gemini'&&gk1()?'✅ ':'⚠️ ')+'Imagens: '+mediaName('image')+(im.id==='gemini'?' — usa a sua foto como referência do rosto (Gemini de imagem costuma exigir conta paga)':' — grátis, mas NÃO mantém o seu rosto: só segue a descrição da foto'));
+ ok(!!(cfg.media.video.ok),'Vídeo gerado por IA'+(cfg.media.video.ok?'':' — não conectado: não existe API de vídeo realmente grátis (Veo é pago e usa a chave do Gemini)'));
+ ok(!!cfg.elKey,'Vozes reais (ElevenLabs)'+(cfg.elKey?'':' — não conectado'));
+ L.push('✅ Música: '+mediaName('music'));
+ const can=['dorama','filme','novela','serie','anim'].includes(P.type);
+ return '<div class="card" style="margin-top:10px"><b>🎬 O que este projeto consegue produzir de verdade agora</b><div class="hint" style="margin:6px 0">'+L.map(esc).join('<br>')+'</div><div class="hint" style="margin:0;color:#e8c36a">Qualidade de dorama de TikTok em vídeo, com o seu rosto e atores consistentes, exige gerador de vídeo pago. Sem ele, o resultado real é: pesquisa, roteiro, personagens, imagens, vozes, trilha e storyboard.</div>'+(can?'<div class="row2"><button class="mini" '+(stuBusy?'disabled':'')+' onclick="stuAuto()">🎬 Produzir automaticamente (pesquisa → bíblia → personagens → episódios → 1º episódio)</button></div>':'')+'</div>'};
+async function stuAuto(){
+ const P=stuP();if(!P||stuBusy)return;stuStop=false;const V0=()=>stuV();
+ const run=async(st,fn)=>{if(stuStop)return false;toast('Etapa: '+st+'…',60000);await fn();const S=V0().st[st];return !(S.s==='fail')};
+ if(!P.refs.some(r=>r.tag==='protagonista'))toast('Dica: adicione a sua foto como "protagonista" nas referências antes (opcional).',5000);
+ await run('pesquisa',()=>stuResearch());
+ for(const st of ['biblia','personagens','universo','episodios']){if(!(await run(st,()=>stuGen(st,-1))))return toast('Parei em "'+st+'": veja o erro na etapa e toque em Gerar de novo.',7000)}
+ for(const st of ['roteiro','cenas','storyboard']){if(!(await run(st,()=>stuGen(st,0))))return toast('Parei em "'+st+'": veja o erro e tente de novo.',7000)}
+ toast('Pronto até o storyboard do 1º episódio. Revise, aprove e gere os próximos pelo botão "Gerar pendentes".',8000)}
+const INV=[['imagens','Imagens'],['voz','Vozes'],['trilha','Músicas'],['video','Vídeos']],stuInvT=V=>INV.map(([id,n])=>n+': '+V.st[id].units.filter(u=>u.file).length+'/'+V.st[id].units.length).join(' · ');
+const stuInvHtml=(P,V)=>'<div class="hint" style="margin:6px 0"><b>Arquivos reais gerados:</b> '+stuInvT(V)+'</div>',stuInv=(V,P)=>'\n## Arquivos reais gerados (nesta versão)\n'+stuInvT(V)+'\n(Só o que consta aqui existe como arquivo; o resto não foi criado.)\n';
+const protNote=P=>{const r=P.refs.find(x=>x.kind==='img'&&x.tag==='protagonista'&&x.desc);return r?' Protagonista (baseado na foto enviada pelo usuário): '+r.desc.slice(0,400)+'. Cena adequada para todas as idades, sem romance e sem violência.':''};
+function mediaPrompt(P,V,kd,ui){
+ const g=k=>V.st[k].out||'',u=k=>(V.st[k].units[ui]||{}).out||'',cut=(t,n)=>t.length>n?t.slice(0,n):t,base=u('storyboard')||u('cenas')||u('roteiro'),ro=u('roteiro');
+ if(kd==='voice')return ro?cutTxt(ro.replace(/RESUMO:[\s\S]*$/i,'').replace(/[*#_`]/g,''),+cfg.elMax||600):null;
+ if(!base)return null;const info=unitInfo(V,ui);
+ if(kd==='image')return 'Quadro-chave cinematográfico desta cena de um(a) '+TY[P.type][1]+'. Personagens: '+cut(g('personagens'),500)+protNote(P)+'. Cena ('+info+'): '+cut(base,600);
+ if(kd==='video')return 'Clipe cinematográfico curto (8 segundos) de '+info+'. '+cut(base,600)+protNote(P)+' Sem texto na tela.';
+ return 'Trilha instrumental para '+info+'. Direção musical: '+(cut(g('musica'),500)||'trilha cinematográfica emotiva')+'. Clima da cena: '+cut(base,300)}
+async function stuMedia(st,ui){
+ const P=stuP(),V=stuV(),S=V.st[st],U=S.units[ui],kd=MED[st];if(!P||stuBusy)return;
+ const why=mediaWhy(kd);if(why)return toast(why,6000);
+ const pr=mediaPrompt(P,V,kd,ui);if(!pr)return toast('Gere antes '+(kd==='voice'?'o roteiro':'o storyboard ou o roteiro')+' desta unidade.',4500);
+ stuBusy=true;U.s='and';U.err='';stuR();stuSave();
+ try{let blob;
+  if(kd==='image')blob=await retry(async()=>genImage(pr,await refImgs(P,['protagonista','personagem','cenario'],2)));
+  else if(kd==='video')blob=await genVideo(pr);
+  else if(kd==='music')blob=await genMusic(pr,Math.min(300,Math.max(10,+mc('music').secs||30))*1000);
+  else blob=await elTTS(pr);
+  if(!blob||blob.size<500)throw new Error('O provedor respondeu sem arquivo.');
+  const key=P.id+'|'+P.cur+'|'+st+'|'+ui;await idbPut(key,blob);
+  const chk=await idbGet(key);if(!chk||!chk.size)throw new Error('Não consegui guardar o arquivo neste aparelho (armazenamento cheio?).');
+  U.file={k:key,t:blob.type||'',n:blob.size};U.prompt=pr.slice(0,300);U.s='apr'}
+ catch(e){U.s='fail';U.err=e.message;delete U.file}
+ stuBusy=false;stuSave();stuR()}
+async function stuDlFile(key,name){const b=await idbGet(key);if(!b)return toast('O arquivo não existe mais.',3000);const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove()}
+async function hydrate(){document.querySelectorAll('[data-k]').forEach(async e=>{if(!e.dataset.k)return;const b=await idbGet(e.dataset.k);if(b)e.src=URL.createObjectURL(b)})}
+const MEXT={image:'png',video:'mp4',voice:'mp3',music:'mp3'};
+function muHtml(P,V,id,S){
+ const kd=MED[id],why=mediaWhy(kd);let h=why?'<div class="res err">🚫 '+esc(why)+'</div>':'<div class="hint">Provedor: '+esc(mediaName(kd))+'.'+(kd==='video'?' São clipes curtos por unidade, não o episódio inteiro.':kd==='voice'?' Até '+(cfg.elMax||600)+' caracteres por unidade (créditos).':'')+'</div>';
+ h+='<div class="row2"><button class="mini" '+(stuBusy||why?'disabled':'')+' onclick="stuPend(\''+id+'\')">✨ Gerar pendentes</button>'+(S.units.some(u=>u.s==='apr')?'<button class="mini" onclick="stuAprAll(\''+id+'\')">✅ Aprovar todos</button>':'')+'</div>';
+ S.units.forEach((u,i)=>{const key=id+i,k=u.file?esc(u.file.k):'';
+  h+='<div style="margin-top:10px;border-top:1px solid var(--b);padding-top:8px"><div class="sh2" style="padding:4px 0" onclick="stuTogU(\''+key+'\')"><span style="font-size:13px">'+(i+1)+'. '+esc(unitInfo(V,i).replace(/^\s*\d+[.)]\s*/,'').slice(0,50))+(u.file?' 📁':'')+'</span><span class="pill '+u.s+'">'+ST_L[u.s]+'</span></div>';
+  if(stuOU===key){if(u.err)h+='<div class="res err">❌ '+esc(u.err)+'</div>';
+   if(u.file)h+=(kd==='image'?'<img data-k="'+k+'" style="width:100%;border-radius:10px;margin-top:8px">':kd==='video'?'<video controls playsinline data-k="'+k+'" style="width:100%;border-radius:10px;margin-top:8px"></video>':'<audio controls data-k="'+k+'" style="width:100%;margin-top:8px"></audio>')+'<div class="hint">Arquivo real: '+Math.round(u.file.n/1024)+' KB</div>';
+   h+='<div class="row2">'+(u.s==='apr'?'<button class="mini" onclick="stuApr(\''+id+'\','+i+')">✅ Aprovar</button>':'')+'<button class="mini" '+(stuBusy||why?'disabled':'')+' onclick="stuMedia(\''+id+'\','+i+')">'+(u.file?'🔄 Refazer':'✨ Gerar')+'</button>'+(u.file?'<button class="mini" onclick="stuDlFile(\''+k+'\',\''+id+'-'+(i+1)+'.'+(kd==='music'&&mc('music').id==='local'?'wav':MEXT[kd])+'\')">⬇ Baixar</button>':'')+'</div>'}
+  h+='</div>'});
+ return h}
+function stuExport(){
+ const P=stuP(),V=stuV();let md='# '+P.name+' — V'+(P.cur+1)+'\n\nTipo: '+TY[P.type][1]+'\n\n',n=0;
+ for(const [id,,nm,k] of SG){const S=V.st[id];
+  if(k==='u'){const us=S.units.map((u,i)=>u.out?'### '+(i+1)+'\n'+u.out:'').filter(Boolean);if(us.length){md+='## '+nm+'\n'+us.join('\n\n')+'\n\n';n++}}
+  else if(k==='t'&&S.out){md+='## '+nm+'\n'+S.out+'\n\n';n++}}
+ if(!n)return toast('Ainda não há nada criado para exportar.',4000);
+ const a=document.createElement('a');md+=stuInv(V,P);a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));a.download=P.name.replace(/\W+/g,'-')+'-V'+(P.cur+1)+'.md';document.body.appendChild(a);a.click();a.remove();
+ V.st.exportacao={s:'ok',out:'Arquivo de texto (.md) com '+n+' seção(ões). É só texto: sem imagens, vídeo ou música.'};stuSave();stuR()}
+async function stuNewVer(){
+ const P=stuP(),chg=($('sv_chg')||{}).value||'';if(stuBusy||!chg.trim())return toast('Escreva o que quer mudar.',3000);
+ const nv=JSON.parse(JSON.stringify(P.versions[P.cur]));nv.n=P.versions.length+1;nv.at=Date.now();nv.note=chg.trim();
+ SG.forEach(([id,,,k])=>{if(k==='mu')nv.st[id]={s:'nao',units:Array.from({length:P.units},()=>({s:'nao'}))}});nv.st.exportacao={s:'nao'}; /* áudio e arquivo pertencem à versão anterior */
+ P.versions.push(nv);P.cur=P.versions.length-1;stuAsk2=false;stuSave();stuStop=false;
+ for(const [id,,,k] of SG){if(stuStop)break;const S=nv.st[id];
+  if(k==='t'&&S.out)await stuGen(id,-1,chg);
+  if(k==='u')for(let i=0;i<S.units.length&&!stuStop;i++)if(S.units[i].out)await stuGen(id,i,chg)}
+ toast('V'+nv.n+' pronta. A V'+(nv.n-1)+' continua disponível.',5000)}
+function stuToGame(){const V=stuV(),P=stuP(),g=k=>(V.st[k].out||'').slice(0,2500);setMode('engineer');$('inp').value='Crie o jogo "'+P.name+'" completo em HTML (mobile) seguindo este projeto.\nIdeia: '+P.idea+'\n'+g('biblia')+'\n'+g('personagens')+'\n'+g('universo');go('home');toast('Mensagem pronta no chat: toque em enviar. O Preview roda e corrige sozinho.',6000)}
+function stuBack(){if(stuView!=='list'){stuView='list';stuR()}else home()}
+function stuNewForm(){stuView='new';stuR()}
+function stuDef(){const t=TY[$('sn_type').value];$('sn_units').value=t[2];$('sn_mins').value=t[3];$('sn_ul').textContent='Quantidade de '+t[4]}
+function stuCreate(){
+ const name=$('sn_name').value.trim(),idea=$('sn_idea').value.trim();if(!name||!idea)return toast('Dê um nome e conte a ideia.',3000);
+ const P={id:'p'+Date.now(),name,type:$('sn_type').value,idea,units:Math.min(60,Math.max(1,+$('sn_units').value||1)),mins:Math.min(180,Math.max(0,+$('sn_mins').value||0)),cur:0,refs:[],versions:[]};
+ P.versions.push({n:1,at:Date.now(),note:'Versão inicial',st:blankSt(P)});STU.unshift(P);stuSave();stuPid=P.id;stuView='proj';stuOpen=null;stuR()}
+async function stuOpenP(id){stuPid=id;stuView='proj';stuOpen=null;stuAsk2=false;stuR();
+ const P=stuP();let ch=false;
+ for(const v of P.versions)for(const [id,,,k] of SG)if(k==='mu')for(let i=0;i<v.st[id].units.length;i++){const u=v.st[id].units[i];if(u.file&&!(await idbGet(u.file.k))){v.st[id].units[i]={s:'nao',err:'O arquivo não existe mais neste aparelho: marcado como não feito.'};ch=true}}
+ if(ch){stuSave();stuR()}}
+function stuDel(id){if(!confirm('Apagar este projeto e todas as versões?'))return;STU=STU.filter(p=>p.id!==id);stuSave();stuR()}
+const stuTog=id=>{stuOpen=stuOpen===id?null:id;stuR()},stuTogU=k=>{stuOU=stuOU===k?null:k;stuR()},stuVer=i=>{stuP().cur=i;stuSave();stuAsk2=false;stuR()};
+function stuR(){
+ const B=$('stuBody');if(!B)return;const P=stuP();
+ if(stuView==='list'||!P){$('stuT').textContent='Studio';
+  B.innerHTML='<button class="save" style="margin-top:0" onclick="stuNewForm()">+ Novo projeto</button><p class="hint" style="margin-top:12px">Produza por etapas. Cada etapa só fica "Concluída" quando existe resultado real. Sem API de imagem, vídeo ou música conectada, essas etapas ficam indisponíveis: o Studio nunca finge.</p>'+(STU.length?STU.map(p=>'<div class="card" onclick="stuOpenP(\''+p.id+'\')"><b>'+TY[p.type][0]+' '+esc(p.name)+'</b><div class="hint" style="margin:4px 0 0">'+TY[p.type][1]+' · V'+p.versions.length+' · '+stuProg(p)+'% concluído <u style="float:right;color:#e2604f" onclick="event.stopPropagation();stuDel(\''+p.id+'\')">apagar</u></div></div>').join(''):'<p class="hint">Nenhum projeto ainda.</p>');return}
+ if(stuView==='new'){$('stuT').textContent='Novo projeto';
+  B.innerHTML='<div class="card"><label>Nome</label><input id="sn_name" placeholder="ex: Amor em Seul"><label>Tipo</label><select id="sn_type" onchange="stuDef()">'+Object.entries(TY).map(([k,v])=>'<option value="'+k+'">'+v[0]+' '+v[1]+'</option>').join('')+'</select><label>Ideia</label><textarea id="sn_idea" rows="4" placeholder="Conte a ideia, o clima, os personagens…" style="width:100%;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px;font-size:14px"></textarea><label id="sn_ul">Quantidade</label><input id="sn_units" type="number" inputmode="numeric"><label>Minutos por unidade (configurável)</label><input id="sn_mins" type="number" inputmode="numeric"><button class="save" onclick="stuCreate()">Criar projeto</button></div>';stuDef();return}
+ const V=P.versions[P.cur],pg=stuProg(P,V);$('stuT').textContent=P.name;
+ let h='<div class="hint" style="margin:0">'+TY[P.type][0]+' '+TY[P.type][1]+' · '+P.units+' '+TY[P.type][4]+' × '+P.mins+' min</div><div class="bar"><i style="width:'+pg+'%"></i></div><div class="hint" style="margin:0">'+pg+'% concluído (só conta o que existe de verdade)</div><div class="chips">'+P.versions.map((v,i)=>'<button class="'+(i===P.cur?'on':'')+'" onclick="stuVer('+i+')">V'+v.n+'</button>').join('')+'</div>';
+ if(P.cur>0)h+='<div class="hint" style="margin:0 0 8px">V'+V.n+': '+esc(V.note)+'</div>';
+ h+=stuInvHtml(P,V)+capHtml(P)+refsHtml(P);
+ if(stuBusy)h+='<div class="row2"><button class="mini" onclick="stuStop=true;toast(\'Vou parar depois desta etapa.\',2500)">⏹ Parar depois desta etapa</button></div>';
+ if(P.type==='jogo')h+='<div class="row2"><button class="mini" onclick="stuToGame()">🎮 Criar o jogo no chat (Engenheiro + Preview)</button></div>';
+ const any=SG.some(([id,,,k])=>k==='t'?V.st[id].out:k==='u'?V.st[id].units.some(u=>u.out):0);
+ if(any&&!stuBusy)h+='<div class="card" style="margin-top:10px"><b>Você gostou desta versão (V'+V.n+')?</b><div class="row2"><button class="mini" onclick="toast(\'Ótimo! Versão mantida.\',2500)">👍 Sim</button><button class="mini" onclick="stuAsk2=!stuAsk2;stuR()">👎 Não, quero mudar</button></div>'+(stuAsk2?'<textarea id="sv_chg" rows="3" placeholder="Ex.: mude o personagem principal, deixe a cena mais dramática e altere o final." style="width:100%;margin-top:8px;background:var(--p2);border:1px solid var(--b);color:var(--ink);border-radius:10px;padding:10px;font-size:14px"></textarea><button class="save" onclick="stuNewVer()">Criar V'+(P.versions.length+1)+' (a V'+V.n+' continua guardada)</button>':'')+'</div>';
+ h+='<div style="margin-top:12px">';
+ SG.forEach((                                                                                                      
